@@ -51,10 +51,10 @@
             android:id="@+id/btn_photo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tv_picture" />
+            android:text="@string/btn_photo" />
 
         <ImageView
-            android:id="@+id/view_photo"
+            android:id="@+id/iv_photo"
             style="@style/PictureStyle.Preview"
             contentDescription="Picture to add" />
 

@@ -33,6 +33,7 @@ public final class R {
         public static final int et_username=0x7f050008;
         public static final int fragment_index=0x7f050000;
         public static final int fragment_register=0x7f050001;
+        public static final int iv_photo=0x7f050006;
         public static final int menu_new=0x7f050010;
         public static final int menu_search=0x7f050011;
         public static final int menu_settings=0x7f050012;
@@ -40,7 +41,6 @@ public final class R {
         public static final int spinner_purpose=0x7f050003;
         public static final int text_item=0x7f050002;
         public static final int text_purpose=0x7f050004;
-        public static final int view_photo=0x7f050006;
     }
     public static final class layout {
         public static final int activity_create=0x7f030000;
@@ -57,6 +57,7 @@ public final class R {
         /**  string for UI components 
          */
         public static final int btn_login=0x7f06000c;
+        public static final int btn_photo=0x7f060010;
         public static final int btn_register=0x7f06000d;
         public static final int btn_register_done=0x7f06000e;
         public static final int menu_new=0x7f06000a;
@@ -77,16 +78,20 @@ public final class R {
         public static final int title_my=0x7f060005;
         public static final int title_recent=0x7f060003;
         public static final int title_top=0x7f060001;
-        public static final int tv_email=0x7f060011;
-        public static final int tv_item=0x7f060014;
-        public static final int tv_password=0x7f060012;
-        public static final int tv_password_confirm=0x7f060013;
-        public static final int tv_picture=0x7f060017;
-        public static final int tv_place=0x7f060016;
-        public static final int tv_purpose=0x7f060015;
-        public static final int tv_username=0x7f060010;
+        public static final int tv_email=0x7f060012;
+        public static final int tv_item=0x7f060015;
+        public static final int tv_password=0x7f060013;
+        public static final int tv_password_confirm=0x7f060014;
+        public static final int tv_place=0x7f060017;
+        public static final int tv_purpose=0x7f060016;
+        public static final int tv_username=0x7f060011;
     }
     public static final class style {
-        public static final int AppTheme=0x7f070000;
+        public static final int AppTheme=0x7f070005;
+        public static final int EveryUseTheme=0x7f070000;
+        public static final int PictureStyle=0x7f070001;
+        public static final int PictureStyle_Large=0x7f070003;
+        public static final int PictureStyle_Preview=0x7f070004;
+        public static final int PictureStyle_Thumb=0x7f070002;
     }
 }
