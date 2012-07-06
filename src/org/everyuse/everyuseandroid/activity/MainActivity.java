@@ -1,4 +1,6 @@
-package org.everyuse.everyuseandroid;
+package org.everyuse.everyuseandroid.activity;
+
+import org.everyuse.everyuseandroid.R;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -73,7 +75,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
