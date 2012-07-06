@@ -54,7 +54,7 @@ public class IndexActivity extends FragmentActivity {
 		initUI();
 
 		// TODO: 아이디와 패스워드를 저장하고, 시작 할때마다 로그인하는 방식으로 하자
-		if (!isAuthenticated()) {
+		if (isAuthenticated()) {
 			Intent intent = new Intent(IndexActivity.this, MainActivity.class);
 			startActivity(intent);
 		} else {
