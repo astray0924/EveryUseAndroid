@@ -42,7 +42,6 @@ public class RegisterActivity extends Activity {
 	private EditText et_email;
 	private EditText et_password;
 	private EditText et_password_confirm;
-	private ProgressDialog indicator;
 
 	// 필드값들
 	String str_username;
@@ -65,12 +64,6 @@ public class RegisterActivity extends Activity {
 		et_email = (EditText) findViewById(R.id.et_email);
 		et_password = (EditText) findViewById(R.id.et_password);
 		et_password_confirm = (EditText) findViewById(R.id.et_password_confirm);
-
-		// Initialize progress dialog
-		indicator = new ProgressDialog(this);
-		indicator.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		indicator.setMessage("Please wait...");
-		indicator.setCancelable(false);
 
 		// initalize buttons
 		Button btn_register_done = (Button) findViewById(R.id.btn_register_done);
@@ -98,8 +91,16 @@ public class RegisterActivity extends Activity {
 	}
 
 	private class RegisterTask extends AsyncTask<Void, Void, HttpResponse> {
+		private ProgressDialog indicator;
+		
 		@Override
 		protected void onPreExecute() {
+			// Initialize progress dialog
+			indicator = new ProgressDialog(getApplicationContext());
+			indicator.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			indicator.setMessage("Please wait...");
+			indicator.setCancelable(false);
+			
 			// show progress dialog
 			indicator.show();
 		}
@@ -137,8 +138,6 @@ public class RegisterActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(HttpResponse result) {
-			indicator.dismiss();
-
 			if (result == null) {
 				Toast.makeText(RegisterActivity.this,
 						getString(R.string.msg_no_response), Toast.LENGTH_SHORT).show();
@@ -190,6 +189,7 @@ public class RegisterActivity extends Activity {
 				}
 
 			}
+			indicator.dismiss();
 		}
 
 	}
