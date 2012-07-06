@@ -49,14 +49,19 @@
 
         <Button
             android:id="@+id/btn_photo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="@string/tv_picture" />
 
         <ImageView
             android:id="@+id/view_photo"
+            style="@style/PictureStyle.Preview"
             contentDescription="Picture to add" />
 
         <Button
             android:id="@+id/btn_submit"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="@string/btn_create" />
     </LinearLayout>
 
