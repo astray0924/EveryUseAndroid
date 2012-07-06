@@ -21,12 +21,13 @@ import org.everyuse.everyuseandroid.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -52,11 +53,36 @@ public class IndexActivity extends FragmentActivity {
 
 		initUI();
 
-		// if (!isLoggedIn()) {
-		//
-		// } else {
-		//
-		// }
+		// TODO: 아이디와 패스워드를 저장하고, 시작 할때마다 로그인하는 방식으로 하자
+		if (!isAuthenticated()) {
+			Intent intent = new Intent(IndexActivity.this, MainActivity.class);
+			startActivity(intent);
+		} else {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(R.string.msg_register)
+					.setCancelable(false)
+					.setPositiveButton("Yes",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									Intent intent = new Intent(IndexActivity.this, RegisterActivity.class);
+									startActivity(intent);
+								}
+							})
+					.setNegativeButton("No",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+	}
+
+	private boolean isAuthenticated() {
+		return UserHelper.isAuthenticated(getApplicationContext());
 	}
 
 	private void initUI() {
@@ -82,7 +108,7 @@ public class IndexActivity extends FragmentActivity {
 					Toast.makeText(getApplicationContext(),
 							R.string.msg_complete_form, Toast.LENGTH_SHORT)
 							.show();
-					
+
 					return;
 				}
 
@@ -113,7 +139,7 @@ public class IndexActivity extends FragmentActivity {
 		@Override
 		protected HttpResponse doInBackground(Void... args) {
 			HttpClient client = new DefaultHttpClient();
-			
+
 			if (str_username.equals("") || str_password.equals("")) {
 				return null;
 			}
@@ -124,11 +150,7 @@ public class IndexActivity extends FragmentActivity {
 					str_username));
 			params.add(new BasicNameValuePair("user_session[password]",
 					str_password));
-			
-			Log.d("IndexActivity#LoginTask", str_username);
-			Log.d("IndexActivity#LoginTask", str_password);
 
-			String msg = null;
 			try {
 				HttpPost post = new HttpPost(URLHelper.USER_SESSIONS_URL
 						+ ".json");
@@ -157,7 +179,7 @@ public class IndexActivity extends FragmentActivity {
 				Toast.makeText(getApplicationContext(),
 						getString(R.string.msg_no_response), Toast.LENGTH_SHORT)
 						.show();
-				
+
 				return;
 			}
 

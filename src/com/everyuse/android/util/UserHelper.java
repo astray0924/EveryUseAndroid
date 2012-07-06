@@ -49,7 +49,7 @@ public class UserHelper {
 
 	}
 	
-	public static boolean isLoggedIn(Context context) {
+	public static boolean isAuthenticated(Context context) {
 		return (getCurrentUser(context) != null);
 	}
 

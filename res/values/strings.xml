@@ -23,6 +23,7 @@
     <string name="tv_password_confirm">CONFIRM PASSWORD</string>
 
     <!-- messages -->
+    <string name="msg_register">Register new account?</string>
     <string name="msg_wait">Please wait</string>
     <string name="msg_no_result">No result</string>
     <string name="msg_no_response">No response from the server</string>

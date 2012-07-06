@@ -55,12 +55,13 @@ public final class R {
         public static final int menu_new=0x7f06000a;
         public static final int menu_search=0x7f060009;
         public static final int menu_settings=0x7f06000b;
-        public static final int msg_complete_form=0x7f060016;
-        public static final int msg_no_response=0x7f060015;
-        public static final int msg_no_result=0x7f060014;
+        public static final int msg_complete_form=0x7f060017;
+        public static final int msg_no_response=0x7f060016;
+        public static final int msg_no_result=0x7f060015;
         /**  messages 
          */
-        public static final int msg_wait=0x7f060013;
+        public static final int msg_register=0x7f060013;
+        public static final int msg_wait=0x7f060014;
         public static final int title_activity_index=0x7f060006;
         public static final int title_activity_main=0x7f060008;
         public static final int title_activity_register=0x7f060007;
