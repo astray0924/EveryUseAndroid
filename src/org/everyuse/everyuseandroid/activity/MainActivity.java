@@ -4,6 +4,7 @@ import org.everyuse.everyuseandroid.R;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -72,13 +74,28 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-
     
 
     @Override
+	public boolean onOptionsItemSelected(MenuItem item) {		
+		int id = item.getItemId();
+		switch(id) {
+		case R.id.menu_new:
+			Intent intent = new Intent(MainActivity.this, CreateActivity.class);
+			startActivity(intent);
+			break;
+			
+		case R.id.menu_search:
+		case R.id.menu_settings:
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
