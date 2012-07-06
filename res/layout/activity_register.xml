@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <!-- user id -->
+    <!-- username -->
     <TextView
-        android:text="@string/tv_id"
+        android:text="@string/tv_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <EditText
-        android:id="@+id/et_id"
+        android:id="@+id/et_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text" />

@@ -24,24 +24,22 @@ public final class R {
     public static final class id {
         public static final int btn_login=0x7f050004;
         public static final int btn_register=0x7f050005;
-        public static final int btn_register_done=0x7f05000a;
+        public static final int btn_register_done=0x7f050009;
         public static final int et_email=0x7f050007;
-        public static final int et_id=0x7f050006;
-        public static final int et_password=0x7f050008;
-        public static final int et_password_confirm=0x7f050009;
+        public static final int et_password=0x7f050003;
+        public static final int et_password_confirm=0x7f050008;
+        public static final int et_username=0x7f050002;
         public static final int fragment_index=0x7f050000;
         public static final int fragment_register=0x7f050001;
-        public static final int layout_activity_index=0x7f050002;
-        public static final int menu_new=0x7f05000c;
-        public static final int menu_search=0x7f05000d;
-        public static final int menu_settings=0x7f05000b;
-        public static final int pager=0x7f050003;
+        public static final int menu_new=0x7f05000b;
+        public static final int menu_search=0x7f05000c;
+        public static final int menu_settings=0x7f05000a;
+        public static final int pager=0x7f050006;
     }
     public static final class layout {
         public static final int activity_index=0x7f030000;
         public static final int activity_main=0x7f030001;
-        public static final int fragment_index=0x7f030002;
-        public static final int fragment_register=0x7f030003;
+        public static final int activity_register=0x7f030002;
     }
     public static final class menu {
         public static final int activity_main=0x7f080000;
@@ -57,6 +55,12 @@ public final class R {
         public static final int menu_new=0x7f06000a;
         public static final int menu_search=0x7f060009;
         public static final int menu_settings=0x7f06000b;
+        public static final int msg_complete_form=0x7f060016;
+        public static final int msg_no_response=0x7f060015;
+        public static final int msg_no_result=0x7f060014;
+        /**  messages 
+         */
+        public static final int msg_wait=0x7f060013;
         public static final int title_activity_index=0x7f060006;
         public static final int title_activity_main=0x7f060008;
         public static final int title_activity_register=0x7f060007;
@@ -66,9 +70,9 @@ public final class R {
         public static final int title_recent=0x7f060003;
         public static final int title_top=0x7f060001;
         public static final int tv_email=0x7f060010;
-        public static final int tv_id=0x7f06000f;
         public static final int tv_password=0x7f060011;
         public static final int tv_password_confirm=0x7f060012;
+        public static final int tv_username=0x7f06000f;
     }
     public static final class style {
         public static final int AppTheme=0x7f070000;

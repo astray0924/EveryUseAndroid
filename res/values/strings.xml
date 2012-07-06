@@ -12,13 +12,20 @@
     <string name="menu_search">Search</string>
     <string name="menu_new">Add new item</string>
     <string name="menu_settings">Settings</string>
-    
+
     <!-- string for UI components -->
-	<string name="btn_login">Login</string>
-	<string name="btn_register">Register</string>
-	<string name="btn_register_done">Done</string>
-	<string name="tv_id">ID</string>
-	<string name="tv_email">EMAIL</string>
-	<string name="tv_password">PASSWORD</string>
-	<string name="tv_password_confirm">CONFIRM PASSWORD</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_register">Register</string>
+    <string name="btn_register_done">Done</string>
+    <string name="tv_username">ID</string>
+    <string name="tv_email">EMAIL</string>
+    <string name="tv_password">PASSWORD</string>
+    <string name="tv_password_confirm">CONFIRM PASSWORD</string>
+
+    <!-- messages -->
+    <string name="msg_wait">Please wait</string>
+    <string name="msg_no_result">No result</string>
+    <string name="msg_no_response">No response from the server</string>
+    <string name="msg_complete_form">Please complete the form</string>
+
 </resources>
