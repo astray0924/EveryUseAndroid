@@ -1,7 +1,10 @@
 package org.everyuse.android.activity;
 
 import org.everyuse.android.R;
+import org.everyuse.android.util.UserHelper;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -90,7 +94,36 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 			break;
 			
 		case R.id.menu_search:
+			break;
 		case R.id.menu_settings:
+			break;
+		case R.id.menu_logout:
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(R.string.msg_logout_prompt)
+					.setCancelable(false)
+					.setPositiveButton("Yes",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									// 사용자 정보 삭제 후 앱 종료
+									UserHelper.disposeUser(getApplicationContext());
+									Toast.makeText(getApplicationContext(), R.string.msg_logout_success, Toast.LENGTH_SHORT).show();
+									
+									// 앱 종료
+									finish();
+								}
+							})
+					.setNegativeButton("No",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+			AlertDialog alert = builder.create();
+			alert.setCancelable(true);
+			alert.show();
+			break;
 		}
 		
 		return super.onOptionsItemSelected(item);
