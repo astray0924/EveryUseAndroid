@@ -96,9 +96,9 @@ public class RegisterActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			// Initialize progress dialog
-			indicator = new ProgressDialog(getApplicationContext());
+			indicator = new ProgressDialog(RegisterActivity.this);
 			indicator.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			indicator.setMessage("Please wait...");
+			indicator.setMessage(getString(R.string.msg_wait));
 			indicator.setCancelable(false);
 			
 			// show progress dialog

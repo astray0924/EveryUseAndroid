@@ -38,13 +38,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
 public class IndexActivity extends FragmentActivity {
 	private EditText et_username;
 	private EditText et_password;
 	private String str_username;
 	private String str_password;
-	private ProgressDialog indicator;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +55,7 @@ public class IndexActivity extends FragmentActivity {
 		if (isAuthenticated()) {
 			Intent intent = new Intent(IndexActivity.this, MainActivity.class);
 			startActivity(intent);
-			
+
 			finish();
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -67,7 +65,9 @@ public class IndexActivity extends FragmentActivity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									Intent intent = new Intent(IndexActivity.this, RegisterActivity.class);
+									Intent intent = new Intent(
+											IndexActivity.this,
+											RegisterActivity.class);
 									startActivity(intent);
 								}
 							})
@@ -79,6 +79,7 @@ public class IndexActivity extends FragmentActivity {
 								}
 							});
 			AlertDialog alert = builder.create();
+			alert.setCancelable(true);
 			alert.show();
 		}
 	}
@@ -92,10 +93,7 @@ public class IndexActivity extends FragmentActivity {
 		et_username = (EditText) findViewById(R.id.et_username);
 		et_password = (EditText) findViewById(R.id.et_password);
 
-		// Initialize progress dialog
-		indicator = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
-		indicator.setMessage(getString(R.string.msg_wait));
-
+		
 		// initialize buttons
 		Button btn_login = (Button) findViewById(R.id.btn_login);
 		btn_login.setOnClickListener(new OnClickListener() {
@@ -132,14 +130,20 @@ public class IndexActivity extends FragmentActivity {
 		});
 	}
 
-	private class LoginTask extends AsyncTask<Void, Void, HttpResponse> {
+	private class LoginTask extends AsyncTask<Void, Void, Boolean> {
+		private ProgressDialog indicator;
+		private String error;
+
 		@Override
 		protected void onPreExecute() {
+			// Initialize progress dialog
+			indicator = new ProgressDialog(IndexActivity.this, ProgressDialog.STYLE_SPINNER);
+			indicator.setMessage(getString(R.string.msg_wait));
 			indicator.show();
 		}
 
 		@Override
-		protected HttpResponse doInBackground(Void... args) {
+		protected Boolean doInBackground(Void... args) {
 			HttpClient client = new DefaultHttpClient();
 
 			if (str_username.equals("") || str_password.equals("")) {
@@ -161,7 +165,37 @@ public class IndexActivity extends FragmentActivity {
 				post.setEntity(req_entity);
 
 				HttpResponse response = client.execute(post);
-				return response;
+				HttpEntity res_entity = response.getEntity();
+
+				if (res_entity != null) {
+					int code = response.getStatusLine().getStatusCode();
+					try {
+						String res_string = EntityUtils.toString(res_entity);
+
+						if (code >= 300) { // error
+							String[] fields = { "username", "password" };
+							error = ErrorHelper.getMostProminentError(
+									res_string, fields);
+
+							return false;
+						} else {
+							JSONObject json = new JSONObject(res_string)
+									.getJSONObject("record");
+							User user = User.parseFromJSON(json);
+
+							// store into shared preferences
+							UserHelper.storeUser(getApplicationContext(), user);
+
+							return true;
+						}
+					} catch (ParseException e1) {
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			} catch (ClientProtocolException e) {
@@ -174,56 +208,28 @@ public class IndexActivity extends FragmentActivity {
 		}
 
 		@Override
-		protected void onPostExecute(HttpResponse result) {
+		protected void onPostExecute(Boolean result) {
 			indicator.dismiss();
 
-			if (result == null) {
+			if (result == null) {								// input form incomplete
 				Toast.makeText(getApplicationContext(),
-						getString(R.string.msg_no_response), Toast.LENGTH_SHORT)
-						.show();
+						getString(R.string.msg_complete_form),
+						Toast.LENGTH_SHORT).show();
+			} else if (result == false) {						// login failed
+				Toast.makeText(getApplicationContext(), error,
+						Toast.LENGTH_SHORT).show();
+			} else if (result == true) {						// login success
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.msg_login_success),
+						Toast.LENGTH_SHORT).show();
 
-				return;
-			}
+				// move to the main
+				Intent intent = new Intent(IndexActivity.this,
+						MainActivity.class);
+				startActivity(intent);
 
-			HttpEntity res_entity = result.getEntity();
-
-			if (res_entity != null) {
-				int code = result.getStatusLine().getStatusCode();
-				try {
-					String res_string = EntityUtils.toString(res_entity);
-
-					if (code >= 300) { // error
-						String[] fields = { "username", "password" };
-						String error = ErrorHelper.getMostProminentError(
-								res_string, fields);
-						Toast.makeText(getApplicationContext(), error,
-								Toast.LENGTH_SHORT).show();
-					} else {
-						Toast.makeText(getApplicationContext(),
-								"Login Successful!", Toast.LENGTH_SHORT).show();
-
-						JSONObject json = new JSONObject(res_string)
-								.getJSONObject("record");
-						User user = User.parseFromJSON(json);
-
-						// store into shared preferences
-						UserHelper.storeUser(getApplicationContext(), user);
-
-						// move to the main
-						Intent intent = new Intent(IndexActivity.this,
-								MainActivity.class);
-						startActivity(intent);
-
-						// finish the activity
-						finish();
-					}
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+				// finish the activity
+				finish();
 			}
 		}
 	}
