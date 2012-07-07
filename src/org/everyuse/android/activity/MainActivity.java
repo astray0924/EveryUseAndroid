@@ -1,4 +1,4 @@
-package org.everyuse.everyuseandroid.activity;
+package org.everyuse.android.activity;
 
 import org.everyuse.everyuseandroid.R;
 
