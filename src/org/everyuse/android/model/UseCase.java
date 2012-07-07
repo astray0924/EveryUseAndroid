@@ -1,9 +1,11 @@
-package com.everyuse.android.model;
+package org.everyuse.android.model;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.everyuse.android.util.OtherHelper;
+import org.everyuse.android.util.URLHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,8 +13,6 @@ import org.json.JSONObject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.everyuse.android.util.OtherHelper;
-import com.everyuse.android.util.URLHelper;
 
 public class UseCase implements Parcelable {
 	public long id;

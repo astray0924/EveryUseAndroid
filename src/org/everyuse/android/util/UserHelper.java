@@ -1,7 +1,9 @@
-package com.everyuse.android.util;
+package org.everyuse.android.util;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import org.everyuse.android.model.User;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.widget.ImageView;
 
-import com.everyuse.android.model.User;
 
 public class UserHelper {
 	public static boolean DEVELOPER_MODE = true;

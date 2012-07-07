@@ -1,4 +1,4 @@
-package com.everyuse.android.util;
+package org.everyuse.android.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,14 +14,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.everyuse.android.model.Comment;
+import org.everyuse.android.model.CommentType;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.widget.Toast;
 
-import com.everyuse.android.model.Comment;
-import com.everyuse.android.model.CommentType;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;

@@ -1,4 +1,4 @@
-package com.everyuse.android.model;
+package org.everyuse.android.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;

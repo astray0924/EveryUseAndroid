@@ -17,6 +17,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.everyuse.android.model.User;
+import org.everyuse.android.util.ErrorHelper;
+import org.everyuse.android.util.URLHelper;
+import org.everyuse.android.util.UserHelper;
 import org.everyuse.everyuseandroid.R;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,10 +38,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.everyuse.android.model.User;
-import com.everyuse.android.util.ErrorHelper;
-import com.everyuse.android.util.URLHelper;
-import com.everyuse.android.util.UserHelper;
 
 public class IndexActivity extends FragmentActivity {
 	private EditText et_username;

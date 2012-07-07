@@ -1,4 +1,4 @@
-package com.everyuse.android.util;
+package org.everyuse.android.util;
 
 public class URLHelper {
 	public static String BASE_URL 						= "http://wikiuse.kaist.ac.kr";

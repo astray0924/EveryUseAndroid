@@ -1,4 +1,4 @@
-package com.everyuse.android.util;
+package org.everyuse.android.util;
 /*
  Copyright (c) 2010, Sungjin Han <meinside@gmail.com>
  All rights reserved.

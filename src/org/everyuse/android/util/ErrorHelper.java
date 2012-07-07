@@ -1,4 +1,4 @@
-package com.everyuse.android.util;
+package org.everyuse.android.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;

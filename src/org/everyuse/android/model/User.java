@@ -1,4 +1,4 @@
-package com.everyuse.android.model;
+package org.everyuse.android.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;

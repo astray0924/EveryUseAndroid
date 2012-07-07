@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.everyuse.android.util;
+package org.everyuse.android.util;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
