@@ -1,6 +1,7 @@
 package org.everyuse.android.activity;
 
 import org.everyuse.android.R;
+import org.everyuse.android.fragment.MyPageFragment;
 import org.everyuse.android.util.UserHelper;
 
 import android.app.AlertDialog;
@@ -148,6 +149,11 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
      * sections of the app.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    	private final int TOP 			= 	0;
+    	private final int FEED 			= 	1;
+    	private final int RECENT 		= 	2;
+    	private final int CATEOGORY 	= 	3;
+    	private final int MY			= 	4;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -155,6 +161,13 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 
         @Override
         public Fragment getItem(int i) {
+        	// TODO 임시로 처리해둠
+        	switch (i) {
+        	case MY:
+        		Fragment fragment = new MyPageFragment();
+        		return fragment;
+        	}
+        	
             Fragment fragment = new DummySectionFragment();
             Bundle args = new Bundle();
             args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, i + 1);
@@ -170,11 +183,11 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0: return getString(R.string.title_top).toUpperCase();
-                case 1: return getString(R.string.title_feed).toUpperCase();
-                case 2: return getString(R.string.title_recent).toUpperCase();
-                case 3: return getString(R.string.title_category).toUpperCase();
-                case 4: return getString(R.string.title_my).toUpperCase();
+                case TOP: return getString(R.string.title_top).toUpperCase();
+                case FEED: return getString(R.string.title_feed).toUpperCase();
+                case RECENT: return getString(R.string.title_recent).toUpperCase();
+                case CATEOGORY: return getString(R.string.title_category).toUpperCase();
+                case MY: return getString(R.string.title_my).toUpperCase();
             }
             return null;
         }
