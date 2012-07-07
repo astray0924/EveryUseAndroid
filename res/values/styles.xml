@@ -2,7 +2,7 @@
 <resources>
 
     <style name="EveryUseTheme" parent="android:Theme.Light">
-        
+       
     </style>
 
     <style name="PictureStyle">

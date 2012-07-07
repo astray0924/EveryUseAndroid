@@ -2,24 +2,25 @@ package org.everyuse.everyuseandroid.activity;
 
 import org.everyuse.everyuseandroid.R;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
+public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
@@ -43,7 +44,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the action bar.
-        final ActionBar actionBar = getActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Set up the ViewPager with the sections adapter.
@@ -74,13 +75,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+        getSupportMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
     
 
     @Override
-	public boolean onOptionsItemSelected(MenuItem item) {		
+	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch(id) {
 		case R.id.menu_new:
