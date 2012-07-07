@@ -48,3 +48,5 @@ gen/
 # Local configuration file (sdk path, etc)
 local.properties
 >>>>>>> 3445eb6c6c97c3de1f668648b85ffc8d81cabd4a
+bin/classes.dex
+bin/EveryUseAndroid.apk
