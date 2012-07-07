@@ -17,11 +17,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.everyuse.android.R;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.ErrorHelper;
 import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
-import org.everyuse.everyuseandroid.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 

@@ -1,6 +1,6 @@
 package org.everyuse.android.activity;
 
-import org.everyuse.everyuseandroid.R;
+import org.everyuse.android.R;
 
 import android.app.SearchManager;
 import android.content.Intent;
