@@ -57,6 +57,8 @@ public class IndexActivity extends FragmentActivity {
 		if (isAuthenticated()) {
 			Intent intent = new Intent(IndexActivity.this, MainActivity.class);
 			startActivity(intent);
+			
+			finish();
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage(R.string.msg_register)
