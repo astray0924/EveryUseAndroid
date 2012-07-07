@@ -34,7 +34,9 @@
         </activity>
         <activity
             android:name=".activity.CreateActivity"
-            android:label="@string/title_activity_main" >
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activity.SearchActivity"
