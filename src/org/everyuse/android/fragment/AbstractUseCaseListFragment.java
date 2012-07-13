@@ -47,10 +47,7 @@ public abstract class AbstractUseCaseListFragment extends ListFragment {
 
 	private String data_url_raw;
 
-	private void initialize() {
-		mDataList = new Vector<UseCase>();
-		mAdapter = new UseCaseSingleAdapter(getActivity(),
-				R.layout.list_item_usecase_single, mDataList);
+	private void initDataComponent() {
 		mListView = (DynamicListView) getListView();
 		mListView.setOnListLoadListener(new OnListLoadListener() {
 
@@ -70,8 +67,6 @@ public abstract class AbstractUseCaseListFragment extends ListFragment {
 		});
 
 		setListAdapter(mAdapter);
-
-		setEmptyText(getString(R.string.tv_no_data));
 	}
 
 	protected void setDataURLRaw(String data_url_raw) {
@@ -85,7 +80,7 @@ public abstract class AbstractUseCaseListFragment extends ListFragment {
 	protected String getDataURLWithQuery() {
 		// build query string using parameters
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("page", String.valueOf(page)));
+		params.add(new BasicNameValuePair("page", String.valueOf(getCurrentPage())));
 		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
 		String query_string = URLEncodedUtils.format(params, "UTF-8");
 
@@ -155,7 +150,7 @@ public abstract class AbstractUseCaseListFragment extends ListFragment {
 		protected void onPostExecute(Boolean success) {
 			if (success) {
 				mAdapter.notifyDataSetChanged();
-				page++;
+				increasePage();
 			} else {
 				Toast.makeText(getActivity(), R.string.msg_data_load_fail,
 						Toast.LENGTH_SHORT).show();
@@ -163,6 +158,16 @@ public abstract class AbstractUseCaseListFragment extends ListFragment {
 
 			load_data_task = null;
 		}
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		mDataList = new Vector<UseCase>();
+		mAdapter = new UseCaseSingleAdapter(getActivity(),
+				R.layout.list_item_usecase_single, mDataList);
+
 	}
 
 	@Override
@@ -179,8 +184,15 @@ public abstract class AbstractUseCaseListFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		initDataComponent();
+	}
+	
+	protected synchronized int getCurrentPage() {
+		return page;
+	}
 
-		initialize();
+	protected synchronized void increasePage() {
+		page++;
 	}
 
 	/*
