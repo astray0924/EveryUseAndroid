@@ -18,6 +18,13 @@ import android.widget.Toast;
 public class MyPageFragment extends ListFragment {
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_mypage, null);
@@ -43,7 +50,7 @@ public class MyPageFragment extends ListFragment {
 		};
 
 		ArrayAdapter<String> aa = new ArrayAdapter<String>(getActivity(),
-				R.layout.listitem_mypage_menu, menu_list);
+				R.layout.list_item_mypage_menu, menu_list);
 		setListAdapter(aa);
 	}
 
