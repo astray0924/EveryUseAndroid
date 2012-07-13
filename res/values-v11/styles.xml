@@ -1,5 +1,5 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light" />
+    <style name="EveryUseTheme" parent="@style/Theme.Sherlock.Light" />
 
 </resources>

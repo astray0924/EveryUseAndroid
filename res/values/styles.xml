@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="EveryUseTheme" parent="android:Theme.Light">
+    <style name="EveryUseTheme" parent="@style/Theme.Sherlock">
        
     </style>
 
