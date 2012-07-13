@@ -36,7 +36,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class UseCaseSingleListFragment extends ListFragment {
+public abstract class UseCaseSingleListFragment extends ListFragment {
 	private List<UseCase> mDataList;
 	private BaseAdapter mAdapter;
 	private DynamicListView mListView;
