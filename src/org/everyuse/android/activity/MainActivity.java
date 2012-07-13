@@ -2,7 +2,7 @@ package org.everyuse.android.activity;
 
 import org.everyuse.android.R;
 import org.everyuse.android.fragment.MyPageFragment;
-import org.everyuse.android.fragment.UseCaseSingleListFragment;
+import org.everyuse.android.fragment.RecentListFragment;
 import org.everyuse.android.util.UserHelper;
 
 import android.app.AlertDialog;
@@ -170,7 +170,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         		fragment = new MyPageFragment();
         		return fragment;
         	case RECENT:
-        		fragment = new UseCaseSingleListFragment();
+        		fragment = new RecentListFragment();
         		return fragment;
         	}
         	
