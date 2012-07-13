@@ -50,5 +50,8 @@
     <string name="msg_complete_form">Please complete the form</string>
     <string name="msg_login_success">Login Successful!</string>
     <string name="msg_create_success">Successfully created!</string>
+    <string name="msg_data_load_fail">Failed to load remote data</string>
+    <string name="msg_data_parse_fail">Failed to parse remote data</string>
+    <string name="msg_data_url_missing">Data URL is missing!</string>
 
 </resources>

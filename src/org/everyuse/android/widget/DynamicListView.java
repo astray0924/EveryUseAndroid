@@ -1,4 +1,4 @@
-package com.everyuse.android.widget;
+package org.everyuse.android.widget;
 
 import org.everyuse.android.R;
 

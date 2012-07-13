@@ -2,6 +2,7 @@ package org.everyuse.android.activity;
 
 import org.everyuse.android.R;
 import org.everyuse.android.fragment.MyPageFragment;
+import org.everyuse.android.fragment.UseCaseSingleListFragment;
 import org.everyuse.android.util.UserHelper;
 
 import android.app.AlertDialog;
@@ -162,13 +163,18 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         @Override
         public Fragment getItem(int i) {
         	// TODO 임시로 처리해둠
+        	Fragment fragment = null;
+        	
         	switch (i) {
         	case MY:
-        		Fragment fragment = new MyPageFragment();
+        		fragment = new MyPageFragment();
+        		return fragment;
+        	case RECENT:
+        		fragment = new UseCaseSingleListFragment();
         		return fragment;
         	}
         	
-            Fragment fragment = new DummySectionFragment();
+            fragment = new DummySectionFragment();
             Bundle args = new Bundle();
             args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, i + 1);
             fragment.setArguments(args);
