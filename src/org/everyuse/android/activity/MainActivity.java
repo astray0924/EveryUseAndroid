@@ -3,6 +3,7 @@ package org.everyuse.android.activity;
 import org.everyuse.android.R;
 import org.everyuse.android.fragment.MyPageFragment;
 import org.everyuse.android.fragment.RecentListFragment;
+import org.everyuse.android.fragment.TopListFragment;
 import org.everyuse.android.util.UserHelper;
 
 import android.app.AlertDialog;
@@ -162,10 +163,12 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 
         @Override
         public Fragment getItem(int i) {
-        	// TODO 임시로 처리해둠
         	Fragment fragment = null;
         	
         	switch (i) {
+        	case TOP:
+        		fragment = new TopListFragment();
+        		return fragment;
         	case MY:
         		fragment = new MyPageFragment();
         		return fragment;

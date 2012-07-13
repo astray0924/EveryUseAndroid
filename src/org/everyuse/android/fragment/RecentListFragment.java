@@ -3,13 +3,13 @@ import org.everyuse.android.util.URLHelper;
 
 import android.os.Bundle;
 
-public class RecentListFragment extends AbstractUseCaseSingleListFragment {
+public class RecentListFragment extends AbstractUseCaseListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		this.setDataURL(URLHelper.USE_CASES_RECENT_URL);
+		this.setDataURLRaw(URLHelper.USE_CASES_RECENT_URL);
 	}
 
 }

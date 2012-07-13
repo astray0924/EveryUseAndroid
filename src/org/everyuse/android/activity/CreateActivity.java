@@ -52,8 +52,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-
 public class CreateActivity extends Activity {
 	private EditText et_item;
 	private EditText et_purpose;

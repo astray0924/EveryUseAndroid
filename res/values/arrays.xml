@@ -5,5 +5,14 @@
         <item>to</item>
         <item>as</item>
     </string-array>
+    <string-array name="use_case">
+        <item>All</item>
+        <item>Item</item>
+        <item>Purpose</item>
+    </string-array>
+    <string-array name="comment">
+        <item>Fun</item>
+        <item>Me too</item>
+    </string-array>
 
 </resources>

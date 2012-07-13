@@ -13,7 +13,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class UseCaseGroup implements Parcelable {
-	public UseCaseType type;
+	public UseCaseSortOption type;
 	public String title;
 	public String photo_url_thumb;
 	public List<UseCase> member_list;
@@ -22,7 +22,7 @@ public class UseCaseGroup implements Parcelable {
 		this.title = title;
 	}
 
-	public UseCaseGroup(UseCaseType type, String title, String photo_url_thumb, List<UseCase> items) {
+	public UseCaseGroup(UseCaseSortOption type, String title, String photo_url_thumb, List<UseCase> items) {
 		this.type = type;
 		this.title = title;
 		this.photo_url_thumb = photo_url_thumb;
@@ -45,7 +45,7 @@ public class UseCaseGroup implements Parcelable {
 		return 0;
 	}
 
-	public static UseCaseGroup parseSingleFromJSON(UseCaseType type, String title, JSONArray member_array)
+	public static UseCaseGroup parseSingleFromJSON(UseCaseSortOption type, String title, JSONArray member_array)
 			throws JSONException {
 		if (member_array.length() == 0) {
 			throw new IllegalArgumentException();
@@ -67,7 +67,7 @@ public class UseCaseGroup implements Parcelable {
 		return new UseCaseGroup(type, title, photo_url, group_members);
 	}
 
-	public static List<UseCaseGroup> parseMultipleFromJSON(UseCaseType category, JSONObject entries) throws JSONException {
+	public static List<UseCaseGroup> parseMultipleFromJSON(UseCaseSortOption category, JSONObject entries) throws JSONException {
 		List<UseCaseGroup> group_list = new ArrayList<UseCaseGroup>();
 
 		@SuppressWarnings({ "unchecked" })
@@ -95,10 +95,10 @@ public class UseCaseGroup implements Parcelable {
 	public static final Creator<UseCaseGroup> CREATOR = new Creator<UseCaseGroup>() {
 
 		public UseCaseGroup createFromParcel(Parcel source) {
-			UseCaseType category = Enum.valueOf(UseCaseType.class, source.readString());
+			UseCaseSortOption category = Enum.valueOf(UseCaseSortOption.class, source.readString());
 			String title = source.readString();
 			String photo_url = source.readString();
-			List<Parcelable> encoded_items = Arrays.asList(source.readParcelableArray(UseCaseType.class
+			List<Parcelable> encoded_items = Arrays.asList(source.readParcelableArray(UseCaseSortOption.class
 					.getClassLoader()));
 			List<UseCase> items = new ArrayList<UseCase>();
 

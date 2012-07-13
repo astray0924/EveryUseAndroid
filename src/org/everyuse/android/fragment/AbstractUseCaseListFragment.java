@@ -18,7 +18,6 @@ import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
 import org.everyuse.android.adapter.UseCaseSingleAdapter;
 import org.everyuse.android.model.UseCase;
-import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.widget.DynamicListView;
 import org.everyuse.android.widget.DynamicListView.OnListLoadListener;
 import org.json.JSONArray;
@@ -28,6 +27,7 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,18 +35,17 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+public abstract class AbstractUseCaseListFragment extends ListFragment {
+	protected List<UseCase> mDataList;
+	protected BaseAdapter mAdapter;
+	protected DynamicListView mListView;
 
-public abstract class AbstractUseCaseSingleListFragment extends ListFragment {
-	private List<UseCase> mDataList;
-	private BaseAdapter mAdapter;
-	private DynamicListView mListView;
+	private AsyncTask<String, Void, Boolean> load_data_task = null;
 
-	private AsyncTask<Void, Void, Boolean> load_data_task = null;
+	protected static final int PER_PAGE = 10;
+	protected static int page = 1;
 
-	private static final int PER_PAGE = 10;
-	private static int page = 1;
-
-	private String data_url;
+	private String data_url_raw;
 
 	private void initialize() {
 		mDataList = new Vector<UseCase>();
@@ -58,8 +57,12 @@ public abstract class AbstractUseCaseSingleListFragment extends ListFragment {
 			@Override
 			public void onLoad() {
 				if (load_data_task == null) {
+					String data_url_with_query = getDataURLWithQuery();
+
+					Log.d("data_url", data_url_with_query);
+
 					load_data_task = new LoadDataTask();
-					load_data_task.execute();
+					load_data_task.execute(data_url_with_query);
 				}
 
 			}
@@ -67,41 +70,45 @@ public abstract class AbstractUseCaseSingleListFragment extends ListFragment {
 		});
 
 		setListAdapter(mAdapter);
+
+		setEmptyText(getString(R.string.tv_no_data));
 	}
 
-	protected void setDataURL(String data_url) {
-		this.data_url = data_url;
+	protected void setDataURLRaw(String data_url_raw) {
+		this.data_url_raw = data_url_raw;
 	}
 
-	protected String getDataURL() {
-		return data_url;
+	protected String getDataURLRaw() {
+		return data_url_raw;
 	}
 
-	private class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
+	protected String getDataURLWithQuery() {
+		// build query string using parameters
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("page", String.valueOf(page)));
+		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
+		String query_string = URLEncodedUtils.format(params, "UTF-8");
+
+		String url = getDataURLRaw();
+		if (url == null || url.equals("")) {
+			throw new IllegalStateException(
+					getString(R.string.msg_missing_data_url));
+		}
+
+		return url + ".json" + "?" + query_string;
+	}
+
+	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
 		private HttpClient client;
-		private String data_url;
 
 		@Override
 		protected void onPreExecute() {
 			client = new DefaultHttpClient();
-
-			// build query string using parameters
-			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("page", String.valueOf(page)));
-			params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
-			String query_string = URLEncodedUtils.format(params, "UTF-8");
-
-			String url = getDataURL();
-			if (url == null || url.equals("")) {
-				throw new IllegalStateException(getString(R.string.msg_data_url_missing));
-			}
-
-			data_url = url + ".json" + "?" + query_string;
 		}
 
 		@Override
-		protected Boolean doInBackground(Void... args) {
-			HttpGet method = new HttpGet(data_url);
+		protected Boolean doInBackground(String... args) {
+			HttpGet method = new HttpGet(args[0]);
 			Boolean success = false;
 
 			try {
