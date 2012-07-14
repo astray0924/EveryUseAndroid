@@ -35,7 +35,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public abstract class AbstractUseCaseListFragment extends ListFragment {
+public class UseCaseListFragment extends ListFragment {
 	protected List<UseCase> mDataList;
 	protected BaseAdapter mAdapter;
 	protected DynamicListView mListView;
@@ -47,7 +47,7 @@ public abstract class AbstractUseCaseListFragment extends ListFragment {
 
 	private String data_url_raw;
 
-	private void initDataComponent() {
+	private void initialize() {
 		mListView = (DynamicListView) getListView();
 		mListView.setOnListLoadListener(new OnListLoadListener() {
 
@@ -80,17 +80,18 @@ public abstract class AbstractUseCaseListFragment extends ListFragment {
 	protected String getDataURLWithQuery() {
 		// build query string using parameters
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("page", String.valueOf(getCurrentPage())));
+		params.add(new BasicNameValuePair("page", String
+				.valueOf(getCurrentPage())));
 		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
 		String query_string = URLEncodedUtils.format(params, "UTF-8");
 
-		String url = getDataURLRaw();
-		if (url == null || url.equals("")) {
+		String url_raw = getDataURLRaw();
+		if (url_raw == null || url_raw.equals("")) {
 			throw new IllegalStateException(
 					getString(R.string.msg_missing_data_url));
 		}
 
-		return url + ".json" + "?" + query_string;
+		return url_raw + ".json" + "?" + query_string;
 	}
 
 	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
@@ -162,6 +163,8 @@ public abstract class AbstractUseCaseListFragment extends ListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.d("UseCaseListFragment", "onCreate()");
+
 		super.onCreate(savedInstanceState);
 
 		mDataList = new Vector<UseCase>();
@@ -173,6 +176,8 @@ public abstract class AbstractUseCaseListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Log.d("UseCaseListFragment", "onCreateView()");
+		
 		return inflater.inflate(R.layout.fragment_recent_list, null);
 	}
 
@@ -184,9 +189,19 @@ public abstract class AbstractUseCaseListFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		initDataComponent();
+		
+		Log.d("UseCaseListFragment", "onActivityCreated()");
+		
+		initialize();
 	}
-	
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		
+		Log.d("UseCaseListFragment", "onStart()");
+	}
+
 	protected synchronized int getCurrentPage() {
 		return page;
 	}

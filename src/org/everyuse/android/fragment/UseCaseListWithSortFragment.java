@@ -16,8 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public abstract class AbstractUseCaseListWithSortFragment extends
-		AbstractUseCaseListFragment {
+public class UseCaseListWithSortFragment extends UseCaseListFragment {
 
 	private Spinner sp_sort;
 
