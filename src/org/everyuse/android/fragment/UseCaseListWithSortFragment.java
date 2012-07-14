@@ -10,7 +10,9 @@ import org.everyuse.android.R;
 import org.everyuse.android.model.UseCaseSortOption;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -19,9 +21,21 @@ import android.widget.AdapterView.OnItemSelectedListener;
 public class UseCaseListWithSortFragment extends UseCaseListFragment {
 
 	private Spinner sp_sort;
+	private int sort_option_array_id = 0;
 
 	public UseCaseListWithSortFragment(String data_url) {
 		super(data_url);
+	}
+
+	public UseCaseListWithSortFragment(String data_url, int sort_option_array_id) {
+		super(data_url);
+		this.sort_option_array_id = sort_option_array_id;
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_usecase_list_with_sort, null);
 	}
 
 	@Override
@@ -49,9 +63,14 @@ public class UseCaseListWithSortFragment extends UseCaseListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		if (sort_option_array_id == 0) { // 정렬 옵션 array가 설정되지 않았음
+			throw new IllegalStateException(
+					getString(R.string.msg_missing_sort_option));
+		}
+
 		sp_sort = (Spinner) getActivity().findViewById(R.id.sp_sort_option);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-				getActivity(), R.array.comment,
+				getActivity(), sort_option_array_id,
 				android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp_sort.setAdapter(adapter);
@@ -59,8 +78,6 @@ public class UseCaseListWithSortFragment extends UseCaseListFragment {
 
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
-				UseCaseSortOption sort_option = getSelectedSortOption();
-
 				resetList();
 			}
 

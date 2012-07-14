@@ -89,7 +89,7 @@ public class CreateActivity extends Activity {
 
 		sp_purpose_type = (Spinner) findViewById(R.id.sp_purpose_type);
 		ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter
-				.createFromResource(this, R.array.purpose_type,
+				.createFromResource(this, R.array.purpose,
 						android.R.layout.simple_spinner_item);
 		spinner_adapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

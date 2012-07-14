@@ -167,7 +167,7 @@ public class UseCaseListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_recent_list, null);
+		return inflater.inflate(R.layout.fragment_usecase_list, null);
 	}
 
 	/*
