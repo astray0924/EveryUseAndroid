@@ -20,6 +20,10 @@ public class UseCaseListWithSortFragment extends UseCaseListFragment {
 
 	private Spinner sp_sort;
 
+	public UseCaseListWithSortFragment(String data_url) {
+		super(data_url);
+	}
+
 	protected void resetList() {
 		mDataList.clear();
 		mAdapter.notifyDataSetChanged();
@@ -30,7 +34,7 @@ public class UseCaseListWithSortFragment extends UseCaseListFragment {
 	@Override
 	protected String getDataURLWithQuery() {
 		// build query string using parameters
-		String url = getDataURLRaw();
+		String url = getRawDataURL();
 		UseCaseSortOption sort_option = getSelectedSortOption();
 
 		if (url == null || url.equals("") || sort_option == null) {

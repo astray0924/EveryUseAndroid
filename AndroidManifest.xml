@@ -17,7 +17,9 @@
         android:theme="@style/EveryUseTheme" >
         <activity
             android:name=".activity.IndexActivity"
-            android:label="@string/title_activity_index" >
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_index"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,11 +28,15 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/title_activity_main" >
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activity.RegisterActivity"
-            android:label="@string/title_activity_main" >
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activity.CreateActivity"
@@ -40,7 +46,9 @@
         </activity>
         <activity
             android:name=".activity.SearchActivity"
-            android:label="@string/title_activity_main" >
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

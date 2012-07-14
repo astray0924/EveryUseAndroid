@@ -13,11 +13,8 @@ import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class TopListFragment extends UseCaseListWithSortFragment {
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		setDataURLRaw(URLHelper.USE_CASES_TOP_URL);
+	public TopListFragment(String data_url) {
+		super(data_url);
 	}
 
 	@Override

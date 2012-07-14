@@ -1,9 +1,13 @@
 package org.everyuse.android.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.everyuse.android.R;
 import org.everyuse.android.fragment.MyPageFragment;
-import org.everyuse.android.fragment.RecentListFragment;
 import org.everyuse.android.fragment.TopListFragment;
+import org.everyuse.android.fragment.UseCaseListFragment;
+import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
 
 import android.app.AlertDialog;
@@ -46,7 +50,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Create the adapter that will return a fragment for each of the three primary sections
+        // Create the adapter that will return a fragment for each of the primary sections
         // of the app.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -156,37 +160,31 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     	private final int RECENT 		= 	2;
     	private final int CATEOGORY 	= 	3;
     	private final int MY			= 	4;
+    	
+    	private List<Fragment> fragment_list = new ArrayList<Fragment>();
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            
+            initFragments();
+        }
+        
+        private void initFragments() {
+        	fragment_list.add(TOP, new TopListFragment(URLHelper.USE_CASES_TOP_URL));
+        	fragment_list.add(FEED, new DummySectionFragment());
+        	fragment_list.add(RECENT, new UseCaseListFragment(URLHelper.USE_CASES_RECENT_URL));
+        	fragment_list.add(CATEOGORY, new DummySectionFragment());
+        	fragment_list.add(MY, new MyPageFragment());
         }
 
         @Override
         public Fragment getItem(int i) {
-        	Fragment fragment = null;
-        	
-        	switch (i) {
-        	case TOP:
-        		fragment = new TopListFragment();
-        		return fragment;
-        	case MY:
-        		fragment = new MyPageFragment();
-        		return fragment;
-        	case RECENT:
-        		fragment = new RecentListFragment();
-        		return fragment;
-        	}
-        	
-            fragment = new DummySectionFragment();
-            Bundle args = new Bundle();
-            args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, i + 1);
-            fragment.setArguments(args);
-            return fragment;
+        	return fragment_list.get(i);
         }
 
         @Override
         public int getCount() {
-            return 5;
+            return fragment_list.size();
         }
 
         @Override
@@ -216,8 +214,9 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
                 Bundle savedInstanceState) {
             TextView textView = new TextView(getActivity());
             textView.setGravity(Gravity.CENTER);
-            Bundle args = getArguments();
-            textView.setText(Integer.toString(args.getInt(ARG_SECTION_NUMBER)));
+//            Bundle args = getArguments();
+//            textView.setText(Integer.toString(args.getInt(ARG_SECTION_NUMBER)));
+            textView.setText("Dummy");
             return textView;
         }
     }

@@ -42,38 +42,22 @@ public class UseCaseListFragment extends ListFragment {
 
 	private AsyncTask<String, Void, Boolean> load_data_task = null;
 
-	protected static final int PER_PAGE = 10;
-	protected static int page = 1;
+	protected final int PER_PAGE = 10;
+	protected int page = 1;
 
 	private String data_url_raw;
 
-	private void initialize() {
-		mListView = (DynamicListView) getListView();
-		mListView.setOnListLoadListener(new OnListLoadListener() {
+	public static final String DATA_URL = "data_url";
 
-			@Override
-			public void onLoad() {
-				if (load_data_task == null) {
-					String data_url_with_query = getDataURLWithQuery();
-
-					Log.d("data_url", data_url_with_query);
-
-					load_data_task = new LoadDataTask();
-					load_data_task.execute(data_url_with_query);
-				}
-
-			}
-
-		});
-
-		setListAdapter(mAdapter);
+	public UseCaseListFragment(String data_url) {
+		setRawDataURL(data_url);
 	}
 
-	protected void setDataURLRaw(String data_url_raw) {
+	protected void setRawDataURL(String data_url_raw) {
 		this.data_url_raw = data_url_raw;
 	}
 
-	protected String getDataURLRaw() {
+	protected String getRawDataURL() {
 		return data_url_raw;
 	}
 
@@ -85,7 +69,7 @@ public class UseCaseListFragment extends ListFragment {
 		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
 		String query_string = URLEncodedUtils.format(params, "UTF-8");
 
-		String url_raw = getDataURLRaw();
+		String url_raw = getRawDataURL();
 		if (url_raw == null || url_raw.equals("")) {
 			throw new IllegalStateException(
 					getString(R.string.msg_missing_data_url));
@@ -163,8 +147,6 @@ public class UseCaseListFragment extends ListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.d("UseCaseListFragment", "onCreate()");
-
 		super.onCreate(savedInstanceState);
 
 		mDataList = new Vector<UseCase>();
@@ -176,8 +158,6 @@ public class UseCaseListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.d("UseCaseListFragment", "onCreateView()");
-		
 		return inflater.inflate(R.layout.fragment_recent_list, null);
 	}
 
@@ -189,25 +169,30 @@ public class UseCaseListFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
-		Log.d("UseCaseListFragment", "onActivityCreated()");
-		
+
 		initialize();
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		
-		Log.d("UseCaseListFragment", "onStart()");
-	}
+	private void initialize() {
+		mListView = (DynamicListView) getListView();
+		mListView.setOnListLoadListener(new OnListLoadListener() {
 
-	protected synchronized int getCurrentPage() {
-		return page;
-	}
+			@Override
+			public void onLoad() {
+				if (load_data_task == null) {
+					String data_url_with_query = getDataURLWithQuery();
 
-	protected synchronized void increasePage() {
-		page++;
+					Log.i("data_url", data_url_with_query);
+
+					load_data_task = new LoadDataTask();
+					load_data_task.execute(data_url_with_query);
+				}
+
+			}
+
+		});
+
+		setListAdapter(mAdapter);
 	}
 
 	/*
@@ -220,5 +205,17 @@ public class UseCaseListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 
+	}
+
+	protected synchronized int getCurrentPage() {
+		return page;
+	}
+
+	protected synchronized void increasePage() {
+		page++;
+	}
+
+	protected synchronized void resetPage() {
+		page = 1;
 	}
 }
