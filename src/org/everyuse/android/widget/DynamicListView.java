@@ -47,6 +47,7 @@ public class DynamicListView extends ListView implements OnScrollListener {
 
 	@Override
 	public void setAdapter(ListAdapter adapter) {
+
 		if (getFooterViewsCount() == 0) {
 			addFooterView(footer, null, false);
 		}
