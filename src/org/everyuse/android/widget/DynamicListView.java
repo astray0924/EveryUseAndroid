@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-
 public class DynamicListView extends ListView implements OnScrollListener {
 	private boolean mLoadEnded = false;
 	private LayoutInflater inflater;
@@ -23,13 +22,13 @@ public class DynamicListView extends ListView implements OnScrollListener {
 		initialize();
 	}
 
-	public DynamicListView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
+	public DynamicListView(Context context, AttributeSet attrs) {
+		super(context, attrs);
 		initialize();
 	}
 
-	public DynamicListView(Context context, AttributeSet attrs) {
-		super(context, attrs);
+	public DynamicListView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
 		initialize();
 	}
 
@@ -38,8 +37,8 @@ public class DynamicListView extends ListView implements OnScrollListener {
 				Context.LAYOUT_INFLATER_SERVICE);
 
 		// inflate footer
-		footer = (LinearLayout) inflater
-				.inflate(R.layout.list_item_footer, null);
+		footer = (LinearLayout) inflater.inflate(R.layout.list_item_footer,
+				null);
 		footer.setClickable(false);
 
 		// set self as onScrollListener
@@ -48,7 +47,9 @@ public class DynamicListView extends ListView implements OnScrollListener {
 
 	@Override
 	public void setAdapter(ListAdapter adapter) {
-		addFooterView(footer, null, false);
+		if (getFooterViewsCount() == 0) {
+			addFooterView(footer, null, false);
+		}
 
 		super.setAdapter(adapter);
 	}
@@ -77,7 +78,7 @@ public class DynamicListView extends ListView implements OnScrollListener {
 					if (getFooterViewsCount() == 0) {
 						addFooterView(footer, null, false);
 					}
-					
+
 					setOnScrollListener(DynamicListView.this);
 				}
 

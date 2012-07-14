@@ -49,6 +49,13 @@ public class UseCaseListFragment extends ListFragment {
 
 	public static final String DATA_URL = "data_url";
 
+	protected void resetList() {
+		mDataList.clear();
+		mAdapter.notifyDataSetChanged();
+		mListView.setLoadEndFlag(false);
+		page = 1;
+	}
+
 	public UseCaseListFragment(String data_url) {
 		setRawDataURL(data_url);
 	}
@@ -153,6 +160,8 @@ public class UseCaseListFragment extends ListFragment {
 		mAdapter = new UseCaseSingleAdapter(getActivity(),
 				R.layout.list_item_usecase_single, mDataList);
 
+		setListAdapter(mAdapter);
+
 	}
 
 	@Override
@@ -191,8 +200,6 @@ public class UseCaseListFragment extends ListFragment {
 			}
 
 		});
-
-		setListAdapter(mAdapter);
 	}
 
 	/*

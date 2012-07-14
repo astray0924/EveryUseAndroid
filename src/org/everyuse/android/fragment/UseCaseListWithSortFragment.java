@@ -24,13 +24,6 @@ public class UseCaseListWithSortFragment extends UseCaseListFragment {
 		super(data_url);
 	}
 
-	protected void resetList() {
-		mDataList.clear();
-		mAdapter.notifyDataSetChanged();
-		mListView.setLoadEndFlag(false);
-		page = 1;
-	}
-
 	@Override
 	protected String getDataURLWithQuery() {
 		// build query string using parameters
@@ -92,8 +85,6 @@ public class UseCaseListWithSortFragment extends UseCaseListFragment {
 			sort_option = UseCaseSortOption.FUN;
 		} else if (selected.equals("me too")) {
 			sort_option = UseCaseSortOption.METOO;
-		} else if (selected.equals("favorite")) {
-			sort_option = UseCaseSortOption.FAVORITE;
 		}
 
 		return sort_option;
