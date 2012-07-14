@@ -41,3 +41,10 @@ local.properties
 
 # PDT-specific
 .buildpathbin
+bin
+/bin/AndroidManifest.xml
+/bin/classes.dex
+/bin/EveryUseAndroid.apk
+/bin/jarlist.cache
+/bin/resources.ap_
+/bin/res
