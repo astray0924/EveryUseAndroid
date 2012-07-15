@@ -16,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
+import org.everyuse.android.activity.DetailActivity;
 import org.everyuse.android.adapter.UseCaseSingleAdapter;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.widget.DynamicListView;
@@ -24,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -211,7 +213,10 @@ public class UseCaseListFragment extends ListFragment {
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-
+		Intent intent = new Intent(getActivity(), DetailActivity.class);
+		intent.putExtra(DetailActivity.EXTRA_DATA_LIST, mDataList.toArray());
+		intent.putExtra(DetailActivity.EXTRA_STRAT_INDEX, position);
+		startActivity(intent);
 	}
 
 	protected synchronized int getCurrentPage() {

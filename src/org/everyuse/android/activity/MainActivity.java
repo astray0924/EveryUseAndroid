@@ -166,10 +166,10 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             
-            initFragments();
+            initFragments(fm);
         }
         
-        private void initFragments() {
+        private void initFragments(FragmentManager fm) {
         	fragment_list.add(TOP, new UseCaseListWithSortFragment(URLHelper.USE_CASES_TOP_URL, R.array.comment));
         	fragment_list.add(FEED, new DummySectionFragment());
         	fragment_list.add(RECENT, new UseCaseListFragment(URLHelper.USE_CASES_RECENT_URL));
