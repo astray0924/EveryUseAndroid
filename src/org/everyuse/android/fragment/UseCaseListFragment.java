@@ -38,7 +38,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class UseCaseListFragment extends ListFragment {
-	protected List<UseCase> mDataList;
+	protected ArrayList<UseCase> mDataList;
 	protected BaseAdapter mAdapter;
 	protected DynamicListView mListView;
 
@@ -50,13 +50,6 @@ public class UseCaseListFragment extends ListFragment {
 	private String data_url_raw;
 
 	public static final String DATA_URL = "data_url";
-
-	protected void resetList() {
-		mDataList.clear();
-		mAdapter.notifyDataSetChanged();
-		mListView.setLoadEndFlag(false);
-		page = 1;
-	}
 
 	public UseCaseListFragment(String data_url) {
 		setRawDataURL(data_url);
@@ -158,7 +151,7 @@ public class UseCaseListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mDataList = new Vector<UseCase>();
+		mDataList = new ArrayList<UseCase>();
 		mAdapter = new UseCaseSingleAdapter(getActivity(),
 				R.layout.list_item_usecase_single, mDataList);
 
@@ -193,8 +186,6 @@ public class UseCaseListFragment extends ListFragment {
 				if (load_data_task == null) {
 					String data_url_with_query = getDataURLWithQuery();
 
-					Log.i("data_url", data_url_with_query);
-
 					load_data_task = new LoadDataTask();
 					load_data_task.execute(data_url_with_query);
 				}
@@ -214,9 +205,16 @@ public class UseCaseListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), DetailActivity.class);
-		intent.putExtra(DetailActivity.EXTRA_DATA_LIST, mDataList.toArray());
+		intent.putParcelableArrayListExtra(DetailActivity.EXTRA_DATA_LIST, mDataList);
 		intent.putExtra(DetailActivity.EXTRA_STRAT_INDEX, position);
 		startActivity(intent);
+	}
+
+	protected void resetList() {
+		mDataList.clear();
+		mAdapter.notifyDataSetChanged();
+		mListView.setLoadEndFlag(false);
+		page = 1;
 	}
 
 	protected synchronized int getCurrentPage() {

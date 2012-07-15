@@ -53,6 +53,7 @@
     <string name="msg_create_success">Successfully created!</string>
     <string name="msg_data_load_fail">Failed to load remote data</string>
     <string name="msg_data_parse_fail">Failed to parse remote data</string>
+    <string name="msg_missing_data">Data is missing!</string>
     <string name="msg_missing_data_url">Data URL is missing!</string>
     <string name="msg_missing_sort_option">Sort option array is not provided!</string>
 
