@@ -50,6 +50,10 @@ public class UseCaseListFragment extends ListFragment {
 	private String data_url_raw;
 
 	public static final String DATA_URL = "data_url";
+	
+	public UseCaseListFragment() {
+		
+	}
 
 	public UseCaseListFragment(String data_url) {
 		setRawDataURL(data_url);

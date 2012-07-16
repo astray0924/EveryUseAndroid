@@ -22,6 +22,10 @@ public class UseCaseListWithSortFragment extends UseCaseListFragment {
 
 	private Spinner sp_sort;
 	private int sort_option_array_id = 0;
+	
+	public UseCaseListWithSortFragment() {
+		super();
+	}
 
 	public UseCaseListWithSortFragment(String data_url) {
 		super(data_url);

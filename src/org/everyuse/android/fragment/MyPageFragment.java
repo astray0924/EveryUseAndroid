@@ -16,12 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MyPageFragment extends ListFragment {
+	
+	public MyPageFragment() {
+		super();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		
+
 	}
 
 	@Override
