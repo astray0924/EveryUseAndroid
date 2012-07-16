@@ -48,7 +48,7 @@ public class DetailActivity extends SherlockFragmentActivity {
 
 		// Set up the action bar.
 		final ActionBar actionBar = getSupportActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
 		// Set up the view pager
 		pager = (ViewPager) findViewById(R.id.pager);
