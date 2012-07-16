@@ -27,7 +27,7 @@ public class DetailActivity extends SherlockFragmentActivity {
 	public static String EXTRA_STRAT_INDEX = "START_INDEX";
 
 	private ArrayList<UseCase> data_list;
-	private int index;
+	private int start_index;
 
 	private ItemsPagerAdapter pager_adapter;
 	private ViewPager pager;
@@ -49,21 +49,24 @@ public class DetailActivity extends SherlockFragmentActivity {
 		// Set up the action bar.
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		
+
 		// Set up the view pager
 		pager = (ViewPager) findViewById(R.id.pager);
 		pager_adapter = new ItemsPagerAdapter(getSupportFragmentManager());
 		pager.setAdapter(pager_adapter);
-		
+
+		pager.setCurrentItem(start_index);
+
 		image_downloader = new ImageDownloader();
 	}
 
 	private void handleIntent(Intent intent) {
 		data_list = intent.getParcelableArrayListExtra(EXTRA_DATA_LIST);
-		index = intent.getIntExtra(EXTRA_STRAT_INDEX, 0);
-		
+		start_index = intent.getIntExtra(EXTRA_STRAT_INDEX, 0);
+
 		if (data_list == null) {
-			throw new IllegalStateException(getString(R.string.msg_missing_data));
+			throw new IllegalStateException(
+					getString(R.string.msg_missing_data));
 		}
 	}
 
@@ -74,7 +77,9 @@ public class DetailActivity extends SherlockFragmentActivity {
 		}
 
 		@Override
-		public Fragment getItem(int position) { 
+		public Fragment getItem(int position) {
+			// Log.d("DetailActivity", position + "");
+
 			return DetailFragment.newInstance(data_list.get(position));
 		}
 
@@ -84,28 +89,30 @@ public class DetailActivity extends SherlockFragmentActivity {
 		}
 
 	}
-	
+
 	public static class DetailFragment extends Fragment {
 		private static String DATA = "DATA";
-		
+
 		public DetailFragment() {
-			
+
 		}
-		
+
 		public static DetailFragment newInstance(UseCase data) {
+			Log.d("DetailActivity", data + "");
+
 			DetailFragment f = new DetailFragment();
-			
+
 			// supply single UseCase as an argument.
 			Bundle args = new Bundle();
 			args.putParcelable(DATA, data);
 			f.setArguments(args);
-			
+
 			return f;
 		}
-		
-		private void display(UseCase data) {
-			ImageView photo = (ImageView) getActivity().findViewById(R.id.photo);
-			TextView text = (TextView) getActivity().findViewById(R.id.text);
+
+		private void fillPage(View page, UseCase data) {
+			ImageView photo = (ImageView) page.findViewById(R.id.photo);
+			TextView text = (TextView) page.findViewById(R.id.text);
 
 			image_downloader.download(data.photo_url_large, photo);
 			text.setText(data.item + ":" + data.purpose);
@@ -119,10 +126,9 @@ public class DetailActivity extends SherlockFragmentActivity {
 		 */
 		@Override
 		public void onActivityCreated(Bundle savedInstanceState) {
+			Log.d("DetailActivity", "onActivityCreated()");
+
 			super.onActivityCreated(savedInstanceState);
-			
-			UseCase data = getArguments().getParcelable(DATA);
-			display(data);
 		}
 
 		/*
@@ -145,7 +151,14 @@ public class DetailActivity extends SherlockFragmentActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			return inflater.inflate(R.layout.fragment_usecase_detail, null);
+			Log.d("DetailActivity", "onCreateView()");
+
+			View page = inflater
+					.inflate(R.layout.fragment_usecase_detail, null);
+			UseCase data = getArguments().getParcelable(DATA);
+			fillPage(page, data);
+
+			return page;
 		}
 	}
 }
