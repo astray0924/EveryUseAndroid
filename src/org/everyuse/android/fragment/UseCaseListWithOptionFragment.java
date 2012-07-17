@@ -4,6 +4,7 @@ import org.everyuse.android.R;
 import org.everyuse.android.model.UseCaseListOption;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,8 @@ import android.widget.Spinner;
 public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 
 	private Spinner sp_option;
-	private int option_array_id = NO_OPTION_ARRAY;
-	private static final int NO_OPTION_ARRAY = -1;
+	private int option_array_id;
+	private static final int NO_OPTION_ARRAY = 0;
 	private String option_name = "type"; // 기본값은 "type"
 
 	public static String EXTRA_OPTION_ARRAY = "option_array";
@@ -41,27 +42,6 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_usecase_list_with_option,
-				null);
-	}
-
-	@Override
-	protected String buildDataURLWithQuery(String data_url_raw) {
-		UseCaseListOption option_value = getSelectedOption();
-		if (data_url_raw == null || data_url_raw.equals("")
-				|| option_value == null || option_value.equals("")) {
-			throw new IllegalArgumentException(
-					getString(R.string.msg_missing_data_url));
-		}
-
-		// build query string using parameters
-		return super.buildDataURLWithQuery(data_url_raw) + "&" + option_name
-				+ "=" + String.valueOf(option_value).toLowerCase();
-	}
-
-	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -79,10 +59,10 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 
 		if (option_array_id == NO_OPTION_ARRAY) { // 리스트 옵션 목록이 설정되지 않았음
 			throw new IllegalStateException(
-					getString(R.string.msg_missing_sort_option));
+					getString(R.string.msg_missing_option_array));
 		}
 
-		sp_option = (Spinner) getActivity().findViewById(R.id.sp_option);
+		sp_option = (Spinner) getView().findViewById(R.id.sp_option);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
 				getActivity(), option_array_id,
 				android.R.layout.simple_spinner_item);
@@ -103,6 +83,32 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	}
 
 	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_usecase_list_with_option,
+				null);
+	}
+
+	@Override
+	protected String buildDataURLWithQuery(String data_url_raw) {
+		UseCaseListOption option_value = getSelectedOption();
+
+		if (data_url_raw == null || data_url_raw.equals("")) {
+			throw new IllegalArgumentException(
+					getString(R.string.msg_missing_data_url));
+		}
+
+		if (option_value == null || option_value.equals("")) {
+			throw new IllegalArgumentException(
+					getString(R.string.msg_missing_option_value));
+		}
+
+		// build query string using parameters
+		return super.buildDataURLWithQuery(data_url_raw) + "&" + option_name
+				+ "=" + String.valueOf(option_value).toLowerCase();
+	}
+
+	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
@@ -113,7 +119,7 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 		if (sp_option == null) {
 			throw new IllegalStateException("Spinner is not initialized!");
 		}
-		
+
 		String selected = sp_option.getSelectedItem().toString().toLowerCase();
 		UseCaseListOption option = null;
 

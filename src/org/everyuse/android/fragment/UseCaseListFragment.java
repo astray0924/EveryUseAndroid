@@ -51,6 +51,7 @@ public class UseCaseListFragment extends ListFragment {
 
 	public static final String EXTRA_DATA_LIST = "data_list";
 	public static final String EXTRA_DATA_URL = "data_url";
+	public static final String EXTRA_DATA_URL_RAW = "data_url_raw";
 	private String data_url;
 	private String data_url_raw;
 
@@ -66,6 +67,59 @@ public class UseCaseListFragment extends ListFragment {
 		}
 
 		this.data_url_raw = data_url_raw;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		mDataList = new ArrayList<UseCase>();
+		mAdapter = new UseCaseSingleAdapter(getActivity(),
+				R.layout.list_item_usecase_single, mDataList);
+
+		setListAdapter(mAdapter);
+
+		if (savedInstanceState != null) {
+			data_url = savedInstanceState.getString(EXTRA_DATA_URL, "");
+			data_url_raw = savedInstanceState.getString(EXTRA_DATA_URL_RAW, "");
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
+	 */
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		initialize();
+	}
+
+	private void initialize() {
+
+		mListView = (DynamicListView) getListView();
+		mListView.setOnListLoadListener(new OnListLoadListener() {
+
+			@Override
+			public void onLoad() {
+				if (load_data_task == null) {
+					data_url = buildDataURLWithQuery(data_url_raw);
+
+					if (data_url == null || data_url.equals("")) {
+						throw new IllegalStateException(
+								getString(R.string.msg_missing_data_url));
+					}
+
+					load_data_task = new LoadDataTask();
+					load_data_task.execute(data_url);
+				}
+
+			}
+
+		});
 	}
 
 	protected String buildDataURLWithQuery(String data_url_raw) {
@@ -95,6 +149,7 @@ public class UseCaseListFragment extends ListFragment {
 		super.onSaveInstanceState(outState);
 
 		outState.putString(EXTRA_DATA_URL, data_url);
+		outState.putString(EXTRA_DATA_URL_RAW, data_url_raw);
 	}
 
 	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
@@ -172,60 +227,9 @@ public class UseCaseListFragment extends ListFragment {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		if (savedInstanceState != null) {
-			data_url = savedInstanceState.getString(EXTRA_DATA_URL, "");
-		}
-
-		mDataList = new ArrayList<UseCase>();
-		mAdapter = new UseCaseSingleAdapter(getActivity(),
-				R.layout.list_item_usecase_single, mDataList);
-
-		setListAdapter(mAdapter);
-
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_usecase_list, null);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
-	 */
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-
-		initialize();
-	}
-
-	private void initialize() {
-		mListView = (DynamicListView) getListView();
-		mListView.setOnListLoadListener(new OnListLoadListener() {
-
-			@Override
-			public void onLoad() {
-				if (load_data_task == null) {
-					data_url = buildDataURLWithQuery(data_url_raw);
-					
-					if (data_url == null || data_url.equals("")) {
-						throw new IllegalStateException(
-								getString(R.string.msg_missing_data_url));
-					}
-
-					load_data_task = new LoadDataTask();
-					load_data_task.execute(data_url);
-				}
-
-			}
-
-		});
 	}
 
 	/*

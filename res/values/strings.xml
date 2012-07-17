@@ -54,6 +54,7 @@
     <string name="msg_data_parse_fail">Failed to parse remote data</string>
     <string name="msg_missing_data">Data is missing!</string>
     <string name="msg_missing_data_url">Data URL is missing!</string>
-    <string name="msg_missing_sort_option">Sort option array is not provided!</string>
+    <string name="msg_missing_option_array">Sort option array is not provided!</string>
+    <string name="msg_missing_option_value">Sort option array is not provided!</string>
 
 </resources>
