@@ -49,6 +49,7 @@ public class UseCaseListFragment extends ListFragment {
 	protected static final int START_PAGE = 1;
 	protected static final int HTTP_ERROR_CODE = 300;
 
+	public static final String EXTRA_DATA_LIST = "data_list";
 	public static final String EXTRA_DATA_URL = "data_url";
 	private String data_url;
 	private String data_url_raw;
