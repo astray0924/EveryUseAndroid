@@ -25,6 +25,8 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	private static final int NO_OPTION_ARRAY = -1;
 	private String option_name = "type"; // 기본값은 "type"
 
+	public static String EXTRA_OPTION_ARRAY = "option_array";
+
 	public UseCaseListWithOptionFragment() {
 		super();
 	}
@@ -74,6 +76,18 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	}
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		// 옵션 배열 복원
+		if (savedInstanceState != null) {
+			option_array_id = savedInstanceState.getInt(EXTRA_OPTION_ARRAY,
+					NO_OPTION_ARRAY);
+		}
+
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
@@ -100,6 +114,13 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 			}
 
 		});
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		outState.putInt(EXTRA_OPTION_ARRAY, option_array_id);
 	}
 
 	private UseCaseListOption getSelectedOption() {
