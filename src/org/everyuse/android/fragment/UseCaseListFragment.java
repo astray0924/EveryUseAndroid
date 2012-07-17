@@ -50,25 +50,29 @@ public class UseCaseListFragment extends ListFragment {
 	protected static final int HTTP_ERROR_CODE = 300;
 
 	public static final String EXTRA_DATA_URL = "data_url";
+	private String data_url;
 	private String data_url_raw;
 
 	public UseCaseListFragment() {
 
 	}
 
-	public UseCaseListFragment(String data_url) {
-		setRawDataURL(data_url);
-	}
+	public UseCaseListFragment(String data_url_raw) {
 
-	protected void setRawDataURL(String data_url_raw) {
+		if (data_url_raw == null || data_url_raw.equals("")) {
+			throw new IllegalArgumentException(
+					getString(R.string.msg_missing_data_url));
+		}
+
 		this.data_url_raw = data_url_raw;
 	}
 
-	protected String getRawDataURL() {
-		return data_url_raw;
-	}
+	protected String buildDataURLWithQuery(String data_url_raw) {
+		if (data_url_raw == null || data_url_raw.equals("")) {
+			throw new IllegalArgumentException(
+					getString(R.string.msg_missing_data_url));
+		}
 
-	protected String getDataURLWithQuery() {
 		// build query string using parameters
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("page", String
@@ -76,13 +80,20 @@ public class UseCaseListFragment extends ListFragment {
 		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
 		String query_string = URLEncodedUtils.format(params, "UTF-8");
 
-		String url_raw = getRawDataURL();
-		if (url_raw == null || url_raw.equals("")) {
-			throw new IllegalStateException(
-					getString(R.string.msg_missing_data_url));
-		}
+		return data_url_raw + ".json" + "?" + query_string;
+	}
 
-		return url_raw + ".json" + "?" + query_string;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * android.support.v4.app.Fragment#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		outState.putString(EXTRA_DATA_URL, data_url);
 	}
 
 	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
@@ -95,6 +106,13 @@ public class UseCaseListFragment extends ListFragment {
 
 		@Override
 		protected Boolean doInBackground(String... args) {
+			String data_url = args[0];
+
+			if (data_url == null || data_url.equals("")) {
+				throw new IllegalArgumentException(
+						getString(R.string.msg_missing_data_url));
+			}
+
 			HttpGet method = new HttpGet(args[0]);
 			Boolean success = false;
 
@@ -156,6 +174,10 @@ public class UseCaseListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		if (savedInstanceState != null) {
+			data_url = savedInstanceState.getString(EXTRA_DATA_URL, "");
+		}
+
 		mDataList = new ArrayList<UseCase>();
 		mAdapter = new UseCaseSingleAdapter(getActivity(),
 				R.layout.list_item_usecase_single, mDataList);
@@ -189,10 +211,15 @@ public class UseCaseListFragment extends ListFragment {
 			@Override
 			public void onLoad() {
 				if (load_data_task == null) {
-					String data_url_with_query = getDataURLWithQuery();
+					data_url = buildDataURLWithQuery(data_url_raw);
+					
+					if (data_url == null || data_url.equals("")) {
+						throw new IllegalStateException(
+								getString(R.string.msg_missing_data_url));
+					}
 
 					load_data_task = new LoadDataTask();
-					load_data_task.execute(data_url_with_query);
+					load_data_task.execute(data_url);
 				}
 
 			}

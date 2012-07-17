@@ -1,11 +1,5 @@
 package org.everyuse.android.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 import org.everyuse.android.R;
 import org.everyuse.android.model.UseCaseListOption;
 
@@ -14,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 
@@ -52,25 +46,17 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	}
 
 	@Override
-	protected String getDataURLWithQuery() {
-		// build query string using parameters
-		String url = getRawDataURL();
+	protected String buildDataURLWithQuery(String data_url_raw) {
 		UseCaseListOption option_value = getSelectedOption();
-
-		if (url == null || url.equals("") || option_value == null
-				|| option_value.equals("")) {
-			throw new IllegalStateException(
+		if (data_url_raw == null || data_url_raw.equals("")
+				|| option_value == null || option_value.equals("")) {
+			throw new IllegalArgumentException(
 					getString(R.string.msg_missing_data_url));
 		}
 
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("page", String.valueOf(page)));
-		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
-		params.add(new BasicNameValuePair(option_name, String.valueOf(
-				option_value).toLowerCase()));
-		String query_string = URLEncodedUtils.format(params, "UTF-8");
-
-		return url + ".json" + "?" + query_string;
+		// build query string using parameters
+		return super.buildDataURLWithQuery(data_url_raw) + "&" + option_name
+				+ "=" + String.valueOf(option_value).toLowerCase();
 	}
 
 	@Override
@@ -103,6 +89,10 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	}
 
 	private UseCaseListOption getSelectedOption() {
+		if (sp_option == null) {
+			throw new IllegalStateException("Spinner is not initialized!");
+		}
+		
 		String selected = sp_option.getSelectedItem().toString().toLowerCase();
 		UseCaseListOption option = null;
 
