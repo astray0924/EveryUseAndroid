@@ -43,18 +43,17 @@ public class UseCaseListFragment extends ListFragment {
 	protected DynamicListView mListView;
 
 	private AsyncTask<String, Void, Boolean> load_data_task = null;
+	protected int page = START_PAGE;
 
 	protected static final int PER_PAGE = 10;
 	protected static final int START_PAGE = 1;
-	protected int page = START_PAGE;
-
-	private String data_url_raw;
+	protected static final int HTTP_ERROR_CODE = 300;
 
 	public static final String EXTRA_DATA_URL = "data_url";
-	private static final int HTTP_ERROR_CODE = 300;
-	
+	private String data_url_raw;
+
 	public UseCaseListFragment() {
-		
+
 	}
 
 	public UseCaseListFragment(String data_url) {
@@ -211,7 +210,8 @@ public class UseCaseListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), DetailActivity.class);
-		intent.putParcelableArrayListExtra(DetailActivity.EXTRA_DATA_LIST, mDataList);
+		intent.putParcelableArrayListExtra(DetailActivity.EXTRA_DATA_LIST,
+				mDataList);
 		intent.putExtra(DetailActivity.EXTRA_STRAT_INDEX, position);
 		startActivity(intent);
 	}
