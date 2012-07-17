@@ -44,12 +44,14 @@ public class UseCaseListFragment extends ListFragment {
 
 	private AsyncTask<String, Void, Boolean> load_data_task = null;
 
-	protected final int PER_PAGE = 10;
-	protected int page = 1;
+	protected static final int PER_PAGE = 10;
+	protected static final int START_PAGE = 1;
+	protected int page = START_PAGE;
 
 	private String data_url_raw;
 
-	public static final String DATA_URL = "data_url";
+	public static final String EXTRA_DATA_URL = "data_url";
+	private static final int HTTP_ERROR_CODE = 300;
 	
 	public UseCaseListFragment() {
 		
@@ -104,7 +106,7 @@ public class UseCaseListFragment extends ListFragment {
 				if (entity != null) {
 					int code = response.getStatusLine().getStatusCode();
 
-					if (code >= 300) { // HTTP error code
+					if (code >= HTTP_ERROR_CODE) { // HTTP error code
 						success = false;
 					} else { // success
 						String res_string = EntityUtils.toString(entity);
@@ -215,10 +217,11 @@ public class UseCaseListFragment extends ListFragment {
 	}
 
 	protected void resetList() {
+		resetPage();
+
 		mDataList.clear();
 		mAdapter.notifyDataSetChanged();
 		mListView.setLoadEndFlag(false);
-		page = 1;
 	}
 
 	protected synchronized int getCurrentPage() {
@@ -230,6 +233,6 @@ public class UseCaseListFragment extends ListFragment {
 	}
 
 	protected synchronized void resetPage() {
-		page = 1;
+		page = START_PAGE;
 	}
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import org.everyuse.android.R;
 import org.everyuse.android.fragment.MyPageFragment;
 import org.everyuse.android.fragment.UseCaseListFragment;
-import org.everyuse.android.fragment.UseCaseListWithSortFragment;
+import org.everyuse.android.fragment.UseCaseListWithOptionFragment;
 import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
 
@@ -185,7 +185,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 
 		private void initFragments(FragmentManager fm) {
-			fragment_list.add(TOP, new UseCaseListWithSortFragment(
+			fragment_list.add(TOP, new UseCaseListWithOptionFragment(
 					URLHelper.USE_CASES_TOP_URL, R.array.comment));
 			fragment_list.add(FEED, new DummySectionFragment());
 			fragment_list.add(RECENT, new UseCaseListFragment(

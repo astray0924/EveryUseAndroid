@@ -1,5 +1,5 @@
 package org.everyuse.android.model;
 
-public enum UseCaseSortOption {
+public enum UseCaseListOption {
 	ITEM, PURPOSE, FUN, METOO, ALL
 }
