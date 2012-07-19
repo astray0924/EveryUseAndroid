@@ -23,6 +23,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class DetailActivity extends SherlockFragmentActivity {
+	public static String EXTRA_DATA = "DATA";
 	public static String EXTRA_DATA_LIST = "DATA_LIST";
 	public static String EXTRA_STRAT_INDEX = "START_INDEX";
 
@@ -63,6 +64,13 @@ public class DetailActivity extends SherlockFragmentActivity {
 	private void handleIntent(Intent intent) {
 		data_list = intent.getParcelableArrayListExtra(EXTRA_DATA_LIST);
 		start_index = intent.getIntExtra(EXTRA_STRAT_INDEX, 0);
+		
+		// data가 인스턴스로 하나만 넘겨졌다면 그걸로 리스트 생성
+		UseCase data = intent.getParcelableExtra(EXTRA_DATA);
+		if (data != null) {
+			data_list = new ArrayList<UseCase>();
+			data_list.add(data);
+		}
 
 		if (data_list == null) {
 			throw new IllegalStateException(
