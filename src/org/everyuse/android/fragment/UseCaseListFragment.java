@@ -70,6 +70,18 @@ public class UseCaseListFragment extends ListFragment {
 	}
 
 	@Override
+	public void onStart() {
+		super.onStart();
+		
+		Bundle args = getArguments();
+		if (args != null) {
+			data_url_raw = args.getString(EXTRA_DATA_URL_RAW);
+			data_url = this.buildDataURLWithQuery(data_url_raw);
+			resetList();
+		}
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -250,7 +262,6 @@ public class UseCaseListFragment extends ListFragment {
 
 	protected void resetList() {
 		resetPage();
-
 		mDataList.clear();
 		mAdapter.notifyDataSetChanged();
 		mListView.setLoadEndFlag(false);
