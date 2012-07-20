@@ -1,5 +1,9 @@
 package org.everyuse.android.util;
 
+import org.everyuse.android.R;
+
+import android.content.res.Resources;
+
 public class URLHelper {
 	public static String BASE_URL 						= "http://wikiuse.kaist.ac.kr";
 	public static String USERS_URL 						= BASE_URL + "/users";
@@ -18,8 +22,22 @@ public class URLHelper {
 	public static String FUN_DELETE_URL					= BASE_URL + "/fun/delete";
 	public static String METOO_ADD_URL					= BASE_URL + "/metoo/add";
 	public static String METOO_DELETE_URL				= BASE_URL + "/metoo/delete";
-	
+
 	public static String getMyFavoritedURL(int user_id) {
+		if (user_id <= 0) {
+			throw new IllegalArgumentException(Resources.getSystem().getString(
+					R.string.msg_wrong_user_id));
+		}
+
 		return USERS_URL + "/" + user_id + "/favorited";
+	}
+
+	public static String getMySharedURL(int user_id) {
+		if (user_id <= 0) {
+			throw new IllegalArgumentException(Resources.getSystem().getString(
+					R.string.msg_wrong_user_id));
+		}
+		
+		return USERS_URL + "/" + user_id + "/use_cases";
 	}
 }

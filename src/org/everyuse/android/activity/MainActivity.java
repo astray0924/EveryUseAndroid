@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.everyuse.android.R;
-import org.everyuse.android.fragment.MyPageFragment;
+import org.everyuse.android.fragment.UserProfileFragment;
 import org.everyuse.android.fragment.UseCaseListFragment;
 import org.everyuse.android.fragment.UseCaseListWithOptionFragment;
 import org.everyuse.android.util.URLHelper;
@@ -191,7 +191,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			fragment_list.add(RECENT, new UseCaseListFragment(
 					URLHelper.USE_CASES_RECENT_URL));
 			fragment_list.add(CATEOGORY, new DummySectionFragment());
-			fragment_list.add(MY, new MyPageFragment());
+			fragment_list.add(MY, new UserProfileFragment());
 
 			FragmentTransaction ft = fm.beginTransaction();
 		}

@@ -10,6 +10,11 @@
         <item>Item</item>
         <item>Purpose</item>
     </string-array>
+    <string-array name="use_case_time">
+        <item>Item</item>
+        <item>Purpose</item>
+        <item>Time</item>
+    </string-array>
     <string-array name="comment">
         <item>Fun</item>
         <item>Me too</item>
