@@ -149,6 +149,8 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 			option = UseCaseListOption.FUN;
 		} else if (selected.equals("me too")) {
 			option = UseCaseListOption.METOO;
+		} else if (selected.equals("time")) {
+			option = UseCaseListOption.TIME;
 		}
 
 		return option;
