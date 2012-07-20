@@ -35,7 +35,7 @@ public class UserProfileActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_profile); 
+		setContentView(R.layout.activity_profile);
 
 		initCurrentUserInfo();
 		initFragmentManager();
@@ -88,13 +88,16 @@ public class UserProfileActivity extends FragmentActivity {
 
 	private void initFragments() {
 		fragmentTransaction = fragmentManager.beginTransaction();
-		
+
 		// initialize fragments
 		fragment_list = new ArrayList<Fragment>();
-		fragment_list.add(MENU_SHARED, new UseCaseListWithOptionFragment(
-				URLHelper.getMySharedURL(user_id), R.array.use_case_time));
-		fragment_list.add(MENU_COMMENTED, new UseCaseListWithOptionFragment(
-				URLHelper.getMyCommentedURL(user_id), R.array.comment));
+		fragment_list.add(MENU_SHARED, UseCaseListWithOptionFragment
+				.newInstance(URLHelper.getMySharedURL(user_id),
+						R.array.use_case_time));
+		fragment_list.add(
+				MENU_COMMENTED,
+				UseCaseListWithOptionFragment.newInstance(
+						URLHelper.getMyCommentedURL(user_id), R.array.comment));
 
 		// add fragments
 		for (Fragment fg : fragment_list) {

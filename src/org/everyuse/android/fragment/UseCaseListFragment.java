@@ -50,23 +50,16 @@ public class UseCaseListFragment extends ListFragment {
 	protected static final int HTTP_ERROR_CODE = 300;
 
 	public static final String EXTRA_DATA_LIST = "data_list";
-	public static final String EXTRA_DATA_URL = "data_url";
-	public static final String EXTRA_DATA_URL_RAW = "data_url_raw";
+	public static final String EXTRA_DATA_URL = "data_url_raw";
 	private String data_url;
 	private String data_url_raw;
 
-	public UseCaseListFragment() {
-
-	}
-
-	public UseCaseListFragment(String data_url_raw) {
-
-		if (data_url_raw == null || data_url_raw.equals("")) {
-			throw new IllegalArgumentException(
-					getString(R.string.msg_missing_data_url));
-		}
-
-		this.data_url_raw = data_url_raw;
+	public static UseCaseListFragment newInstance(String data_url) {
+		UseCaseListFragment f = new UseCaseListFragment();
+		Bundle b = new Bundle();
+		b.putString(EXTRA_DATA_URL, data_url);
+		f.setArguments(b);
+		return f;
 	}
 
 	@Override
@@ -79,9 +72,10 @@ public class UseCaseListFragment extends ListFragment {
 
 		setListAdapter(mAdapter);
 
-		if (savedInstanceState != null) {
-			data_url = savedInstanceState.getString(EXTRA_DATA_URL);
-			data_url_raw = savedInstanceState.getString(EXTRA_DATA_URL_RAW);
+		Bundle args = getArguments();
+
+		if (args != null) {
+			data_url_raw = args.getString(EXTRA_DATA_URL);
 		}
 
 	}
@@ -94,21 +88,6 @@ public class UseCaseListFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-		// TODO 개선 필요
-		Bundle args = getArguments();
-		if (args != null) {
-			String data_url_raw = args.getString(EXTRA_DATA_URL_RAW);
-
-			if (data_url_raw == null || data_url_raw == "") {
-				Log.d("ListFragment",
-						getString(R.string.msg_intent_parameter_not_set));
-			} else {
-				this.data_url_raw = data_url_raw;
-				resetList();
-			}
-
-		}
 
 		initialize();
 	}
@@ -153,20 +132,6 @@ public class UseCaseListFragment extends ListFragment {
 		return data_url_raw + ".json" + "?" + query_string;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * android.support.v4.app.Fragment#onSaveInstanceState(android.os.Bundle)
-	 */
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-
-		outState.putString(EXTRA_DATA_URL, data_url);
-		outState.putString(EXTRA_DATA_URL_RAW, data_url_raw);
-	}
-
 	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
 		private HttpClient client;
 
@@ -178,7 +143,7 @@ public class UseCaseListFragment extends ListFragment {
 		@Override
 		protected Boolean doInBackground(String... args) {
 			String data_url = args[0];
-			
+
 			Log.d("data_url", data_url + "");
 
 			if (data_url == null || data_url.equals("")) {
