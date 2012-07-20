@@ -17,11 +17,6 @@ import android.widget.ListView;
 
 public class UserProfileFragment extends ListFragment {
 	private List<String> menu_list = new ArrayList<String>();
-	private static final int MENU_SHARED = 0;
-	private static final int MENU_COMMENTED = 1;
-	private static final int MENU_FAVORITED = 2;
-	private static final int MENU_FOLLOWING = 3;
-	private static final int MENU_FOLLOWER = 4;
 
 	public UserProfileFragment() {
 		super();
@@ -57,11 +52,16 @@ public class UserProfileFragment extends ListFragment {
 
 	private List<String> buildMenuItemList() {
 		List<String> menu_list = new ArrayList<String>();
-		menu_list.add(MENU_SHARED, getString(R.string.menu_shared));
-		menu_list.add(MENU_COMMENTED, getString(R.string.menu_commented));
-		menu_list.add(MENU_FAVORITED, getString(R.string.menu_favorited));
-		menu_list.add(MENU_FOLLOWING, getString(R.string.menu_following));
-		menu_list.add(MENU_FOLLOWER, getString(R.string.menu_follower));
+		menu_list.add(UserProfileActivity.MENU_SHARED,
+				getString(R.string.menu_shared));
+		menu_list.add(UserProfileActivity.MENU_COMMENTED,
+				getString(R.string.menu_commented));
+		menu_list.add(UserProfileActivity.MENU_SCRAPED,
+				getString(R.string.menu_scraped));
+		menu_list.add(UserProfileActivity.MENU_FOLLOWING,
+				getString(R.string.menu_following));
+		menu_list.add(UserProfileActivity.MENU_FOLLOWER,
+				getString(R.string.menu_follower));
 
 		return menu_list;
 	}
@@ -76,18 +76,7 @@ public class UserProfileFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-
-		switch (position) {
-		case MENU_SHARED:
-			intent.putExtra(UserProfileActivity.EXTRA_MENU_SELECTED,
-					UserProfileActivity.MENU_SHARED);
-			break;
-		case MENU_COMMENTED:
-		case MENU_FAVORITED:
-		case MENU_FOLLOWING:
-		case MENU_FOLLOWER:
-		}
-
+		intent.putExtra(UserProfileActivity.EXTRA_MENU_SELECTED, position);
 		startActivity(intent);
 	}
 }

@@ -18,7 +18,7 @@
     <string name="menu_logout">Logout</string>
     <string name="menu_shared">Uses I Shared</string>
     <string name="menu_commented">Uses I Commented</string>
-    <string name="menu_favorited">Favorite</string>
+    <string name="menu_scraped">Scraped uses</string>
     <string name="menu_following">Following</string>
     <string name="menu_follower">Follower</string>
 
@@ -58,6 +58,6 @@
     <string name="msg_missing_option_value">Sort option array is not provided!</string>
     <string name="msg_wrong_user_id">user_id must be bigger than 0!</string>
     <string name="msg_user_session_invalid">User session is invalid!</string>
-    <string name="msg_require_intent_parameter">Required intent parameter is not set!</string>
+    <string name="msg_intent_parameter_not_set">Required intent parameter is not set!</string>
 
 </resources>

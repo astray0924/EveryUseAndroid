@@ -54,6 +54,22 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	}
 
 	@Override
+	public void onStart() {
+		super.onStart();
+
+		Bundle args = getArguments();
+		if (args != null) {
+			int option_array_id = args.getInt(EXTRA_OPTION_ARRAY);
+			
+			if (option_array_id == 0) {
+				Log.d("ListFragment", getString(R.string.msg_intent_parameter_not_set));
+			} else {
+				// TODO 구현 필요
+			}
+		}
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 

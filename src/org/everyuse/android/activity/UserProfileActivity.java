@@ -53,7 +53,7 @@ public class UserProfileActivity extends FragmentActivity {
 				MENU_NOT_SELECTED);
 		if (menu_selected == MENU_NOT_SELECTED) {
 			throw new IllegalStateException(
-					getString(R.string.msg_require_intent_parameter));
+					getString(R.string.msg_intent_parameter_not_set));
 		}
 
 		setFragment(menu_selected);
@@ -93,6 +93,8 @@ public class UserProfileActivity extends FragmentActivity {
 		fragment_list = new ArrayList<Fragment>();
 		fragment_list.add(MENU_SHARED, new UseCaseListWithOptionFragment(
 				URLHelper.getMySharedURL(user_id), R.array.use_case_time));
+		fragment_list.add(MENU_COMMENTED, new UseCaseListWithOptionFragment(
+				URLHelper.getMyCommentedURL(user_id), R.array.comment));
 
 		// add fragments
 		for (Fragment fg : fragment_list) {

@@ -70,18 +70,6 @@ public class UseCaseListFragment extends ListFragment {
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
-		
-		Bundle args = getArguments();
-		if (args != null) {
-			data_url_raw = args.getString(EXTRA_DATA_URL_RAW);
-			data_url = this.buildDataURLWithQuery(data_url_raw);
-			resetList();
-		}
-	}
-
-	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -106,6 +94,21 @@ public class UseCaseListFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+
+		// TODO 개선 필요
+		Bundle args = getArguments();
+		if (args != null) {
+			String data_url_raw = args.getString(EXTRA_DATA_URL_RAW);
+
+			if (data_url_raw == null || data_url_raw == "") {
+				Log.d("ListFragment",
+						getString(R.string.msg_intent_parameter_not_set));
+			} else {
+				this.data_url_raw = data_url_raw;
+				resetList();
+			}
+
+		}
 
 		initialize();
 	}
@@ -175,6 +178,8 @@ public class UseCaseListFragment extends ListFragment {
 		@Override
 		protected Boolean doInBackground(String... args) {
 			String data_url = args[0];
+			
+			Log.d("data_url", data_url + "");
 
 			if (data_url == null || data_url.equals("")) {
 				throw new IllegalArgumentException(
