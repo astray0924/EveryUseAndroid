@@ -80,8 +80,8 @@ public class UseCaseListFragment extends ListFragment {
 		setListAdapter(mAdapter);
 
 		if (savedInstanceState != null) {
-			data_url = savedInstanceState.getString(EXTRA_DATA_URL, "");
-			data_url_raw = savedInstanceState.getString(EXTRA_DATA_URL_RAW, "");
+			data_url = savedInstanceState.getString(EXTRA_DATA_URL);
+			data_url_raw = savedInstanceState.getString(EXTRA_DATA_URL_RAW);
 		}
 
 	}
