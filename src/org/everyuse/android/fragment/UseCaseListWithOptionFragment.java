@@ -17,18 +17,20 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 
 	private Spinner sp_option;
 	private int option_array_id;
-	private static final int NO_OPTION_ARRAY = 0;
 	private String option_name = "type"; // 기본값은 "type"
 
 	public static String EXTRA_OPTION_ARRAY = "option_array";
+	private static final int NO_OPTION_ARRAY = 0;
 
 	public static UseCaseListWithOptionFragment newInstance(String data_url,
 			int option_array_id) {
 		UseCaseListWithOptionFragment f = new UseCaseListWithOptionFragment();
+		
 		Bundle b = new Bundle();
 		b.putString(EXTRA_DATA_URL, data_url);
 		b.putInt(EXTRA_OPTION_ARRAY, option_array_id);
 		f.setArguments(b);
+		
 		return f;
 	}
 

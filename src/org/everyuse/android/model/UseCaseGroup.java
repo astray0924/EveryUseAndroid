@@ -44,8 +44,8 @@ public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 		return 0;
 	}
 
-	public static UseCaseGroup parseSingleFromJSON(UseCaseListOption type,
-			String title, JSONArray member_array) throws JSONException {
+	public static UseCaseGroup parseSingleFromJSON(String title,
+			JSONArray member_array) throws JSONException {
 		if (member_array.length() == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -66,8 +66,7 @@ public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 		return new UseCaseGroup(title, photo_url, group_members);
 	}
 
-	public static List<UseCaseGroup> parseMultipleFromJSON(
-			UseCaseListOption category, JSONObject entries)
+	public static List<UseCaseGroup> parseMultipleFromJSON(JSONObject entries)
 			throws JSONException {
 		List<UseCaseGroup> group_list = new ArrayList<UseCaseGroup>();
 
@@ -77,8 +76,7 @@ public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 			String title = iter.next();
 			JSONArray member_array = entries.getJSONArray(title);
 
-			UseCaseGroup group = parseSingleFromJSON(category, title,
-					member_array);
+			UseCaseGroup group = parseSingleFromJSON(title, member_array);
 			group_list.add(group);
 		}
 
