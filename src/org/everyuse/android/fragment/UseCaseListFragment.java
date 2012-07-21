@@ -174,7 +174,7 @@ public class UseCaseListFragment extends ListFragment {
 
 						for (int i = 0; i < data_list.length(); i++) {
 							JSONObject json = data_list.getJSONObject(i);
-							UseCase u = UseCase.parseFromJSON(json);
+							UseCase u = UseCase.parseSingleFromJSON(json);
 
 							mDataList.add(u);
 						}

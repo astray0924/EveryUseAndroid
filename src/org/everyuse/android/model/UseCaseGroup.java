@@ -55,7 +55,7 @@ public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 
 		for (int i = 0; i < member_array.length(); i++) {
 			JSONObject member_json = member_array.getJSONObject(i);
-			UseCase use_case = UseCase.parseFromJSON(member_json);
+			UseCase use_case = UseCase.parseSingleFromJSON(member_json);
 			group_members.add(use_case);
 
 			if (i == 0) {
@@ -66,7 +66,7 @@ public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 		return new UseCaseGroup(title, photo_url, group_members);
 	}
 
-	public static List<UseCaseGroup> parseMultipleFromJSON(JSONObject entries)
+	public static List<UseCaseGroup> parseFromJSON(JSONObject entries)
 			throws JSONException {
 		List<UseCaseGroup> group_list = new ArrayList<UseCaseGroup>();
 

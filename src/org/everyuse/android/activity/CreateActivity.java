@@ -247,7 +247,7 @@ public class CreateActivity extends Activity {
 					JSONObject json = null;
 					try {
 						json = new JSONObject(responseString);
-						created_use_case = UseCase.parseFromJSON(json);
+						created_use_case = UseCase.parseSingleFromJSON(json);
 					} catch (JSONException e) {
 						e.printStackTrace();
 						return false;

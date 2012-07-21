@@ -25,12 +25,12 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	public static UseCaseListWithOptionFragment newInstance(String data_url,
 			int option_array_id) {
 		UseCaseListWithOptionFragment f = new UseCaseListWithOptionFragment();
-		
+
 		Bundle b = new Bundle();
 		b.putString(EXTRA_DATA_URL, data_url);
 		b.putInt(EXTRA_OPTION_ARRAY, option_array_id);
 		f.setArguments(b);
-		
+
 		return f;
 	}
 
