@@ -67,8 +67,7 @@ public class UseCaseListFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 
 		mDataList = new ArrayList<UseCase>();
-		mAdapter = new UseCaseSingleAdapter(getActivity(),
-				R.layout.list_item_usecase_single, mDataList);
+		mAdapter = new UseCaseSingleAdapter(getActivity(), mDataList);
 
 		setListAdapter(mAdapter);
 

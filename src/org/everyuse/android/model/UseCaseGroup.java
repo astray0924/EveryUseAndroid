@@ -12,41 +12,40 @@ import org.json.JSONObject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class UseCaseGroup implements Parcelable {
-	public UseCaseListOption type;
+public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 	public String title;
 	public String photo_url_thumb;
-	public List<UseCase> member_list;
-	
+	public List<UseCase> children;
+
 	public UseCaseGroup(String title) {
 		this.title = title;
 	}
 
-	public UseCaseGroup(UseCaseListOption type, String title, String photo_url_thumb, List<UseCase> items) {
-		this.type = type;
+	public UseCaseGroup(String title, String photo_url_thumb,
+			List<UseCase> items) {
 		this.title = title;
 		this.photo_url_thumb = photo_url_thumb;
-		this.member_list = items;
+		this.children = items;
 	}
 
-	public List<UseCase> getMembers() {
-		return member_list;
+	public List<UseCase> getChildren() {
+		return children;
 	}
 
 	public int getItemCount() {
-		return member_list.size();
+		return children.size();
 	}
 
 	public String toString() {
-		return "Title: " + title + ", Item Count:" + member_list.size();
+		return "Title: " + title + ", Item Count:" + children.size();
 	}
 
 	public int describeContents() {
 		return 0;
 	}
 
-	public static UseCaseGroup parseSingleFromJSON(UseCaseListOption type, String title, JSONArray member_array)
-			throws JSONException {
+	public static UseCaseGroup parseSingleFromJSON(UseCaseListOption type,
+			String title, JSONArray member_array) throws JSONException {
 		if (member_array.length() == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -64,10 +63,12 @@ public class UseCaseGroup implements Parcelable {
 			}
 		}
 
-		return new UseCaseGroup(type, title, photo_url, group_members);
+		return new UseCaseGroup(title, photo_url, group_members);
 	}
 
-	public static List<UseCaseGroup> parseMultipleFromJSON(UseCaseListOption category, JSONObject entries) throws JSONException {
+	public static List<UseCaseGroup> parseMultipleFromJSON(
+			UseCaseListOption category, JSONObject entries)
+			throws JSONException {
 		List<UseCaseGroup> group_list = new ArrayList<UseCaseGroup>();
 
 		@SuppressWarnings({ "unchecked" })
@@ -76,7 +77,8 @@ public class UseCaseGroup implements Parcelable {
 			String title = iter.next();
 			JSONArray member_array = entries.getJSONArray(title);
 
-			UseCaseGroup group = parseSingleFromJSON(category, title, member_array);
+			UseCaseGroup group = parseSingleFromJSON(category, title,
+					member_array);
 			group_list.add(group);
 		}
 
@@ -84,29 +86,28 @@ public class UseCaseGroup implements Parcelable {
 	}
 
 	public void writeToParcel(Parcel dest, int flag) {
-		dest.writeString(type.name());
 		dest.writeString(title);
 		dest.writeString(photo_url_thumb);
 
-		UseCase[] item_array = new UseCase[member_list.size()];
-		dest.writeParcelableArray(member_list.toArray(item_array), 0);
+		UseCase[] item_array = new UseCase[children.size()];
+		dest.writeParcelableArray(children.toArray(item_array), 0);
 	}
 
 	public static final Creator<UseCaseGroup> CREATOR = new Creator<UseCaseGroup>() {
 
 		public UseCaseGroup createFromParcel(Parcel source) {
-			UseCaseListOption category = Enum.valueOf(UseCaseListOption.class, source.readString());
 			String title = source.readString();
 			String photo_url = source.readString();
-			List<Parcelable> encoded_items = Arrays.asList(source.readParcelableArray(UseCaseListOption.class
-					.getClassLoader()));
+			List<Parcelable> encoded_items = Arrays.asList(source
+					.readParcelableArray(UseCaseListOption.class
+							.getClassLoader()));
 			List<UseCase> items = new ArrayList<UseCase>();
 
 			for (Parcelable e : encoded_items) {
 				items.add((UseCase) e);
 			}
 
-			return new UseCaseGroup(category, title, photo_url, items);
+			return new UseCaseGroup(title, photo_url, items);
 		}
 
 		public UseCaseGroup[] newArray(int size) {
@@ -114,4 +115,9 @@ public class UseCaseGroup implements Parcelable {
 		}
 
 	};
+
+	@Override
+	public int compareTo(UseCaseGroup another) {
+		return title.compareTo(another.title);
+	}
 }
