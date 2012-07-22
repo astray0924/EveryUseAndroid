@@ -24,17 +24,17 @@ import android.widget.TextView;
  * @author KyoungRok
  * 
  */
-public class UseCaseExpandableAdapter extends BaseExpandableListAdapter {
+public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 	private String[] titles;
 	private UseCase[][] children;
 	private LayoutInflater inflater;
 	private ImageDownloader image_downloader;
 
-	public UseCaseExpandableAdapter() {
+	public UseCaseGroupAdapter() {
 		this.image_downloader = new ImageDownloader();
 	}
 
-	public UseCaseExpandableAdapter(Context context,
+	public UseCaseGroupAdapter(Context context,
 			List<UseCaseGroup> group_list) {
 		this();
 
@@ -59,7 +59,7 @@ public class UseCaseExpandableAdapter extends BaseExpandableListAdapter {
 
 	}
 
-	public UseCaseExpandableAdapter(Context context, String[] groups,
+	public UseCaseGroupAdapter(Context context, String[] groups,
 			UseCase[][] children) {
 		this();
 		this.titles = groups;

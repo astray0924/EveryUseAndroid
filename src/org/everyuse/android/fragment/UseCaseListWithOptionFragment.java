@@ -19,7 +19,7 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	private int option_array_id;
 	private String option_name = "type"; // 기본값은 "type"
 
-	public static String EXTRA_OPTION_ARRAY = "option_array";
+	public static final String EXTRA_OPTION_ARRAY = "option_array";
 	private static final int NO_OPTION_ARRAY = 0;
 
 	public static UseCaseListWithOptionFragment newInstance(String data_url,
@@ -49,6 +49,10 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		initOptionSpinner();
+	}
+
+	private void initOptionSpinner() {
 		if (option_array_id == NO_OPTION_ARRAY) { // 리스트 옵션 목록이 설정되지 않았음
 			throw new IllegalStateException(
 					getString(R.string.msg_missing_option_array));
@@ -83,13 +87,12 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 
 	@Override
 	protected String buildDataURLWithQuery(String data_url_raw) {
-		UseCaseListOption option_value = getSelectedOption();
-
 		if (data_url_raw == null || data_url_raw.equals("")) {
 			throw new IllegalArgumentException(
 					getString(R.string.msg_missing_data_url));
 		}
 
+		UseCaseListOption option_value = getSelectedOption();
 		if (option_value == null || option_value.equals("")) {
 			throw new IllegalArgumentException(
 					getString(R.string.msg_missing_option_value));

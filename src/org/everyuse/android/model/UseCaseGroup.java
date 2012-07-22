@@ -2,7 +2,6 @@ package org.everyuse.android.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -13,12 +12,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
-	public String title;
 	public String photo_url_thumb;
+	public String title;
 	public List<UseCase> children;
 
 	public UseCaseGroup(String title) {
 		this.title = title;
+		children = new ArrayList<UseCase>();
 	}
 
 	public UseCaseGroup(String title, String photo_url_thumb,
@@ -44,39 +44,38 @@ public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 		return 0;
 	}
 
-	public static UseCaseGroup parseSingleFromJSON(String title,
-			JSONArray member_array) throws JSONException {
-		if (member_array.length() == 0) {
+	public static UseCaseGroup parseSingleFromJSON(JSONObject json_group)
+			throws JSONException {
+		if (json_group == null) {
 			throw new IllegalArgumentException();
 		}
-
-		List<UseCase> group_members = new ArrayList<UseCase>();
-		String photo_url = null;
-
-		for (int i = 0; i < member_array.length(); i++) {
-			JSONObject member_json = member_array.getJSONObject(i);
-			UseCase use_case = UseCase.parseSingleFromJSON(member_json);
-			group_members.add(use_case);
-
+		
+		String photo_url = ""; 
+		String title = json_group.getString("title");
+		List<UseCase> children = new ArrayList<UseCase>();
+		
+		JSONArray json_children = json_group.getJSONArray("children");
+		for (int i = 0; i < json_children.length(); i++) {
+			JSONObject child = json_children.getJSONObject(i);
+			UseCase use_case = UseCase.parseSingleFromJSON(child);
+			children.add(use_case);
+			
 			if (i == 0) {
 				photo_url = use_case.photo_url_thumb;
 			}
 		}
 
-		return new UseCaseGroup(title, photo_url, group_members);
+
+		return new UseCaseGroup(title, photo_url, children);
 	}
 
-	public static List<UseCaseGroup> parseFromJSON(JSONObject entries)
+	public static List<UseCaseGroup> parseMultipleFromJSON(JSONArray json_array)
 			throws JSONException {
 		List<UseCaseGroup> group_list = new ArrayList<UseCaseGroup>();
 
-		@SuppressWarnings({ "unchecked" })
-		Iterator<String> iter = entries.keys();
-		while (iter.hasNext()) {
-			String title = iter.next();
-			JSONArray member_array = entries.getJSONArray(title);
-
-			UseCaseGroup group = parseSingleFromJSON(title, member_array);
+		for (int i = 0; i < json_array.length(); i++) {
+			JSONObject json_group = json_array.getJSONObject(i);
+			UseCaseGroup group = parseSingleFromJSON(json_group);
 			group_list.add(group);
 		}
 
