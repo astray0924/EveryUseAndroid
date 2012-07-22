@@ -247,11 +247,14 @@ public class CreateActivity extends Activity {
 					JSONObject json = null;
 					try {
 						json = new JSONObject(responseString);
-						created = UseCase.parseFromJSON(json);
-						
-						Intent intent = new Intent(CreateActivity.this, DetailActivity.class);
+
+						created = UseCase.parseSingleFromJSON(json);
+
+						Intent intent = new Intent(CreateActivity.this,
+								DetailActivity.class);
 						intent.putExtra(DetailActivity.EXTRA_DATA, created);
 						startActivity(intent);
+
 					} catch (JSONException e) {
 						e.printStackTrace();
 						return false;
@@ -284,11 +287,11 @@ public class CreateActivity extends Activity {
 						R.string.msg_create_success, Toast.LENGTH_SHORT).show();
 
 				// TODO 올린 케이스 보여주는 기능 추가
-				
+
 				finish();
 			} else {
-				Toast.makeText(CreateActivity.this,
-						msg_error, Toast.LENGTH_SHORT).show();
+				Toast.makeText(CreateActivity.this, msg_error,
+						Toast.LENGTH_SHORT).show();
 			}
 		}
 

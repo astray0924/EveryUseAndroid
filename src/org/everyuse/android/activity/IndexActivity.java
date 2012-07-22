@@ -29,6 +29,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -50,6 +52,8 @@ public class IndexActivity extends FragmentActivity {
 		setContentView(R.layout.activity_index);
 
 		initUI();
+
+		checkConnectivity();
 
 		// TODO: 아이디와 패스워드를 저장하고, 시작 할때마다 로그인하는 방식으로 하자
 		if (isAuthenticated()) {
@@ -84,6 +88,17 @@ public class IndexActivity extends FragmentActivity {
 		}
 	}
 
+	private void checkConnectivity() {
+		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo mWifi = connManager
+				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+		if (!mWifi.isConnected()) {
+			// TODO 연결되어 있지 않을때 처리
+		}
+
+	}
+
 	private boolean isAuthenticated() {
 		return UserHelper.isAuthenticated(getApplicationContext());
 	}
@@ -93,7 +108,6 @@ public class IndexActivity extends FragmentActivity {
 		et_username = (EditText) findViewById(R.id.et_username);
 		et_password = (EditText) findViewById(R.id.et_password);
 
-		
 		// initialize buttons
 		Button btn_login = (Button) findViewById(R.id.btn_login);
 		btn_login.setOnClickListener(new OnClickListener() {
@@ -137,7 +151,8 @@ public class IndexActivity extends FragmentActivity {
 		@Override
 		protected void onPreExecute() {
 			// Initialize progress dialog
-			indicator = new ProgressDialog(IndexActivity.this, ProgressDialog.STYLE_SPINNER);
+			indicator = new ProgressDialog(IndexActivity.this,
+					ProgressDialog.STYLE_SPINNER);
 			indicator.setMessage(getString(R.string.msg_wait));
 			indicator.show();
 		}
@@ -211,14 +226,14 @@ public class IndexActivity extends FragmentActivity {
 		protected void onPostExecute(Boolean result) {
 			indicator.dismiss();
 
-			if (result == null) {								// input form incomplete
+			if (result == null) { // input form incomplete
 				Toast.makeText(getApplicationContext(),
 						getString(R.string.msg_complete_form),
 						Toast.LENGTH_SHORT).show();
-			} else if (result == false) {						// login failed
+			} else if (result == false) { // login failed
 				Toast.makeText(getApplicationContext(), error,
 						Toast.LENGTH_SHORT).show();
-			} else if (result == true) {						// login success
+			} else if (result == true) { // login success
 				Toast.makeText(getApplicationContext(),
 						getString(R.string.msg_login_success),
 						Toast.LENGTH_SHORT).show();

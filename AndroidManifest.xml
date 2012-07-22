@@ -51,6 +51,12 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".activity.UserProfileActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".activity.SearchActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_main"

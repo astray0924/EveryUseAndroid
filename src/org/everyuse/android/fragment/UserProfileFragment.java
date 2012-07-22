@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.everyuse.android.R;
+import org.everyuse.android.activity.UserProfileActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -12,12 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-public class MyPageFragment extends ListFragment {
-	
-	public MyPageFragment() {
+public class UserProfileFragment extends ListFragment {
+	private List<String> menu_list = new ArrayList<String>();
+
+	public UserProfileFragment() {
 		super();
 	}
 
@@ -42,19 +43,27 @@ public class MyPageFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		List<String> menu_list = new ArrayList<String>() {
-			{
-				add(getString(R.string.menu_shared));
-				add(getString(R.string.menu_commented));
-				add(getString(R.string.menu_favorite));
-				add(getString(R.string.menu_following));
-				add(getString(R.string.menu_follower));
-			}
-		};
+		menu_list = buildMenuItemList();
 
 		ArrayAdapter<String> aa = new ArrayAdapter<String>(getActivity(),
 				R.layout.list_item_mypage_menu, menu_list);
 		setListAdapter(aa);
+	}
+
+	private List<String> buildMenuItemList() {
+		List<String> menu_list = new ArrayList<String>();
+		menu_list.add(UserProfileActivity.MENU_SHARED,
+				getString(R.string.menu_shared));
+		menu_list.add(UserProfileActivity.MENU_COMMENTED,
+				getString(R.string.menu_commented));
+		menu_list.add(UserProfileActivity.MENU_SCRAPED,
+				getString(R.string.menu_scraped));
+		menu_list.add(UserProfileActivity.MENU_FOLLOWING,
+				getString(R.string.menu_following));
+		menu_list.add(UserProfileActivity.MENU_FOLLOWER,
+				getString(R.string.menu_follower));
+
+		return menu_list;
 	}
 
 	/*
@@ -66,10 +75,8 @@ public class MyPageFragment extends ListFragment {
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		TextView tv = (TextView) v;
-		String menu_title = tv.getText().toString();
-
-		Toast.makeText(getActivity(), menu_title, Toast.LENGTH_LONG).show();
-
+		Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+		intent.putExtra(UserProfileActivity.EXTRA_MENU_SELECTED, position);
+		startActivity(intent);
 	}
 }

@@ -79,7 +79,7 @@ public class UseCase implements Parcelable {
 		return (int) (id - c.id);
 	}
 
-	public static UseCase parseFromJSON(JSONObject json) throws JSONException {
+	public static UseCase parseSingleFromJSON(JSONObject json) throws JSONException {
 		long id = json.getLong("id");
 		String item = json.getString("item");
 		String purpose = json.getString("purpose");
@@ -97,13 +97,13 @@ public class UseCase implements Parcelable {
 				metoos_count);
 	}
 
-	public static List<UseCase> parseMultipleFromJSON(JSONArray json)
+	public static List<UseCase> parseFromJSON(JSONArray json)
 			throws JSONException {
 		List<UseCase> use_case_list = new ArrayList<UseCase>();
 
 		for (int i = 0; i < json.length(); i++) {
 			JSONObject item = json.getJSONObject(i);
-			UseCase use_case = parseFromJSON(item);
+			UseCase use_case = parseSingleFromJSON(item);
 
 			use_case_list.add(use_case);
 		}

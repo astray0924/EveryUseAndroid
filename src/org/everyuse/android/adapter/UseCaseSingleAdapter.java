@@ -5,6 +5,7 @@ import java.util.List;
 import org.everyuse.android.R;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.ImageDownloader;
+import org.everyuse.android.widget.UseCaseSingleViewHolder;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,28 +18,26 @@ import android.widget.TextView;
 public class UseCaseSingleAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private List<UseCase> data_list;
-	private int item_layout;
 	private ImageDownloader image_downloader;
 
 	public UseCaseSingleAdapter() {
 
 	}
 
-	public UseCaseSingleAdapter(Context context, int item_layout,
-			List<UseCase> data_list) {
+	public UseCaseSingleAdapter(Context context, List<UseCase> data_list) {
 		this.inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.data_list = data_list;
-		this.item_layout = item_layout;
 		this.image_downloader = new ImageDownloader();
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = inflater.inflate(item_layout, null);
+			convertView = inflater.inflate(R.layout.list_item_usecase_single,
+					null);
 
-			ViewHolder holder = new ViewHolder();
+			UseCaseSingleViewHolder holder = new UseCaseSingleViewHolder();
 			holder.photo = (ImageView) convertView.findViewById(R.id.photo);
 			holder.text = (TextView) convertView.findViewById(R.id.text);
 
@@ -49,7 +48,8 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 		UseCase use_case = (UseCase) getItem(position);
 
 		//
-		ViewHolder holder = (ViewHolder) convertView.getTag();
+		UseCaseSingleViewHolder holder = (UseCaseSingleViewHolder) convertView
+				.getTag();
 		image_downloader.download(use_case.photo_url_thumb, holder.photo);
 		holder.text.setText(use_case.item);
 
@@ -72,8 +72,4 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 		return position;
 	}
 
-	private class ViewHolder {
-		public ImageView photo;
-		public TextView text;
-	}
 }
