@@ -27,10 +27,12 @@ import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -53,7 +55,7 @@ public class IndexActivity extends FragmentActivity {
 
 		initUI();
 
-		checkConnectivity();
+//		checkConnectivity();
 
 		// TODO: 아이디와 패스워드를 저장하고, 시작 할때마다 로그인하는 방식으로 하자
 		if (isAuthenticated()) {
@@ -94,7 +96,8 @@ public class IndexActivity extends FragmentActivity {
 				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
 		if (!mWifi.isConnected()) {
-			// TODO 연결되어 있지 않을때 처리
+			WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+			wifiManager.setWifiEnabled(true);
 		}
 
 	}
