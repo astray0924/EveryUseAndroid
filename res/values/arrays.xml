@@ -6,6 +6,10 @@
         <item>as</item>
     </string-array>
     <string-array name="use_case">
+        <item>Item</item>
+        <item>Purpose</item>
+    </string-array>
+    <string-array name="use_case_all">
         <item>All</item>
         <item>Item</item>
         <item>Purpose</item>

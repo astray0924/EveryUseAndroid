@@ -17,11 +17,11 @@ import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
 import org.everyuse.android.activity.DetailActivity;
 import org.everyuse.android.adapter.UseCaseGroupAdapter;
-import org.everyuse.android.model.UseCase;
 import org.everyuse.android.model.UseCaseGroup;
 import org.everyuse.android.model.UseCaseListOption;
-import org.everyuse.android.widget.DynamicListView;
-import org.everyuse.android.widget.DynamicListView.OnListLoadListener;
+import org.everyuse.android.widget.DynamicExpandableListView;
+import org.everyuse.android.widget.DynamicExpandableListView.OnListLoadListener;
+import org.everyuse.android.widget.ExpandableListFragment;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,10 +41,10 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class UseCaseGroupListFragment extends ListFragment {
+public class UseCaseGroupListFragment extends ExpandableListFragment {
 	protected ArrayList<UseCaseGroup> mDataList;
 	protected BaseExpandableListAdapter mAdapter;
-	protected DynamicListView mListView;
+	protected DynamicExpandableListView mListView;
 
 	private AsyncTask<String, Void, Boolean> load_data_task = null;
 	protected int page = START_PAGE;
@@ -86,7 +85,7 @@ public class UseCaseGroupListFragment extends ListFragment {
 		mDataList = new ArrayList<UseCaseGroup>();
 		mAdapter = new UseCaseGroupAdapter(getActivity(), mDataList);
 
-//		setListAdapter(mAdapter);
+		setListAdapter(mAdapter);
 
 		Bundle args = getArguments();
 
@@ -139,7 +138,7 @@ public class UseCaseGroupListFragment extends ListFragment {
 
 	private void initialize() {
 
-		mListView = (DynamicListView) getListView();
+		mListView = (DynamicExpandableListView) getExpandableListView();
 		mListView.setOnListLoadListener(new OnListLoadListener() {
 
 			@Override
@@ -246,7 +245,10 @@ public class UseCaseGroupListFragment extends ListFragment {
 
 						for (int i = 0; i < data_list.length(); i++) {
 							JSONObject json = data_list.getJSONObject(i);
-							UseCaseGroup group = UseCaseGroup.parseSingleFromJSON(json);
+							UseCaseGroup group = UseCaseGroup
+									.parseSingleFromJSON(json);
+							
+							Log.d("data", group.toString());
 
 							mDataList.add(group);
 						}
@@ -282,8 +284,8 @@ public class UseCaseGroupListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_usecase_list_with_option,
-				null);
+		return inflater.inflate(
+				R.layout.fragment_usecase_group_list_with_option, null);
 	}
 
 	/*
