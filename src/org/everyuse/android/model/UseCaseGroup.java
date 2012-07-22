@@ -14,7 +14,7 @@ import android.os.Parcelable;
 public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 	public String photo_url_thumb;
 	public String title;
-	public List<UseCase> children;
+	public ArrayList<UseCase> children;
 
 	public UseCaseGroup(String title) {
 		this.title = title;
@@ -22,13 +22,13 @@ public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 	}
 
 	public UseCaseGroup(String title, String photo_url_thumb,
-			List<UseCase> items) {
+			ArrayList<UseCase> items) {
 		this.title = title;
 		this.photo_url_thumb = photo_url_thumb;
 		this.children = items;
 	}
 
-	public List<UseCase> getChildren() {
+	public ArrayList<UseCase> getChildren() {
 		return children;
 	}
 
@@ -52,7 +52,7 @@ public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 		
 		String photo_url = ""; 
 		String title = json_group.getString("title");
-		List<UseCase> children = new ArrayList<UseCase>();
+		ArrayList<UseCase> children = new ArrayList<UseCase>();
 		
 		JSONArray json_children = json_group.getJSONArray("children");
 		for (int i = 0; i < json_children.length(); i++) {
@@ -98,7 +98,7 @@ public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 			List<Parcelable> encoded_items = Arrays.asList(source
 					.readParcelableArray(UseCaseListOption.class
 							.getClassLoader()));
-			List<UseCase> items = new ArrayList<UseCase>();
+			ArrayList<UseCase> items = new ArrayList<UseCase>();
 
 			for (Parcelable e : encoded_items) {
 				items.add((UseCase) e);

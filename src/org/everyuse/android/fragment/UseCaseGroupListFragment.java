@@ -19,8 +19,6 @@ import org.everyuse.android.activity.DetailActivity;
 import org.everyuse.android.adapter.UseCaseGroupAdapter;
 import org.everyuse.android.model.UseCaseGroup;
 import org.everyuse.android.model.UseCaseListOption;
-import org.everyuse.android.widget.DynamicExpandableListView;
-import org.everyuse.android.widget.DynamicExpandableListView.OnListLoadListener;
 import org.everyuse.android.widget.ExpandableListFragment;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,14 +35,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class UseCaseGroupListFragment extends ExpandableListFragment {
+public class UseCaseGroupListFragment extends ExpandableListFragment implements OnChildClickListener {
 	protected ArrayList<UseCaseGroup> mDataList;
 	protected BaseExpandableListAdapter mAdapter;
-	protected DynamicExpandableListView mListView;
+	protected ExpandableListView mListView;
 
 	private AsyncTask<String, Void, Boolean> load_data_task = null;
 	protected int page = START_PAGE;
@@ -84,7 +83,6 @@ public class UseCaseGroupListFragment extends ExpandableListFragment {
 
 		mDataList = new ArrayList<UseCaseGroup>();
 		mAdapter = new UseCaseGroupAdapter(getActivity(), mDataList);
-
 		setListAdapter(mAdapter);
 
 		Bundle args = getArguments();
@@ -108,6 +106,21 @@ public class UseCaseGroupListFragment extends ExpandableListFragment {
 		initOptionSpinner();
 
 		initialize();
+
+		// TODO 테스트
+		fetchData();
+	}
+
+	private void fetchData() {
+		data_url = buildDataURLWithQuery(data_url_raw);
+
+		if (data_url == null || data_url.equals("")) {
+			throw new IllegalStateException(
+					getString(R.string.msg_missing_data_url));
+		}
+
+		load_data_task = new LoadDataTask();
+		load_data_task.execute(data_url);
 	}
 
 	private void initOptionSpinner() {
@@ -138,26 +151,27 @@ public class UseCaseGroupListFragment extends ExpandableListFragment {
 
 	private void initialize() {
 
-		mListView = (DynamicExpandableListView) getExpandableListView();
-		mListView.setOnListLoadListener(new OnListLoadListener() {
-
-			@Override
-			public void onLoad() {
-				if (load_data_task == null) {
-					data_url = buildDataURLWithQuery(data_url_raw);
-
-					if (data_url == null || data_url.equals("")) {
-						throw new IllegalStateException(
-								getString(R.string.msg_missing_data_url));
-					}
-
-					load_data_task = new LoadDataTask();
-					load_data_task.execute(data_url);
-				}
-
-			}
-
-		});
+		mListView = (ExpandableListView) getExpandableListView();
+		mListView.setOnChildClickListener(this);
+		// mListView.setOnListLoadListener(new OnListLoadListener() {
+		//
+		// @Override
+		// public void onLoad() {
+		// if (load_data_task == null) {
+		// data_url = buildDataURLWithQuery(data_url_raw);
+		//
+		// if (data_url == null || data_url.equals("")) {
+		// throw new IllegalStateException(
+		// getString(R.string.msg_missing_data_url));
+		// }
+		//
+		// load_data_task = new LoadDataTask();
+		// load_data_task.execute(data_url);
+		// }
+		//
+		// }
+		//
+		// });
 	}
 
 	private UseCaseListOption getSelectedOption() {
@@ -239,7 +253,7 @@ public class UseCaseGroupListFragment extends ExpandableListFragment {
 
 						// if no items were fetched, end the list
 						if (data_list.length() == 0) {
-							mListView.setLoadEndFlag(true);
+							// mListView.setLoadEndFlag(true);
 							return true;
 						}
 
@@ -247,8 +261,6 @@ public class UseCaseGroupListFragment extends ExpandableListFragment {
 							JSONObject json = data_list.getJSONObject(i);
 							UseCaseGroup group = UseCaseGroup
 									.parseSingleFromJSON(json);
-							
-							Log.d("data", group.toString());
 
 							mDataList.add(group);
 						}
@@ -292,23 +304,27 @@ public class UseCaseGroupListFragment extends ExpandableListFragment {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * android.support.v4.app.ListFragment#onListItemClick(android.widget.ListView
-	 * , android.view.View, int, long)
+	 * org.everyuse.android.widget.ExpandableListFragment#onChildClick(android
+	 * .widget.ExpandableListView, android.view.View, int, int, long)
 	 */
 	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
 		Intent intent = new Intent(getActivity(), DetailActivity.class);
 		intent.putParcelableArrayListExtra(DetailActivity.EXTRA_DATA_LIST,
-				mDataList);
-		intent.putExtra(DetailActivity.EXTRA_STRAT_INDEX, position);
+				mDataList.get(groupPosition).getChildren());
+		intent.putExtra(DetailActivity.EXTRA_STRAT_INDEX, childPosition);
 		startActivity(intent);
+		
+		return true;
 	}
+
 
 	protected void resetList() {
 		resetPage();
 		mDataList.clear();
 		mAdapter.notifyDataSetChanged();
-		mListView.setLoadEndFlag(false);
+		// mListView.setLoadEndFlag(false);
 	}
 
 	protected synchronized int getCurrentPage() {
