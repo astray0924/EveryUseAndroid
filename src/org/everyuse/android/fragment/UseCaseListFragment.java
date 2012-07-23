@@ -165,9 +165,12 @@ public class UseCaseListFragment extends ListFragment {
 						JSONArray data_list = new JSONArray(res_string);
 
 						// if no items were fetched, end the list
-						if (data_list.length() == 0) {
+						if (data_list.length() < PER_PAGE) {
 							mListView.setLoadEndFlag(true);
-							return true;
+
+							if (data_list.length() == 0) {
+								return true;
+							}
 						}
 
 						for (int i = 0; i < data_list.length(); i++) {
@@ -221,8 +224,8 @@ public class UseCaseListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), UseCaseDetailActivity.class);
-		intent.putParcelableArrayListExtra(UseCaseDetailActivity.EXTRA_DATA_LIST,
-				mDataList);
+		intent.putParcelableArrayListExtra(
+				UseCaseDetailActivity.EXTRA_DATA_LIST, mDataList);
 		intent.putExtra(UseCaseDetailActivity.EXTRA_STRAT_INDEX, position);
 		startActivity(intent);
 	}

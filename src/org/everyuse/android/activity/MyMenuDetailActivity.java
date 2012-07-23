@@ -91,8 +91,6 @@ public class MyMenuDetailActivity extends FragmentActivity {
 	}
 
 	private void initFragments() {
-		fragmentTransaction = fragmentManager.beginTransaction();
-
 		// initialize fragments
 		fragment_list = new ArrayList<Fragment>();
 		fragment_list.add(MENU_SHARED, UseCaseListWithOptionFragment
@@ -107,12 +105,5 @@ public class MyMenuDetailActivity extends FragmentActivity {
 		fragment_list.add(MENU_SCRAPED, UseCaseListWithOptionFragment
 				.newInstance(URLHelper.getMyScrapedURL(user_id),
 						R.array.use_case_time));
-
-		// add fragments
-		for (Fragment fg : fragment_list) {
-			fragmentTransaction.add(R.id.fragment_container, fg);
-		}
-		
-		fragmentTransaction.commit();
 	}
 }
