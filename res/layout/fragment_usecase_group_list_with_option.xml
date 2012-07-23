@@ -21,7 +21,7 @@
             android:gravity="center" />
     </LinearLayout>
 
-    <ExpandableListView
+    <org.everyuse.android.widget.DynamicExpandableListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

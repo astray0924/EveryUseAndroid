@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 
 public class DynamicExpandableListView extends ExpandableListView implements OnScrollListener {
 	private boolean mLoadEnded = false;
@@ -47,7 +47,7 @@ public class DynamicExpandableListView extends ExpandableListView implements OnS
 	}
 
 	@Override
-	public void setAdapter(ListAdapter adapter) {
+	public void setAdapter(ExpandableListAdapter adapter) {
 
 		if (getFooterViewsCount() == 0) {
 			addFooterView(footer, null, false);

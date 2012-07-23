@@ -19,6 +19,8 @@ import org.everyuse.android.activity.DetailActivity;
 import org.everyuse.android.adapter.UseCaseGroupAdapter;
 import org.everyuse.android.model.UseCaseGroup;
 import org.everyuse.android.model.UseCaseListOption;
+import org.everyuse.android.widget.DynamicExpandableListView;
+import org.everyuse.android.widget.DynamicExpandableListView.OnListLoadListener;
 import org.everyuse.android.widget.ExpandableListFragment;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,10 +42,11 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class UseCaseGroupListFragment extends ExpandableListFragment implements OnChildClickListener {
+public class UseCaseGroupListFragment extends ExpandableListFragment implements
+		OnChildClickListener {
 	protected ArrayList<UseCaseGroup> mDataList;
 	protected BaseExpandableListAdapter mAdapter;
-	protected ExpandableListView mListView;
+	protected DynamicExpandableListView mListView;
 
 	private AsyncTask<String, Void, Boolean> load_data_task = null;
 	protected int page = START_PAGE;
@@ -106,9 +109,6 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements 
 		initOptionSpinner();
 
 		initialize();
-
-		// TODO 테스트
-		fetchData();
 	}
 
 	private void fetchData() {
@@ -151,27 +151,19 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements 
 
 	private void initialize() {
 
-		mListView = (ExpandableListView) getExpandableListView();
+		mListView = (DynamicExpandableListView) getExpandableListView();
 		mListView.setOnChildClickListener(this);
-		// mListView.setOnListLoadListener(new OnListLoadListener() {
-		//
-		// @Override
-		// public void onLoad() {
-		// if (load_data_task == null) {
-		// data_url = buildDataURLWithQuery(data_url_raw);
-		//
-		// if (data_url == null || data_url.equals("")) {
-		// throw new IllegalStateException(
-		// getString(R.string.msg_missing_data_url));
-		// }
-		//
-		// load_data_task = new LoadDataTask();
-		// load_data_task.execute(data_url);
-		// }
-		//
-		// }
-		//
-		// });
+		mListView.setOnListLoadListener(new OnListLoadListener() {
+
+			@Override
+			public void onLoad() {
+				if (load_data_task == null) {
+					fetchData();
+				}
+
+			}
+
+		});
 	}
 
 	private UseCaseListOption getSelectedOption() {
@@ -315,10 +307,9 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements 
 				mDataList.get(groupPosition).getChildren());
 		intent.putExtra(DetailActivity.EXTRA_STRAT_INDEX, childPosition);
 		startActivity(intent);
-		
+
 		return true;
 	}
-
 
 	protected void resetList() {
 		resetPage();
