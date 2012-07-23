@@ -15,14 +15,14 @@ public class URLHelper {
 	public static String PHOTOS_URL = BASE_URL + "/photos";
 	public static String SEARCH_URL = BASE_URL + "/search";
 	public static String COMMENT_URL = BASE_URL + "/comments";
-	public static String FAVORITE_ADD_URL = BASE_URL + "/favorite/add";
-	public static String FAVORITE_DELETE_URL = BASE_URL + "/favorite/delete";
+	public static String SCRAP_ADD_URL = BASE_URL + "/favorite/add";
+	public static String SCRAP_DELETE_URL = BASE_URL + "/favorite/delete";
 	public static String FUN_ADD_URL = BASE_URL + "/fun/add";
 	public static String FUN_DELETE_URL = BASE_URL + "/fun/delete";
 	public static String METOO_ADD_URL = BASE_URL + "/metoo/add";
 	public static String METOO_DELETE_URL = BASE_URL + "/metoo/delete";
 
-	public static String getMyFavoritedURL(int user_id) {
+	public static String getMyScrapedURL(int user_id) {
 		if (user_id <= 0) {
 			throw new IllegalArgumentException(Resources.getSystem().getString(
 					R.string.msg_wrong_user_id));

@@ -135,7 +135,7 @@ public class CommentHelper {
 		case ADD:
 			switch (type) {
 			case FAVORITE:
-				url = URLHelper.FAVORITE_ADD_URL + ".json";
+				url = URLHelper.SCRAP_ADD_URL + ".json";
 				break;
 			case FUN:
 				url = URLHelper.FUN_ADD_URL + ".json";
@@ -148,7 +148,7 @@ public class CommentHelper {
 		case DELETE:
 			switch (type) {
 			case FAVORITE:
-				url = URLHelper.FAVORITE_DELETE_URL + ".json";
+				url = URLHelper.SCRAP_DELETE_URL + ".json";
 				break;
 			case FUN:
 				url = URLHelper.FUN_DELETE_URL + ".json";
