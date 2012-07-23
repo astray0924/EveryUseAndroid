@@ -251,8 +251,8 @@ public class CreateActivity extends Activity {
 						created = UseCase.parseSingleFromJSON(json);
 
 						Intent intent = new Intent(CreateActivity.this,
-								DetailActivity.class);
-						intent.putExtra(DetailActivity.EXTRA_DATA, created);
+								UseCaseDetailActivity.class);
+						intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, created);
 						startActivity(intent);
 
 					} catch (JSONException e) {

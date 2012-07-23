@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.everyuse.android.R;
-import org.everyuse.android.activity.UserProfileActivity;
+import org.everyuse.android.activity.MyMenuDetailActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class UserProfileFragment extends ListFragment {
+public class MyMenuFragment extends ListFragment {
 	private List<String> menu_list = new ArrayList<String>();
 
-	public UserProfileFragment() {
+	public MyMenuFragment() {
 		super();
 	}
 
@@ -52,15 +52,20 @@ public class UserProfileFragment extends ListFragment {
 
 	private List<String> buildMenuItemList() {
 		List<String> menu_list = new ArrayList<String>();
-		menu_list.add(UserProfileActivity.MENU_SHARED,
+		
+		menu_list.add(MyMenuDetailActivity.MENU_SHARED,
 				getString(R.string.menu_shared));
-		menu_list.add(UserProfileActivity.MENU_COMMENTED,
+		
+		menu_list.add(MyMenuDetailActivity.MENU_COMMENTED,
 				getString(R.string.menu_commented));
-		menu_list.add(UserProfileActivity.MENU_SCRAPED,
+		
+		menu_list.add(MyMenuDetailActivity.MENU_SCRAPED,
 				getString(R.string.menu_scraped));
-		menu_list.add(UserProfileActivity.MENU_FOLLOWING,
+		
+		menu_list.add(MyMenuDetailActivity.MENU_FOLLOWING,
 				getString(R.string.menu_following));
-		menu_list.add(UserProfileActivity.MENU_FOLLOWER,
+		
+		menu_list.add(MyMenuDetailActivity.MENU_FOLLOWER,
 				getString(R.string.menu_follower));
 
 		return menu_list;
@@ -75,8 +80,8 @@ public class UserProfileFragment extends ListFragment {
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-		intent.putExtra(UserProfileActivity.EXTRA_MENU_SELECTED, position);
-		startActivity(intent);
+		 Intent intent = new Intent(getActivity(), MyMenuDetailActivity.class);
+		 intent.putExtra(MyMenuDetailActivity.EXTRA_MENU_SELECTED, position);
+		 startActivity(intent);
 	}
 }

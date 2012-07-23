@@ -9,14 +9,17 @@ import org.everyuse.android.model.User;
 import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.AttributeSet;
+import android.view.View;
 
-public class UserProfileActivity extends FragmentActivity {
+public class MyMenuDetailActivity extends FragmentActivity {
 	private User user;
 	private int user_id;
 
@@ -51,6 +54,7 @@ public class UserProfileActivity extends FragmentActivity {
 	private void handleIntent(Intent intent) {
 		int menu_selected = intent.getIntExtra(EXTRA_MENU_SELECTED,
 				MENU_NOT_SELECTED);
+		
 		if (menu_selected == MENU_NOT_SELECTED) {
 			throw new IllegalStateException(
 					getString(R.string.msg_intent_parameter_not_set));
@@ -94,15 +98,21 @@ public class UserProfileActivity extends FragmentActivity {
 		fragment_list.add(MENU_SHARED, UseCaseListWithOptionFragment
 				.newInstance(URLHelper.getMySharedURL(user_id),
 						R.array.use_case_time));
+		
 		fragment_list.add(
 				MENU_COMMENTED,
 				UseCaseListWithOptionFragment.newInstance(
 						URLHelper.getMyCommentedURL(user_id), R.array.comment));
 
+		fragment_list.add(MENU_SCRAPED, UseCaseListWithOptionFragment
+				.newInstance(URLHelper.getMyScrapedURL(user_id),
+						R.array.use_case_time));
+
 		// add fragments
 		for (Fragment fg : fragment_list) {
 			fragmentTransaction.add(R.id.fragment_container, fg);
 		}
+		
 		fragmentTransaction.commit();
 	}
 }

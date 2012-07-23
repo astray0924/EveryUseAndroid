@@ -12,7 +12,8 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 
-public class DynamicExpandableListView extends ExpandableListView implements OnScrollListener {
+public class DynamicExpandableListView extends ExpandableListView implements
+		OnScrollListener {
 	private boolean mLoadEnded = false;
 	private LayoutInflater inflater;
 	private View footer;
@@ -28,7 +29,8 @@ public class DynamicExpandableListView extends ExpandableListView implements OnS
 		initialize();
 	}
 
-	public DynamicExpandableListView(Context context, AttributeSet attrs, int defStyle) {
+	public DynamicExpandableListView(Context context, AttributeSet attrs,
+			int defStyle) {
 		super(context, attrs, defStyle);
 		initialize();
 	}
@@ -99,7 +101,11 @@ public class DynamicExpandableListView extends ExpandableListView implements OnS
 
 		if (lastItem == totalItemCount && !mLoadEnded) {
 			if (mHandler != null) {
-				mHandler.onLoad();
+				post(new Runnable() {
+					public void run() {
+						mHandler.onLoad();
+					}
+				});
 			}
 		}
 	}

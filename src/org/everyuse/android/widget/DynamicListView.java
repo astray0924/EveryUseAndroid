@@ -98,7 +98,11 @@ public class DynamicListView extends ListView implements OnScrollListener {
 
 		if (lastItem == totalItemCount && !mLoadEnded) {
 			if (mHandler != null) {
-				mHandler.onLoad();
+				post(new Runnable() {
+					public void run() {
+						mHandler.onLoad();
+					}
+				});
 			}
 		}
 	}

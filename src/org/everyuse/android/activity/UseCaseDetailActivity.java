@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
-public class DetailActivity extends SherlockFragmentActivity {
+public class UseCaseDetailActivity extends SherlockFragmentActivity {
 	public static String EXTRA_DATA = "DATA";
 	public static String EXTRA_DATA_LIST = "DATA_LIST";
 	public static String EXTRA_STRAT_INDEX = "START_INDEX";

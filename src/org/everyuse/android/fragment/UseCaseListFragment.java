@@ -16,7 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
-import org.everyuse.android.activity.DetailActivity;
+import org.everyuse.android.activity.UseCaseDetailActivity;
 import org.everyuse.android.adapter.UseCaseSingleAdapter;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.widget.DynamicListView;
@@ -68,11 +68,9 @@ public class UseCaseListFragment extends ListFragment {
 
 		mDataList = new ArrayList<UseCase>();
 		mAdapter = new UseCaseSingleAdapter(getActivity(), mDataList);
-
 		setListAdapter(mAdapter);
 
 		Bundle args = getArguments();
-
 		if (args != null) {
 			data_url_raw = args.getString(EXTRA_DATA_URL);
 		}
@@ -222,10 +220,10 @@ public class UseCaseListFragment extends ListFragment {
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Intent intent = new Intent(getActivity(), DetailActivity.class);
-		intent.putParcelableArrayListExtra(DetailActivity.EXTRA_DATA_LIST,
+		Intent intent = new Intent(getActivity(), UseCaseDetailActivity.class);
+		intent.putParcelableArrayListExtra(UseCaseDetailActivity.EXTRA_DATA_LIST,
 				mDataList);
-		intent.putExtra(DetailActivity.EXTRA_STRAT_INDEX, position);
+		intent.putExtra(UseCaseDetailActivity.EXTRA_STRAT_INDEX, position);
 		startActivity(intent);
 	}
 

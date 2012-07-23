@@ -15,7 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
-import org.everyuse.android.activity.DetailActivity;
+import org.everyuse.android.activity.UseCaseDetailActivity;
 import org.everyuse.android.adapter.UseCaseGroupAdapter;
 import org.everyuse.android.model.UseCaseGroup;
 import org.everyuse.android.model.UseCaseListOption;
@@ -302,10 +302,10 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
-		Intent intent = new Intent(getActivity(), DetailActivity.class);
-		intent.putParcelableArrayListExtra(DetailActivity.EXTRA_DATA_LIST,
+		Intent intent = new Intent(getActivity(), UseCaseDetailActivity.class);
+		intent.putParcelableArrayListExtra(UseCaseDetailActivity.EXTRA_DATA_LIST,
 				mDataList.get(groupPosition).getChildren());
-		intent.putExtra(DetailActivity.EXTRA_STRAT_INDEX, childPosition);
+		intent.putExtra(UseCaseDetailActivity.EXTRA_STRAT_INDEX, childPosition);
 		startActivity(intent);
 
 		return true;
