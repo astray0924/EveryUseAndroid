@@ -19,7 +19,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class MyMenuDetailActivity extends FragmentActivity {
+public class UserInfoDetailActivity extends FragmentActivity {
 	private User user;
 	private int user_id;
 

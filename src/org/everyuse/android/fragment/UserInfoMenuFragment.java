@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.everyuse.android.R;
-import org.everyuse.android.activity.MyMenuDetailActivity;
+import org.everyuse.android.activity.UserInfoDetailActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class MyMenuFragment extends ListFragment {
+public class UserInfoMenuFragment extends ListFragment {
 	private List<String> menu_list = new ArrayList<String>();
 
-	public MyMenuFragment() {
+	public UserInfoMenuFragment() {
 		super();
 	}
 
@@ -53,19 +53,19 @@ public class MyMenuFragment extends ListFragment {
 	private List<String> buildMenuItemList() {
 		List<String> menu_list = new ArrayList<String>();
 		
-		menu_list.add(MyMenuDetailActivity.MENU_SHARED,
+		menu_list.add(UserInfoDetailActivity.MENU_SHARED,
 				getString(R.string.menu_shared));
 		
-		menu_list.add(MyMenuDetailActivity.MENU_COMMENTED,
+		menu_list.add(UserInfoDetailActivity.MENU_COMMENTED,
 				getString(R.string.menu_commented));
 		
-		menu_list.add(MyMenuDetailActivity.MENU_SCRAPED,
+		menu_list.add(UserInfoDetailActivity.MENU_SCRAPED,
 				getString(R.string.menu_scraped));
 		
-		menu_list.add(MyMenuDetailActivity.MENU_FOLLOWING,
+		menu_list.add(UserInfoDetailActivity.MENU_FOLLOWING,
 				getString(R.string.menu_following));
 		
-		menu_list.add(MyMenuDetailActivity.MENU_FOLLOWER,
+		menu_list.add(UserInfoDetailActivity.MENU_FOLLOWER,
 				getString(R.string.menu_follower));
 
 		return menu_list;
@@ -80,8 +80,8 @@ public class MyMenuFragment extends ListFragment {
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		 Intent intent = new Intent(getActivity(), MyMenuDetailActivity.class);
-		 intent.putExtra(MyMenuDetailActivity.EXTRA_MENU_SELECTED, position);
+		 Intent intent = new Intent(getActivity(), UserInfoDetailActivity.class);
+		 intent.putExtra(UserInfoDetailActivity.EXTRA_MENU_SELECTED, position);
 		 startActivity(intent);
 	}
 }
