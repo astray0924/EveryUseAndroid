@@ -134,12 +134,6 @@ public class CreateActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				input_item = et_item.getText().toString();
-				input_purpose = et_purpose.getText().toString();
-				input_purpose_type = sp_purpose_type.getSelectedItem()
-						.toString().toLowerCase();
-				input_photo_file = photo_file;
-
 				// 서버로 데이터 전송
 				new SubmitTask().execute();
 			}
@@ -194,6 +188,13 @@ public class CreateActivity extends Activity {
 					ProgressDialog.STYLE_SPINNER);
 			indicator.setMessage("Please wait...");
 			indicator.show();
+
+			input_item = et_item.getText().toString();
+			input_purpose = et_purpose.getText().toString();
+			input_purpose_type = sp_purpose_type.getSelectedItem().toString()
+					.toLowerCase();
+			input_photo_file = photo_file;
+
 		}
 
 		@Override
@@ -252,7 +253,8 @@ public class CreateActivity extends Activity {
 
 						Intent intent = new Intent(CreateActivity.this,
 								UseCaseDetailActivity.class);
-						intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, created);
+						intent.putExtra(UseCaseDetailActivity.EXTRA_DATA,
+								created);
 						startActivity(intent);
 
 					} catch (JSONException e) {
