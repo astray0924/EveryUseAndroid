@@ -248,15 +248,7 @@ public class CreateActivity extends Activity {
 					JSONObject json = null;
 					try {
 						json = new JSONObject(responseString);
-
 						created = UseCase.parseSingleFromJSON(json);
-
-						Intent intent = new Intent(CreateActivity.this,
-								UseCaseDetailActivity.class);
-						intent.putExtra(UseCaseDetailActivity.EXTRA_DATA,
-								created);
-						startActivity(intent);
-
 					} catch (JSONException e) {
 						e.printStackTrace();
 						return false;
@@ -278,17 +270,15 @@ public class CreateActivity extends Activity {
 			indicator.dismiss();
 
 			if (success) {
-				// if (created_use_case != null) {
-				// Intent intent = new Intent(CreateActivity.this,
-				// TopDetailActivity.class);
-				// intent.putExtra("DATA", created_use_case);
-				// startActivity(intent);
-				// }
-
 				Toast.makeText(CreateActivity.this,
 						R.string.msg_create_success, Toast.LENGTH_SHORT).show();
 
-				// TODO 올린 케이스 보여주는 기능 추가
+				Intent intent = new Intent(CreateActivity.this,
+						UseCaseDetailActivity.class);
+				intent.putExtra(UseCaseDetailActivity.EXTRA_DATA,
+						created);
+				startActivity(intent);
+
 
 				finish();
 			} else {
