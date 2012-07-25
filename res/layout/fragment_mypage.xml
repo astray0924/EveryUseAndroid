@@ -13,9 +13,9 @@
             android:contentDescription="Profile Photo" />
 
         <TextView
+            android:id="@+id/tv_username"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ID or nickname" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <ListView

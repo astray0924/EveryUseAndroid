@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.everyuse.android.R;
 import org.everyuse.android.activity.UserInfoDetailActivity;
+import org.everyuse.android.model.User;
+import org.everyuse.android.util.UserHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,24 +16,54 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class UserInfoMenuFragment extends ListFragment {
+	private User user;
 	private List<String> menu_list = new ArrayList<String>();
+	public static final String EXTRA_USER = "user";
 
 	public UserInfoMenuFragment() {
 		super();
+	}
+
+	public static UserInfoMenuFragment newInstance(User user) {
+		UserInfoMenuFragment f = new UserInfoMenuFragment();
+		Bundle b = new Bundle();
+		b.putParcelable(EXTRA_USER, user);
+		f.setArguments(b);
+		return f;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Bundle args = getArguments();
+		if (args != null) {
+			user = args.getParcelable(EXTRA_USER);
+		}
+
+		if (user == null) {
+			throw new IllegalStateException(
+					getString(R.string.msg_intent_parameter_not_set));
+		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_mypage, null);
+		if (user == null) {
+			throw new IllegalStateException(
+					getString(R.string.msg_intent_parameter_not_set));
+		}
+
+		// 유저 정보 출력
+		View view = inflater.inflate(R.layout.fragment_mypage, null);
+		TextView tv_username = (TextView) view.findViewById(R.id.tv_username);
+		tv_username.setText(user.username);
+		
+		return view;
 	}
 
 	/*
@@ -52,21 +84,23 @@ public class UserInfoMenuFragment extends ListFragment {
 
 	private List<String> buildMenuItemList() {
 		List<String> menu_list = new ArrayList<String>();
-		
+
 		menu_list.add(UserInfoDetailActivity.MENU_SHARED,
 				getString(R.string.menu_shared));
-		
+
 		menu_list.add(UserInfoDetailActivity.MENU_COMMENTED,
 				getString(R.string.menu_commented));
-		
+
 		menu_list.add(UserInfoDetailActivity.MENU_SCRAPED,
 				getString(R.string.menu_scraped));
-		
-		menu_list.add(UserInfoDetailActivity.MENU_FOLLOWING,
-				getString(R.string.menu_following));
-		
-		menu_list.add(UserInfoDetailActivity.MENU_FOLLOWER,
-				getString(R.string.menu_follower));
+
+		if (isCurrentUser(user)) {
+			menu_list.add(UserInfoDetailActivity.MENU_FOLLOWING,
+					getString(R.string.menu_following));
+
+			menu_list.add(UserInfoDetailActivity.MENU_FOLLOWER,
+					getString(R.string.menu_follower));
+		}
 
 		return menu_list;
 	}
@@ -80,8 +114,12 @@ public class UserInfoMenuFragment extends ListFragment {
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		 Intent intent = new Intent(getActivity(), UserInfoDetailActivity.class);
-		 intent.putExtra(UserInfoDetailActivity.EXTRA_MENU_SELECTED, position);
-		 startActivity(intent);
+		Intent intent = new Intent(getActivity(), UserInfoDetailActivity.class);
+		intent.putExtra(UserInfoDetailActivity.EXTRA_MENU_SELECTED, position);
+		startActivity(intent);
+	}
+
+	private boolean isCurrentUser(User user) {
+		return (user.id == UserHelper.getCurrentUser(getActivity()).id);
 	}
 }

@@ -196,8 +196,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 			fragment_list.add(CATEOGORY, UseCaseGroupListFragment.newInstance(
 					URLHelper.USE_CASE_GROUPS_URL, R.array.use_case));
-			
-			fragment_list.add(MY, new UserInfoMenuFragment());
+
+			fragment_list.add(MY, UserInfoMenuFragment.newInstance(UserHelper
+					.getCurrentUser(MainActivity.this)));
 		}
 
 		@Override

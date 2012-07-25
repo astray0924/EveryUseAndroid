@@ -31,6 +31,10 @@ public class UseCase implements Parcelable {
 	public int favorites_count;
 	public int funs_count;
 	public int metoos_count;
+	
+	public UseCase() {
+		
+	}
 
 	public UseCase(long id, String item, String purpose, String purpose_type,
 			String photo_file_name, String username, Date created_at,
