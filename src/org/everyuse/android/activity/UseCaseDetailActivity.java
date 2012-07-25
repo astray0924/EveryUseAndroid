@@ -122,7 +122,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			ImageView photo = (ImageView) page.findViewById(R.id.iv_photo);
 			TextView text = (TextView) page.findViewById(R.id.text);
 
-			image_downloader.download(data.photo_url_large, photo);
+			image_downloader.download(data.getPhotoLargeURL(), photo);
 			text.setText(data.item + ":" + data.purpose);
 		}
 

@@ -20,9 +20,6 @@ public class UseCase implements Parcelable {
 	public String purpose;
 	public String purpose_type;
 	public String photo_file_name;
-	public String photo_url_base;
-	public String photo_url_thumb;
-	public String photo_url_large;
 	public Date created_at;
 	public Date updated_at;
 
@@ -52,14 +49,18 @@ public class UseCase implements Parcelable {
 		this.favorites_count = favorites_count;
 		this.funs_count = funs_count;
 		this.metoos_count = metoos_count;
-
-		populatePhotoUrls(photo_file_name);
 	}
-
-	private void populatePhotoUrls(String photo_file_name) {
-		this.photo_url_base = URLHelper.PHOTOS_URL + "/" + id;
-		this.photo_url_thumb = photo_url_base + "/thumb/" + photo_file_name;
-		this.photo_url_large = photo_url_base + "/large/" + photo_file_name;
+	
+	public String getPhotoBaseURL() {
+		return URLHelper.PHOTOS_URL + "/" + id;
+	}
+	
+	public String getPhotoThumbURL() {
+		return getPhotoBaseURL() + "/thumb/" + photo_file_name;
+	}
+	
+	public String getPhotoLargeURL() {
+		return getPhotoBaseURL() + "/large/" + photo_file_name;
 	}
 
 	public UseCase(Parcel source) {

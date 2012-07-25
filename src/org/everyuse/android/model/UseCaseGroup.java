@@ -61,7 +61,7 @@ public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 			children.add(use_case);
 			
 			if (i == 0) {
-				photo_url = use_case.photo_url_thumb;
+				photo_url = use_case.getPhotoThumbURL();
 			}
 		}
 

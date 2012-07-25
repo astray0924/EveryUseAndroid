@@ -50,7 +50,7 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 		//
 		UseCaseSingleViewHolder holder = (UseCaseSingleViewHolder) convertView
 				.getTag();
-		image_downloader.download(use_case.photo_url_thumb, holder.photo);
+		image_downloader.download(use_case.getPhotoThumbURL(), holder.photo);
 		holder.text.setText(use_case.item);
 
 		return convertView;
