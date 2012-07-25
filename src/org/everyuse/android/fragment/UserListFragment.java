@@ -16,8 +16,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
 import org.everyuse.android.activity.UseCaseDetailActivity;
+import org.everyuse.android.activity.UserInfoDetailActivity;
 import org.everyuse.android.adapter.UserAdapter;
-import org.everyuse.android.model.UseCase;
 import org.everyuse.android.model.User;
 import org.everyuse.android.widget.DynamicListView;
 import org.everyuse.android.widget.DynamicListView.OnListLoadListener;
@@ -223,9 +223,9 @@ public class UserListFragment extends ListFragment {
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Intent intent = new Intent(getActivity(), UseCaseDetailActivity.class);
+		Intent intent = new Intent(getActivity(), UserInfoDetailActivity.class);
 		intent.putParcelableArrayListExtra(
-				UseCaseDetailActivity.EXTRA_DATA_LIST, mDataList);
+				UserInfoDetailActivity.EXTRA_USER, mDataList);
 		intent.putExtra(UseCaseDetailActivity.EXTRA_STRAT_INDEX, position);
 		startActivity(intent);
 	}
