@@ -1,4 +1,4 @@
-package org.everyuse.android.model;
+package org.everyuse.android.util;
 
 import android.content.SearchRecentSuggestionsProvider;
 

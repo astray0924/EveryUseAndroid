@@ -74,7 +74,7 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 					null);
 
 			UseCaseSingleViewHolder holder = new UseCaseSingleViewHolder();
-			holder.photo = (ImageView) convertView.findViewById(R.id.photo);
+			holder.photo = (ImageView) convertView.findViewById(R.id.iv_photo);
 			holder.text = (TextView) convertView.findViewById(R.id.text);
 
 			convertView.setTag(holder);

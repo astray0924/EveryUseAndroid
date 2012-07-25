@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.everyuse.android.R;
 import org.everyuse.android.model.UseCase;
+import org.everyuse.android.model.User;
 import org.everyuse.android.util.ImageDownloader;
 import org.everyuse.android.widget.UseCaseSingleViewHolder;
 
@@ -15,16 +16,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class UseCaseSingleAdapter extends BaseAdapter {
+public class UserAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
-	private List<UseCase> data_list;
+	private List<User> data_list;
 	private ImageDownloader image_downloader;
 
-	public UseCaseSingleAdapter() {
+	public UserAdapter() {
 
 	}
 
-	public UseCaseSingleAdapter(Context context, List<UseCase> data_list) {
+	public UserAdapter(Context context, List<User> data_list) {
 		this.inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.data_list = data_list;
@@ -37,26 +38,25 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 			convertView = inflater.inflate(R.layout.list_item_usecase_single,
 					null);
 
-			UseCaseSingleViewHolder holder = new UseCaseSingleViewHolder();
+			UserViewHolder holder = new UserViewHolder();
 			holder.photo = (ImageView) convertView.findViewById(R.id.iv_photo);
-			holder.text = (TextView) convertView.findViewById(R.id.text);
+			holder.username = (TextView) convertView.findViewById(R.id.tv_username);
 
 			convertView.setTag(holder);
 		}
 
 		//
-		UseCase use_case = (UseCase) getItem(position);
+		User user = (User) getItem(position);
 
 		//
-		UseCaseSingleViewHolder holder = (UseCaseSingleViewHolder) convertView
-				.getTag();
-		image_downloader.download(use_case.photo_url_thumb, holder.photo);
-		holder.text.setText(use_case.item);
+		UserViewHolder holder = (UserViewHolder) convertView.getTag();
+//		image_downloader.download(user.photo_url_thumb, holder.photo);
+		holder.username.setText(user.username);
 
 		return convertView;
 	}
 
-	public List<UseCase> getDataList() {
+	public List<User> getDataList() {
 		return data_list;
 	}
 
@@ -70,6 +70,11 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 
 	public long getItemId(int position) {
 		return position;
+	}
+
+	private class UserViewHolder {
+		public ImageView photo;
+		public TextView username;
 	}
 
 }
