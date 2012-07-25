@@ -15,7 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
-import org.everyuse.android.activity.UserProfileActivity;
+import org.everyuse.android.activity.UserProfileDetailActivity;
 import org.everyuse.android.adapter.UserAdapter;
 import org.everyuse.android.model.User;
 import org.everyuse.android.widget.DynamicListView;
@@ -222,8 +222,9 @@ public class UserListFragment extends ListFragment {
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-		intent.putExtra(UserProfileFragment.EXTRA_USER, mDataList.get(position));
+		Intent intent = new Intent(getActivity(), UserProfileDetailActivity.class);
+		intent.putExtra(UserProfileDetailActivity.EXTRA_USER, mDataList.get(position));
+		intent.putExtra(UserProfileDetailActivity.EXTRA_MENU_SELECTED, UserProfileDetailActivity.MENU_USER);
 		startActivity(intent);
 	}
 

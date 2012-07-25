@@ -3,6 +3,7 @@ package org.everyuse.android.activity;
 import org.everyuse.android.R;
 import org.everyuse.android.fragment.UseCaseListWithOptionFragment;
 import org.everyuse.android.fragment.UserListFragment;
+import org.everyuse.android.fragment.UserProfileFragment;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.URLHelper;
 
@@ -28,11 +29,12 @@ public class UserProfileDetailActivity extends FragmentActivity {
 	public static final int MENU_SCRAPED = 2;
 	public static final int MENU_FOLLOWING = 3;
 	public static final int MENU_FOLLOWER = 4;
+	public static final int MENU_USER = 5;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_profile);
+		setContentView(R.layout.activity_user_profile);
 
 		initFragmentManager();
 
@@ -90,6 +92,8 @@ public class UserProfileDetailActivity extends FragmentActivity {
 		case MENU_FOLLOWER:
 			return UserListFragment.newInstance(URLHelper
 					.getMyFollowerURL(user.id));
+		case MENU_USER:
+			return UserProfileFragment.newInstance(user);
 
 		}
 

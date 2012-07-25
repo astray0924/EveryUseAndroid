@@ -59,7 +59,7 @@ public class UserProfileFragment extends ListFragment {
 		}
 
 		// 유저 정보 출력
-		View view = inflater.inflate(R.layout.fragment_mypage, null);
+		View view = inflater.inflate(R.layout.fragment_user_profile, null);
 		TextView tv_username = (TextView) view.findViewById(R.id.tv_username);
 		tv_username.setText(user.username);
 		
