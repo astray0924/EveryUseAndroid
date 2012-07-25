@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.everyuse.android.R;
-import org.everyuse.android.activity.UserDetailActivity;
+import org.everyuse.android.activity.UserProfileDetailActivity;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.UserHelper;
 
@@ -18,17 +18,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class UserMenuFragment extends ListFragment {
+public class UserProfileFragment extends ListFragment {
 	private User user;
 	private List<String> menu_list = new ArrayList<String>();
 	public static final String EXTRA_USER = "user";
 
-	public UserMenuFragment() {
+	public UserProfileFragment() {
 		super();
 	}
 
-	public static UserMenuFragment newInstance(User user) {
-		UserMenuFragment f = new UserMenuFragment();
+	public static UserProfileFragment newInstance(User user) {
+		UserProfileFragment f = new UserProfileFragment();
 		Bundle b = new Bundle();
 		b.putParcelable(EXTRA_USER, user);
 		f.setArguments(b);
@@ -85,20 +85,20 @@ public class UserMenuFragment extends ListFragment {
 	private List<String> buildMenuItemList() {
 		List<String> menu_list = new ArrayList<String>();
 
-		menu_list.add(UserDetailActivity.MENU_SHARED,
+		menu_list.add(UserProfileDetailActivity.MENU_SHARED,
 				getString(R.string.menu_shared));
 
-		menu_list.add(UserDetailActivity.MENU_COMMENTED,
+		menu_list.add(UserProfileDetailActivity.MENU_COMMENTED,
 				getString(R.string.menu_commented));
 
-		menu_list.add(UserDetailActivity.MENU_SCRAPED,
+		menu_list.add(UserProfileDetailActivity.MENU_SCRAPED,
 				getString(R.string.menu_scraped));
 
 		if (isCurrentUser(user)) {
-			menu_list.add(UserDetailActivity.MENU_FOLLOWING,
+			menu_list.add(UserProfileDetailActivity.MENU_FOLLOWING,
 					getString(R.string.menu_following));
 
-			menu_list.add(UserDetailActivity.MENU_FOLLOWER,
+			menu_list.add(UserProfileDetailActivity.MENU_FOLLOWER,
 					getString(R.string.menu_follower));
 		}
 
@@ -114,9 +114,9 @@ public class UserMenuFragment extends ListFragment {
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Intent intent = new Intent(getActivity(), UserDetailActivity.class);
-		intent.putExtra(UserDetailActivity.EXTRA_MENU_SELECTED, position);
-		intent.putExtra(UserDetailActivity.EXTRA_USER, user);
+		Intent intent = new Intent(getActivity(), UserProfileDetailActivity.class);
+		intent.putExtra(UserProfileDetailActivity.EXTRA_MENU_SELECTED, position);
+		intent.putExtra(UserProfileDetailActivity.EXTRA_USER, user);
 		startActivity(intent);
 	}
 

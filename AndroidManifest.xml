@@ -53,7 +53,13 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.UserDetailActivity"
+            android:name=".activity.UserProfileDetailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activity.UserProfileActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait" >
