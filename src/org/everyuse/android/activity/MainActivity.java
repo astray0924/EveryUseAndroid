@@ -7,7 +7,7 @@ import org.everyuse.android.R;
 import org.everyuse.android.fragment.UseCaseGroupListFragment;
 import org.everyuse.android.fragment.UseCaseListFragment;
 import org.everyuse.android.fragment.UseCaseListWithOptionFragment;
-import org.everyuse.android.fragment.UserInfoMenuFragment;
+import org.everyuse.android.fragment.UserMenuFragment;
 import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
 
@@ -201,7 +201,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			fragment_list.add(CATEOGORY, UseCaseGroupListFragment.newInstance(
 					URLHelper.USE_CASE_GROUPS_URL, R.array.use_case));
 
-			fragment_list.add(MY, UserInfoMenuFragment.newInstance(UserHelper
+			fragment_list.add(MY, UserMenuFragment.newInstance(UserHelper
 					.getCurrentUser(MainActivity.this)));
 		}
 

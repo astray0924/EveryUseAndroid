@@ -14,7 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-public class UserInfoDetailActivity extends FragmentActivity {
+public class UserDetailActivity extends FragmentActivity {
 	private User user;
 
 	private FragmentManager fragmentManager;
