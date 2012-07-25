@@ -189,7 +189,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 			fragment_list.add(TOP, UseCaseListWithOptionFragment.newInstance(
 					URLHelper.USE_CASES_TOP_URL, R.array.comment));
-			fragment_list.add(FEED, new DummySectionFragment());
+
+			fragment_list.add(FEED,
+					UseCaseListFragment.newInstance(URLHelper
+							.getMyFeedsURL(UserHelper
+									.getCurrentUser(MainActivity.this).id)));
 
 			fragment_list.add(RECENT, UseCaseListFragment
 					.newInstance(URLHelper.USE_CASES_RECENT_URL));

@@ -13,7 +13,6 @@ import org.json.JSONObject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
 public class UseCase implements Parcelable {
 	public long id;
 	public String username;
@@ -31,9 +30,9 @@ public class UseCase implements Parcelable {
 	public int favorites_count;
 	public int funs_count;
 	public int metoos_count;
-	
+
 	public UseCase() {
-		
+
 	}
 
 	public UseCase(long id, String item, String purpose, String purpose_type,
@@ -65,12 +64,12 @@ public class UseCase implements Parcelable {
 
 	public UseCase(Parcel source) {
 		this(source.readLong(), source.readString(), source.readString(),
-				source.readString(), source.readString(), source.readString(), OtherHelper
-						.parseDate(source.readString()), OtherHelper
+				source.readString(), source.readString(), source.readString(),
+				OtherHelper.parseDate(source.readString()), OtherHelper
 						.parseDate(source.readString()), source.readInt(),
 				source.readInt(), source.readInt());
 	}
-	
+
 	public String getPurposeText() {
 		return purpose_type.equals("") ? purpose : purpose_type + ":" + purpose;
 	}
@@ -83,7 +82,8 @@ public class UseCase implements Parcelable {
 		return (int) (id - c.id);
 	}
 
-	public static UseCase parseSingleFromJSON(JSONObject json) throws JSONException {
+	public static UseCase parseSingleFromJSON(JSONObject json)
+			throws JSONException {
 		long id = json.getLong("id");
 		String item = json.getString("item");
 		String purpose = json.getString("purpose");
@@ -96,8 +96,8 @@ public class UseCase implements Parcelable {
 		int funs_count = json.getInt("funs_count");
 		int metoos_count = json.getInt("metoos_count");
 
-		return new UseCase(id, item, purpose, purpose_type, photo_file_name, username,
-				created_at, updated_at, favorites_count, funs_count,
+		return new UseCase(id, item, purpose, purpose_type, photo_file_name,
+				username, created_at, updated_at, favorites_count, funs_count,
 				metoos_count);
 	}
 
