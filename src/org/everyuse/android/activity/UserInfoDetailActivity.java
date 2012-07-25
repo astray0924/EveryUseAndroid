@@ -1,12 +1,10 @@
 package org.everyuse.android.activity;
 
-import java.util.List;
-
 import org.everyuse.android.R;
 import org.everyuse.android.fragment.UseCaseListWithOptionFragment;
+import org.everyuse.android.fragment.UserListFragment;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.URLHelper;
-import org.everyuse.android.util.UserHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,11 +16,11 @@ import android.util.Log;
 
 public class UserInfoDetailActivity extends FragmentActivity {
 	private User user;
-	private int user_id;
 
 	private FragmentManager fragmentManager;
 	private FragmentTransaction fragmentTransaction;
 
+	public static final String EXTRA_USER = "extra_user";
 	public static final String EXTRA_MENU_SELECTED = "menu_selected";
 	public static final int MENU_NOT_SELECTED = -1;
 	public static final int MENU_SHARED = 0;
@@ -36,7 +34,6 @@ public class UserInfoDetailActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
 
-		initCurrentUserInfo();
 		initFragmentManager();
 
 		handleIntent(getIntent());
@@ -47,6 +44,13 @@ public class UserInfoDetailActivity extends FragmentActivity {
 	}
 
 	private void handleIntent(Intent intent) {
+		user = intent.getParcelableExtra(EXTRA_USER);
+
+		if (user == null) {
+			throw new IllegalStateException(
+					getString(R.string.msg_intent_parameter_not_set));
+		}
+
 		int menu_selected = intent.getIntExtra(EXTRA_MENU_SELECTED,
 				MENU_NOT_SELECTED);
 
@@ -76,30 +80,27 @@ public class UserInfoDetailActivity extends FragmentActivity {
 
 	private Fragment getFragment(int menu_selected) {
 		switch (menu_selected) {
+
 		case MENU_SHARED:
 			return UseCaseListWithOptionFragment.newInstance(
-					URLHelper.getMySharedURL(user_id), R.array.use_case_time);
+					URLHelper.getMySharedURL(user.id), R.array.use_case_time);
 		case MENU_COMMENTED:
 			return UseCaseListWithOptionFragment.newInstance(
-					URLHelper.getMyCommentedURL(user_id), R.array.comment);
+					URLHelper.getMyCommentedURL(user.id), R.array.comment);
 		case MENU_SCRAPED:
 			return UseCaseListWithOptionFragment.newInstance(
-					URLHelper.getMyScrapedURL(user_id), R.array.use_case_time);
-		default:
-			Log.d("UserInfoDetailActivity", menu_selected + "");
-			return null;
-		}
-	}
+					URLHelper.getMyScrapedURL(user.id), R.array.use_case_time);
+		case MENU_FOLLOWING:
+			return UserListFragment.newInstance(URLHelper
+					.getMyFollowingURL(user.id));
+		case MENU_FOLLOWER:
+			return UserListFragment.newInstance(URLHelper
+					.getMyFollowerURL(user.id));
 
-	private void initCurrentUserInfo() {
-		user = UserHelper.getCurrentUser(this);
-
-		if (user == null) {
-			throw new IllegalStateException(
-					getString(R.string.msg_user_session_invalid));
-		} else {
-			user_id = user.id;
 		}
+
+		Log.d("UserInfoDetailActivity", menu_selected + "");
+		return null;
 	}
 
 }

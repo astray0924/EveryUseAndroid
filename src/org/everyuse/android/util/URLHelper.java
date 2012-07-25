@@ -22,15 +22,33 @@ public class URLHelper {
 	public static String METOO_ADD_URL = BASE_URL + "/metoo/add";
 	public static String METOO_DELETE_URL = BASE_URL + "/metoo/delete";
 
+	public static String getMyFollowerURL(int user_id) {
+		if (user_id <= 0) {
+			throw new IllegalArgumentException(Resources.getSystem().getString(
+					R.string.msg_wrong_user_id));
+		}
+
+		return USERS_URL + "/" + user_id + "/followers";
+	}
+
+	public static String getMyFollowingURL(int user_id) {
+		if (user_id <= 0) {
+			throw new IllegalArgumentException(Resources.getSystem().getString(
+					R.string.msg_wrong_user_id));
+		}
+
+		return USERS_URL + "/" + user_id + "/followings";
+	}
+
 	public static String getMyFeedsURL(int user_id) {
 		if (user_id <= 0) {
 			throw new IllegalArgumentException(Resources.getSystem().getString(
 					R.string.msg_wrong_user_id));
 		}
-		
+
 		return USERS_URL + "/" + user_id + "/feeds";
 	}
-	
+
 	public static String getMyScrapedURL(int user_id) {
 		if (user_id <= 0) {
 			throw new IllegalArgumentException(Resources.getSystem().getString(

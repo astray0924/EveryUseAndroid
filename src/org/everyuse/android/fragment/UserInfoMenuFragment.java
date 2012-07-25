@@ -116,6 +116,7 @@ public class UserInfoMenuFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), UserInfoDetailActivity.class);
 		intent.putExtra(UserInfoDetailActivity.EXTRA_MENU_SELECTED, position);
+		intent.putExtra(UserInfoDetailActivity.EXTRA_USER, user);
 		startActivity(intent);
 	}
 
