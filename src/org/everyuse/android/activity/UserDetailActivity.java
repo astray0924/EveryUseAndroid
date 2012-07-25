@@ -45,16 +45,10 @@ public class UserDetailActivity extends FragmentActivity {
 
 	private void handleIntent(Intent intent) {
 		user = intent.getParcelableExtra(EXTRA_USER);
-
-		if (user == null) {
-			throw new IllegalStateException(
-					getString(R.string.msg_intent_parameter_not_set));
-		}
-
 		int menu_selected = intent.getIntExtra(EXTRA_MENU_SELECTED,
 				MENU_NOT_SELECTED);
 
-		if (menu_selected == MENU_NOT_SELECTED) {
+		if (menu_selected == MENU_NOT_SELECTED || user == null) {
 			throw new IllegalStateException(
 					getString(R.string.msg_intent_parameter_not_set));
 		}
