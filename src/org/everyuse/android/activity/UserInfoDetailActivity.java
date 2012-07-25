@@ -22,7 +22,6 @@ public class UserInfoDetailActivity extends FragmentActivity {
 
 	private FragmentManager fragmentManager;
 	private FragmentTransaction fragmentTransaction;
-	private List<Fragment> fragment_list;
 
 	public static final String EXTRA_MENU_SELECTED = "menu_selected";
 	public static final int MENU_NOT_SELECTED = -1;
