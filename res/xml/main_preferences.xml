@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/pref_category_user_group" >
+
+        <ListPreference
+            android:dialogTitle="@string/pref_dialog_user_group"
+            android:entries="@array/user_group_list_preference"
+            android:entryValues="@array/user_group_values_list_preference"
+            android:key="pref_user_group"
+            android:summary="@string/pref_summary_user_group"
+            android:title="@string/pref_title_user_group" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

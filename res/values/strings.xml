@@ -59,5 +59,11 @@
     <string name="msg_wrong_user_id">user_id must be bigger than 0!</string>
     <string name="msg_user_session_invalid">User session is invalid!</string>
     <string name="msg_intent_parameter_not_set">Required intent parameter is not set!</string>
+    
+    <!-- preferences -->
+    <string name="pref_title_user_group">User Group</string>
+    <string name="pref_category_user_group">User Group</string>
+    <string name="pref_dialog_user_group">Select the group</string>
+    <string name="pref_summary_user_group">Select your user group</string>
 
 </resources>
