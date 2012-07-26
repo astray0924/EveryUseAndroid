@@ -13,6 +13,8 @@ import org.json.JSONObject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+
 public class UseCase implements Parcelable {
 	public long id;
 	public String username;
@@ -22,11 +24,11 @@ public class UseCase implements Parcelable {
 	public String photo_file_name;
 	public Date created_at;
 	public Date updated_at;
-
-	// comments
 	public int favorites_count;
-	public int funs_count;
+	public int wows_count;
 	public int metoos_count;
+	
+	private static Gson gson = new Gson();
 
 	public UseCase() {
 
@@ -34,7 +36,7 @@ public class UseCase implements Parcelable {
 
 	public UseCase(long id, String item, String purpose, String purpose_type,
 			String photo_file_name, String username, Date created_at,
-			Date updated_at, int favorites_count, int funs_count,
+			Date updated_at, int favorites_count, int wows_count,
 			int metoos_count) {
 		this.id = id;
 		this.username = username;
@@ -44,10 +46,8 @@ public class UseCase implements Parcelable {
 		this.photo_file_name = photo_file_name;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
-
-		// comments
 		this.favorites_count = favorites_count;
-		this.funs_count = funs_count;
+		this.wows_count = wows_count;
 		this.metoos_count = metoos_count;
 	}
 	
@@ -94,11 +94,11 @@ public class UseCase implements Parcelable {
 		Date created_at = OtherHelper.parseDate(json.getString("created_at"));
 		Date updated_at = OtherHelper.parseDate(json.getString("updated_at"));
 		int favorites_count = json.getInt("favorites_count");
-		int funs_count = json.getInt("funs_count");
+		int wows_count = json.getInt("wows_count");
 		int metoos_count = json.getInt("metoos_count");
 
 		return new UseCase(id, item, purpose, purpose_type, photo_file_name,
-				username, created_at, updated_at, favorites_count, funs_count,
+				username, created_at, updated_at, favorites_count, wows_count,
 				metoos_count);
 	}
 
@@ -130,7 +130,7 @@ public class UseCase implements Parcelable {
 		dest.writeString(OtherHelper.encodeDate(created_at));
 		dest.writeString(OtherHelper.encodeDate(updated_at));
 		dest.writeInt(favorites_count);
-		dest.writeInt(funs_count);
+		dest.writeInt(wows_count);
 		dest.writeInt(metoos_count);
 	}
 
