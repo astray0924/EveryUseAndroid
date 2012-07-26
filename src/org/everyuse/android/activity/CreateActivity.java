@@ -209,11 +209,11 @@ public class CreateActivity extends Activity {
 			try {
 				User user = UserHelper.getCurrentUser(getApplicationContext());
 
-				entity.addPart("use_case[item]", new StringBody(input_item));
+				entity.addPart("use_case[item]", new StringBody(input_item, Charset.forName("UTF-8")));
 				entity.addPart("use_case[purpose]", new StringBody(
-						input_purpose));
+						input_purpose, Charset.forName("UTF-8")));
 				entity.addPart("use_case[purpose_type]", new StringBody(
-						input_purpose_type));
+						input_purpose_type, Charset.forName("UTF-8")));
 				entity.addPart("use_case[photo]", new FileBody(
 						input_photo_file, "image/png"));
 				entity.addPart("user_credentials", new StringBody(
