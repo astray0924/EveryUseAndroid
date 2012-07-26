@@ -36,7 +36,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
 public class RegisterActivity extends Activity {
 	private EditText et_username;
 	private EditText et_email;
@@ -44,10 +43,12 @@ public class RegisterActivity extends Activity {
 	private EditText et_password_confirm;
 
 	// 필드값들
-	String str_username;
-	String str_email;
-	String str_password;
-	String str_password_confirm;
+	private String str_username;
+	private String str_email;
+	private String str_password;
+	private String str_password_confirm;
+
+	private User new_user;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,9 @@ public class RegisterActivity extends Activity {
 				if (str_username.equals("") || str_email.equals("")
 						|| str_password.equals("")
 						|| str_password_confirm.equals("")) {
-					Toast.makeText(getApplicationContext(), R.string.msg_complete_form, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(),
+							R.string.msg_complete_form, Toast.LENGTH_SHORT)
+							.show();
 					return;
 				}
 
@@ -90,9 +93,11 @@ public class RegisterActivity extends Activity {
 		});
 	}
 
-	private class RegisterTask extends AsyncTask<Void, Void, HttpResponse> {
+	private class RegisterTask extends AsyncTask<Void, Void, Boolean> {
+
 		private ProgressDialog indicator;
-		
+		private String msg_error;
+
 		@Override
 		protected void onPreExecute() {
 			// Initialize progress dialog
@@ -100,13 +105,13 @@ public class RegisterActivity extends Activity {
 			indicator.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			indicator.setMessage(getString(R.string.msg_wait));
 			indicator.setCancelable(false);
-			
+
 			// show progress dialog
 			indicator.show();
 		}
 
 		@Override
-		protected HttpResponse doInBackground(Void... args) {
+		protected Boolean doInBackground(Void... args) {
 			// instantiate the http client
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(URLHelper.USERS_URL + ".json");
@@ -124,7 +129,39 @@ public class RegisterActivity extends Activity {
 				post.setEntity(entity);
 
 				HttpResponse res = client.execute(post);
-				return res;
+				HttpEntity res_entity = res.getEntity();
+				if (res_entity != null) {
+					int code = res.getStatusLine().getStatusCode();
+					try {
+						String res_string = EntityUtils.toString(res_entity);
+
+						if (code >= 300) { // error occurred
+							String[] fields = { "username", "email",
+									"password", "password_confirmation" };
+							msg_error = ErrorHelper.getMostProminentError(
+									res_string, fields);
+
+							return false;
+						} else {
+							try {
+								JSONObject json = new JSONObject(res_string);
+								new_user = User.parseFromJSON(json);
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+
+							return true;
+						}
+					} catch (ParseException e1) {
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+				}
+
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			} catch (ClientProtocolException e) {
@@ -133,63 +170,31 @@ public class RegisterActivity extends Activity {
 				e.printStackTrace();
 			}
 
-			return null;
+			return false;
 		}
 
 		@Override
-		protected void onPostExecute(HttpResponse result) {
-			if (result == null) {
-				Toast.makeText(RegisterActivity.this,
-						getString(R.string.msg_no_response), Toast.LENGTH_SHORT).show();
-				return;
-			}
-
-			HttpEntity res_entity = result.getEntity();
-			if (res_entity != null) {
-				int code = result.getStatusLine().getStatusCode();
-				try {
-					String res_string = EntityUtils.toString(res_entity);
-
-					if (code >= 300) { // error occurred
-						String[] fields = { "username", "email", "password",
-								"password_confirmation" };
-						String error = ErrorHelper.getMostProminentError(
-								res_string, fields);
-						Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT)
-								.show();
-					} else {
-						Toast.makeText(getApplicationContext(),
-								"Registration was successful!", Toast.LENGTH_SHORT).show();
-
-						User user = null;
-
-						try {
-							JSONObject json = new JSONObject(res_string);
-							user = User.parseFromJSON(json);
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-
-						// store into shared preferences
-						UserHelper.storeUser(getApplicationContext(), user);
-
-						Intent intent = new Intent(RegisterActivity.this,
-								MainActivity.class);
-						startActivity(intent);
-
-						// return to previous activity
-						finish();
-					}
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-
-			}
+		protected void onPostExecute(Boolean result) {
 			indicator.dismiss();
+
+			if (result) {
+				Toast.makeText(getApplicationContext(), getString(R.string.msg_register_success),
+						Toast.LENGTH_SHORT).show();
+				
+				// store into shared preferences
+				UserHelper.storeUser(getApplicationContext(), new_user);
+
+				Intent intent = new Intent(RegisterActivity.this,
+						MainActivity.class);
+				startActivity(intent);
+
+				// return to previous activity
+				finish();
+			} else {
+				Toast.makeText(getApplicationContext(), msg_error,
+						Toast.LENGTH_SHORT).show();
+			}
+
 		}
 
 	}

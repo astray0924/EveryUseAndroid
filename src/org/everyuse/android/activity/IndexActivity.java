@@ -66,7 +66,7 @@ public class IndexActivity extends SherlockFragmentActivity {
 			finish();
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(R.string.msg_register)
+			builder.setMessage(R.string.msg_register_prompt)
 					.setCancelable(false)
 					.setPositiveButton("Yes",
 							new DialogInterface.OnClickListener() {

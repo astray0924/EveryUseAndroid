@@ -41,12 +41,14 @@
     <string name="hint_search">Search Use Cases</string>
 
     <!-- messages -->
-    <string name="msg_register">Register new account?</string>
     <string name="msg_logout_prompt">Logout from the app?</string>
     <string name="msg_logout_success">Logout successful</string>
     <string name="msg_wait">Please wait</string>
     <string name="msg_no_result">No result</string>
     <string name="msg_no_response">No response from the server</string>
+    <string name="msg_register_prompt">Register new account?</string>
+    <string name="msg_register_success">New account successfully created!</string>
+    <string name="msg_register_fail">Failed to register new account!</string>
     <string name="msg_complete_form">Please complete the form</string>
     <string name="msg_login_success">Login Successful!</string>
     <string name="msg_create_success">Successfully created!</string>
