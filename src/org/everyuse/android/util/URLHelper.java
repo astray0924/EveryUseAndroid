@@ -14,13 +14,9 @@ public class URLHelper {
 	public static String USER_SESSIONS_URL = BASE_URL + "/user_sessions";
 	public static String PHOTOS_URL = BASE_URL + "/photos";
 	public static String SEARCH_URL = BASE_URL + "/search";
-	public static String COMMENT_URL = BASE_URL + "/comments";
-	public static String SCRAP_ADD_URL = BASE_URL + "/favorite/add";
-	public static String SCRAP_DELETE_URL = BASE_URL + "/favorite/delete";
-	public static String WOW_ADD_URL = BASE_URL + "/wow/add";
-	public static String WOW_DELETE_URL = BASE_URL + "/wow/delete";
-	public static String METOO_ADD_URL = BASE_URL + "/metoo/add";
-	public static String METOO_DELETE_URL = BASE_URL + "/metoo/delete";
+	public static String SCRAP_URL = BASE_URL + "/favorite";
+	public static String WOW_URL = BASE_URL + "/wow";
+	public static String METOO_URL = BASE_URL + "/metoo";
 
 	public static String getMyFollowerURL(int user_id) {
 		if (user_id <= 0) {

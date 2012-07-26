@@ -27,6 +27,17 @@ public class UseCase implements Parcelable {
 	public int favorites_count;
 	public int wows_count;
 	public int metoos_count;
+	
+	public static class CurrentUserComment {
+		public Comment favorite;
+		public Comment wow;
+		public Comment metoo;
+	}
+	
+	public static class Comment {
+		public int user_id;
+		public int use_case_id;
+	}
 
 	private static Gson gson = new Gson();
 
