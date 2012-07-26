@@ -17,8 +17,8 @@ public class URLHelper {
 	public static String COMMENT_URL = BASE_URL + "/comments";
 	public static String SCRAP_ADD_URL = BASE_URL + "/favorite/add";
 	public static String SCRAP_DELETE_URL = BASE_URL + "/favorite/delete";
-	public static String FUN_ADD_URL = BASE_URL + "/fun/add";
-	public static String FUN_DELETE_URL = BASE_URL + "/fun/delete";
+	public static String WOW_ADD_URL = BASE_URL + "/wow/add";
+	public static String WOW_DELETE_URL = BASE_URL + "/wow/delete";
 	public static String METOO_ADD_URL = BASE_URL + "/metoo/add";
 	public static String METOO_DELETE_URL = BASE_URL + "/metoo/delete";
 

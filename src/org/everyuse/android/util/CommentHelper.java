@@ -137,8 +137,8 @@ public class CommentHelper {
 			case FAVORITE:
 				url = URLHelper.SCRAP_ADD_URL + ".json";
 				break;
-			case FUN:
-				url = URLHelper.FUN_ADD_URL + ".json";
+			case WOW:
+				url = URLHelper.WOW_ADD_URL + ".json";
 				break;
 			case METOO:
 				url = URLHelper.METOO_ADD_URL + ".json";
@@ -150,8 +150,8 @@ public class CommentHelper {
 			case FAVORITE:
 				url = URLHelper.SCRAP_DELETE_URL + ".json";
 				break;
-			case FUN:
-				url = URLHelper.FUN_DELETE_URL + ".json";
+			case WOW:
+				url = URLHelper.WOW_DELETE_URL + ".json";
 				break;
 			case METOO:
 				url = URLHelper.METOO_DELETE_URL + ".json";
