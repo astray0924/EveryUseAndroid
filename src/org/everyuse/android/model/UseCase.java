@@ -27,48 +27,41 @@ public class UseCase implements Parcelable {
 	public int favorites_count;
 	public int wows_count;
 	public int metoos_count;
-	
+
 	private static Gson gson = new Gson();
 
 	public UseCase() {
 
 	}
-
-	public UseCase(long id, String item, String purpose, String purpose_type,
-			String photo_file_name, String username, Date created_at,
-			Date updated_at, int favorites_count, int wows_count,
-			int metoos_count) {
-		this.id = id;
-		this.username = username;
-		this.item = item;
-		this.purpose = purpose;
-		this.purpose_type = purpose_type;
-		this.photo_file_name = photo_file_name;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.favorites_count = favorites_count;
-		this.wows_count = wows_count;
-		this.metoos_count = metoos_count;
-	}
 	
-	public String getPhotoBaseURL() {
-		return URLHelper.PHOTOS_URL + "/" + id;
-	}
-	
-	public String getPhotoThumbURL() {
-		return getPhotoBaseURL() + "/thumb/" + photo_file_name;
-	}
-	
-	public String getPhotoLargeURL() {
-		return getPhotoBaseURL() + "/large/" + photo_file_name;
+	public UseCase(UseCase use_case) {
+		this.id = use_case.id;
+		this.username = use_case.username;
+		this.item = use_case.item;
+		this.purpose = use_case.purpose;
+		this.purpose_type = use_case.purpose_type;
+		this.photo_file_name = use_case.photo_file_name;
+		this.created_at = use_case.created_at;
+		this.updated_at = use_case.updated_at;
+		this.favorites_count = use_case.favorites_count;
+		this.wows_count = use_case.wows_count;
+		this.metoos_count = use_case.metoos_count;
 	}
 
 	public UseCase(Parcel source) {
-		this(source.readLong(), source.readString(), source.readString(),
-				source.readString(), source.readString(), source.readString(),
-				OtherHelper.parseDate(source.readString()), OtherHelper
-						.parseDate(source.readString()), source.readInt(),
-				source.readInt(), source.readInt());
+		this(gson.fromJson(source.readString(), UseCase.class));
+	}
+
+	public String getPhotoBaseURL() {
+		return URLHelper.PHOTOS_URL + "/" + id;
+	}
+
+	public String getPhotoThumbURL() {
+		return getPhotoBaseURL() + "/thumb/" + photo_file_name;
+	}
+
+	public String getPhotoLargeURL() {
+		return getPhotoBaseURL() + "/large/" + photo_file_name;
 	}
 
 	public String getPurposeText() {
@@ -85,21 +78,7 @@ public class UseCase implements Parcelable {
 
 	public static UseCase parseSingleFromJSON(JSONObject json)
 			throws JSONException {
-		long id = json.getLong("id");
-		String item = json.getString("item");
-		String purpose = json.getString("purpose");
-		String purpose_type = json.getString("purpose_type");
-		String photo_file_name = json.getString("converted_file_name");
-		String username = json.getString("username");
-		Date created_at = OtherHelper.parseDate(json.getString("created_at"));
-		Date updated_at = OtherHelper.parseDate(json.getString("updated_at"));
-		int favorites_count = json.getInt("favorites_count");
-		int wows_count = json.getInt("wows_count");
-		int metoos_count = json.getInt("metoos_count");
-
-		return new UseCase(id, item, purpose, purpose_type, photo_file_name,
-				username, created_at, updated_at, favorites_count, wows_count,
-				metoos_count);
+		return gson.fromJson(json.toString(), UseCase.class);
 	}
 
 	public static List<UseCase> parseFromJSON(JSONArray json)
@@ -121,17 +100,7 @@ public class UseCase implements Parcelable {
 	}
 
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeLong(id);
-		dest.writeString(item);
-		dest.writeString(purpose);
-		dest.writeString(purpose_type);
-		dest.writeString(photo_file_name);
-		dest.writeString(username);
-		dest.writeString(OtherHelper.encodeDate(created_at));
-		dest.writeString(OtherHelper.encodeDate(updated_at));
-		dest.writeInt(favorites_count);
-		dest.writeInt(wows_count);
-		dest.writeInt(metoos_count);
+		dest.writeString(gson.toJson(this));
 	}
 
 	public static final Parcelable.Creator<UseCase> CREATOR = new Parcelable.Creator<UseCase>() {

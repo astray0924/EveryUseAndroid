@@ -1,8 +1,5 @@
 package org.everyuse.android.util;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.everyuse.android.model.User;
 
 import android.app.Activity;
@@ -10,7 +7,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.widget.ImageView;
 
 
 public class UserHelper {
@@ -28,8 +24,8 @@ public class UserHelper {
 		editor.putInt("id", user.id);
 		editor.putString("username", user.username);
 		editor.putString("email", user.email);
-		editor.putString("p_token", user.persistence_token);
-		editor.putString("s_token", user.single_access_token);
+		editor.putString("persistence_token", user.persistence_token);
+		editor.putString("single_access_token", user.single_access_token);
 		editor.commit();
 	}
 
@@ -39,13 +35,13 @@ public class UserHelper {
 		int id = prefs.getInt("id", 0);
 		String username = prefs.getString("username", "");
 		String email = prefs.getString("email", "");
-		String p_token = prefs.getString("p_token", "");
-		String s_token = prefs.getString("s_token", "");
+		String persistence_token = prefs.getString("persistence_token", "");
+		String single_access_token = prefs.getString("single_access_token", "");
 
 		if (id == 0) {
 			return null;
 		} else {
-			return new User(id, username, email, p_token, s_token);
+			return new User(id, username, email, persistence_token, single_access_token);
 		}
 
 	}

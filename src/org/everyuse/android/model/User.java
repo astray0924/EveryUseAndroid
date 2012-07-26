@@ -6,55 +6,40 @@ import org.json.JSONObject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+
 public class User implements Parcelable {
-	/**
-	 * DB index of the user
-	 */
 	public int id;
-
-	/**
-	 * Username
-	 */
 	public String username;
-
-	/**
-	 * email
-	 */
 	public String email;
-
-	/**
-	 * token used for the session
-	 */
 	public String persistence_token;
-
 	public String single_access_token;
+
+	private static final Gson gson = new Gson();
 
 	public User() {
 
 	}
 
-	public User(int id, String username, String email, String p_token,
-			String s_token) {
+	public User(int id, String username, String email,
+			String persistence_token, String single_access_token) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
-		this.persistence_token = p_token;
-		this.single_access_token = s_token;
+		this.persistence_token = persistence_token;
+		this.single_access_token = single_access_token;
+	}
+
+	public User(User user) {
+		this(user.id, user.username, user.email, user.persistence_token, user.single_access_token);
 	}
 
 	public User(Parcel source) {
-		this(source.readInt(), source.readString(), source.readString(), source
-				.readString(), source.readString());
+		this(gson.fromJson(source.readString(), User.class));
 	}
 
 	public static User parseFromJSON(JSONObject json) throws JSONException {
-		int id = json.getInt("id");
-		String username = json.getString("username");
-		String email = json.getString("email");
-		String p_token = json.getString("persistence_token");
-		String s_token = json.getString("single_access_token");
-
-		return new User(id, username, email, p_token, s_token);
+		return gson.fromJson(json.toString(), User.class);
 	}
 
 	@Override
@@ -64,11 +49,7 @@ public class User implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(id);
-		dest.writeString(username);
-		dest.writeString(email);
-		dest.writeString(persistence_token);
-		dest.writeString(single_access_token);
+		dest.writeString(gson.toJson(this));
 	}
 
 	public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
