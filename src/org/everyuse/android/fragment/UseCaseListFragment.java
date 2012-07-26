@@ -3,7 +3,6 @@ package org.everyuse.android.fragment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -35,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class UseCaseListFragment extends ListFragment {
@@ -111,6 +111,9 @@ public class UseCaseListFragment extends ListFragment {
 			}
 
 		});
+
+//		TextView tv_empty = (TextView) getActivity().findViewById(android.R.id.empty);
+//		mListView.setEmptyView(tv_empty);
 	}
 
 	protected String buildDataURLWithQuery(String data_url_raw) {

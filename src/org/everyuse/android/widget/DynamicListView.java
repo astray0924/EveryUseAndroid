@@ -10,6 +10,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class DynamicListView extends ListView implements OnScrollListener {
 	private boolean mLoadEnded = false;
