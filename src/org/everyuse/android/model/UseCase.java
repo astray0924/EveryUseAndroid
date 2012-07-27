@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.everyuse.android.util.OtherHelper;
 import org.everyuse.android.util.URLHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,6 +11,7 @@ import org.json.JSONObject;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -113,6 +113,8 @@ public class UseCase implements Parcelable {
 
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(gson.toJson(this));
+		
+		Log.d("UseCase", gson.toJson(this));
 	}
 
 	public static final Parcelable.Creator<UseCase> CREATOR = new Parcelable.Creator<UseCase>() {
