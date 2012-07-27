@@ -1,54 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/profile_panel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/iv_photo"
-        style="@style/PictureStyle.Large" />
-
-    <TextView
-        android:id="@+id/tv_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/tv_purpose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:id="@+id/comment_panel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/similar_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/btn_similar_item"
+        <LinearLayout
+            android:id="@+id/profile_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="I have similar use of something" />
+            android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/btn_similar_purpose"
+            <ImageView
+                android:id="@+id/iv_user_photo"
+                style="@style/PictureStyle.Thumb" />
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/content_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="I have similar use of something" />
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/iv_usecase_photo"
+                style="@style/PictureStyle.Large" />
+
+            <TextView
+                android:id="@+id/tv_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_purpose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/comment_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_comment" />
+
+            <ToggleButton
+                android:id="@+id/tgl_wow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ToggleButton
+                android:id="@+id/tgl_metoo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/similar_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btn_similar_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="I have similar use of something" />
+
+            <Button
+                android:id="@+id/btn_similar_purpose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="I have similar use of something" />
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

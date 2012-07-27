@@ -119,11 +119,11 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		}
 
 		private void fillPage(View page, UseCase data) {
-			ImageView photo = (ImageView) page.findViewById(R.id.iv_photo);
+			ImageView usecase_photo = (ImageView) page.findViewById(R.id.iv_usecase_photo);
 			TextView item = (TextView) page.findViewById(R.id.tv_item);
 			TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);
 
-			image_downloader.download(data.getPhotoLargeURL(), photo);
+			image_downloader.download(data.getPhotoLargeURL(), usecase_photo);
 			item.setText(data.item);
 			purpose.setText(data.getPurposeString());
 		}

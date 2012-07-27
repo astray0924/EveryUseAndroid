@@ -38,6 +38,7 @@
     <string name="tv_purpose">for this action</string>
     <string name="tv_place">At this place</string>
     <string name="tv_no_data">No data</string>
+    <string name="tv_comment">Comment</string>
     <string name="hint_search">Search Use Cases</string>
 
     <!-- messages -->
