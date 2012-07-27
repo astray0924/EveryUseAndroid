@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.everyuse.android.R;
 import org.everyuse.android.model.UseCase;
+import org.everyuse.android.util.CommentsHelper;
 import org.everyuse.android.util.ImageDownloader;
 
 import android.content.Intent;
@@ -15,9 +16,11 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -34,6 +37,8 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 	private ViewPager pager;
 	private static ImageDownloader image_downloader;
 
+	private static CommentsHelper commentsHelper;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -48,6 +53,10 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		handleIntent(getIntent());
 
 		// Set up the action bar.
+		initialize();
+	}
+
+	private void initialize() {
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
@@ -55,16 +64,21 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		pager = (ViewPager) findViewById(R.id.pager);
 		pager_adapter = new ItemsPagerAdapter(getSupportFragmentManager());
 		pager.setAdapter(pager_adapter);
-
 		pager.setCurrentItem(start_index);
 
+		// image downloader 초기화
 		image_downloader = new ImageDownloader();
+
+		// 코멘트 헬퍼 초기화
+		// use_case_id는 시작 아이템의 것으로 함
+		commentsHelper = new CommentsHelper(this, data_list.get(start_index).id);
+
 	}
 
 	private void handleIntent(Intent intent) {
 		data_list = intent.getParcelableArrayListExtra(EXTRA_DATA_LIST);
 		start_index = intent.getIntExtra(EXTRA_STRAT_INDEX, 0);
-		
+
 		// data가 인스턴스로 하나만 넘겨졌다면 그걸로 리스트 생성
 		UseCase data = intent.getParcelableExtra(EXTRA_DATA);
 		if (data != null) {
@@ -86,9 +100,10 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			// Log.d("DetailActivity", position + "");
+			UseCase data = data_list.get(position);
+			commentsHelper.setUseCaseID(data.id);
 
-			return DetailFragment.newInstance(data_list.get(position));
+			return DetailFragment.newInstance(data);
 		}
 
 		@Override
@@ -119,7 +134,8 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		}
 
 		private void fillPage(View page, UseCase data) {
-			ImageView usecase_photo = (ImageView) page.findViewById(R.id.iv_usecase_photo);
+			ImageView usecase_photo = (ImageView) page
+					.findViewById(R.id.iv_usecase_photo);
 			TextView item = (TextView) page.findViewById(R.id.tv_item);
 			TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);
 
@@ -139,6 +155,18 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			Log.d("DetailActivity", "onActivityCreated()");
 
 			super.onActivityCreated(savedInstanceState);
+			
+
+			// 코멘트 버튼 초기화
+			ToggleButton tgl_wow = (ToggleButton) getActivity().findViewById(R.id.tgl_wow);
+			tgl_wow.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					commentsHelper.postWow();
+				}
+
+			});
 		}
 
 		/*

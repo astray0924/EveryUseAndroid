@@ -59,6 +59,7 @@
     <string name="msg_missing_data_url">Data URL is missing!</string>
     <string name="msg_missing_option_array">Sort option array is not provided!</string>
     <string name="msg_missing_option_value">Sort option array is not provided!</string>
+    <string name="msg_missing_use_case_id">UseCase id is not provided!</string>
     <string name="msg_wrong_user_id">user_id must be bigger than 0!</string>
     <string name="msg_user_session_invalid">User session is invalid!</string>
     <string name="msg_intent_parameter_not_set">Required intent parameter is not set!</string>

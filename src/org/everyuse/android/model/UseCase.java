@@ -48,6 +48,10 @@ public class UseCase implements Parcelable {
 	public static class Comment {
 		public int user_id;
 		public int use_case_id;
+		
+		public static Comment parseSingleFromJSON(JSONObject json) {
+			return gson.fromJson(json.toString(), Comment.class);
+		}
 	}
 
 	public UseCase() {

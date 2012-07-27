@@ -69,7 +69,7 @@ public class UseCaseGroup implements Comparable<UseCaseGroup> {
 		return new UseCaseGroup(title, photo_url, children);
 	}
 
-	public static List<UseCaseGroup> parseMultipleFromJSON(JSONArray json_array)
+	public static List<UseCaseGroup> parseFromJSON(JSONArray json_array)
 			throws JSONException {
 		List<UseCaseGroup> group_list = new ArrayList<UseCaseGroup>();
 
