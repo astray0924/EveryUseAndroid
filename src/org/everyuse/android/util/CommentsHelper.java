@@ -61,6 +61,11 @@ public class CommentsHelper {
 	}
 
 	public boolean postMetoo() {
+		if (use_case_id == 0) {
+			throw new IllegalStateException(
+					context.getString(R.string.msg_missing_use_case_id));
+		}
+		
 		return postComment(METOO, use_case_id, user_credential);
 	}
 
@@ -84,6 +89,8 @@ public class CommentsHelper {
 		RequestParams params = new RequestParams();
 		params.put("comment[use_case_id]", String.valueOf(use_case_id));
 		params.put("user_credentials", user_credentials);
+		
+		Toast.makeText(context, params.toString(), Toast.LENGTH_SHORT).show();
 
 		client.post(url, params, new AsyncHttpResponseHandler() {
 			@Override
@@ -94,7 +101,7 @@ public class CommentsHelper {
 			@Override
 			public void onFailure(Throwable throwable) {
 				Toast.makeText(context, "failed", Toast.LENGTH_SHORT).show();
-				Toast.makeText(context, url, Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, throwable.toString(), Toast.LENGTH_SHORT).show();
 //				Toast.makeText(context, params, Toast.LENGTH_SHORT).show();
 			}
 		});

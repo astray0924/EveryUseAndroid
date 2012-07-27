@@ -121,8 +121,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		}
 
 		public static DetailFragment newInstance(UseCase data) {
-			Log.d("DetailActivity", data + "");
-
 			DetailFragment f = new DetailFragment();
 
 			// supply single UseCase as an argument.
@@ -152,18 +150,27 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		 */
 		@Override
 		public void onActivityCreated(Bundle savedInstanceState) {
-			Log.d("DetailActivity", "onActivityCreated()");
-
 			super.onActivityCreated(savedInstanceState);
-			
 
 			// 코멘트 버튼 초기화
-			ToggleButton tgl_wow = (ToggleButton) getActivity().findViewById(R.id.tgl_wow);
+			ToggleButton tgl_wow = (ToggleButton) getActivity().findViewById(
+					R.id.tgl_wow);
 			tgl_wow.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					commentsHelper.postWow();
+				}
+
+			});
+
+			ToggleButton tgl_metoo = (ToggleButton) getActivity().findViewById(
+					R.id.tgl_metoo);
+			tgl_metoo.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					commentsHelper.postMetoo();
 				}
 
 			});
