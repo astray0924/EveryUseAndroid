@@ -13,7 +13,7 @@ import com.loopj.android.http.RequestParams;
 
 public class CommentsHelper {
 	private static AsyncHttpClient client;
-	
+
 	public static final int SCRAP = 0;
 	public static final int WOW = 1;
 	public static final int METOO = 2;
@@ -30,7 +30,7 @@ public class CommentsHelper {
 		this.context = context;
 		this.user = UserHelper.getCurrentUser(context);
 		this.use_case_id = use_case_id;
-		
+
 		client = new AsyncHttpClient();
 		client.addHeader("Content-type", "application/x-www-form-urlencoded");
 	}
@@ -80,7 +80,7 @@ public class CommentsHelper {
 
 	private boolean postComment(int type) {
 		final String url = getURL(type);
-		
+
 		RequestParams params = new RequestParams();
 		params.put("comment[user_id]", String.valueOf(user.id));
 		params.put("comment[use_case_id]", String.valueOf(use_case_id));
@@ -102,19 +102,22 @@ public class CommentsHelper {
 	}
 
 	private boolean deleteComment(int type, int comment_id) {
-//		String url = getURL(type) + "/" + comment_id;
-//		HttpDelete httpDelete = new HttpDelete(url);
-//
-//		try {
-//			client.execute(httpDelete);
-//
-//			return true;
-//		} catch (ClientProtocolException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
+		String url = getURL(type) + "/" + comment_id;
+		client.delete(url, new AsyncHttpResponseHandler() {
+
+			@Override
+			public void onSuccess(String response) {
+				Toast.makeText(context, "success", Toast.LENGTH_SHORT).show();
+			}
+
+			@Override
+			public void onFailure(Throwable throwable, String content) {
+				Log.d("Comments", content);
+			}
+
+
+		});
+		
 		return false;
 	}
 
