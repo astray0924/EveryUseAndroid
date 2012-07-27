@@ -5,5 +5,6 @@ import android.widget.TextView;
 
 public class UseCaseSingleViewHolder {
 	public ImageView photo;
-	public TextView text;
+	public TextView item;
+	public TextView purpose;
 }
