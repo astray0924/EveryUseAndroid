@@ -42,7 +42,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setContentView(R.layout.activity_detail);
+		setContentView(R.layout.activity_usecase_detail);
 
 		// handle intent
 		handleIntent(getIntent());
@@ -120,10 +120,12 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 		private void fillPage(View page, UseCase data) {
 			ImageView photo = (ImageView) page.findViewById(R.id.iv_photo);
-			TextView text = (TextView) page.findViewById(R.id.text);
+			TextView item = (TextView) page.findViewById(R.id.tv_item);
+			TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);
 
 			image_downloader.download(data.getPhotoLargeURL(), photo);
-			text.setText(data.item + ":" + data.purpose);
+			item.setText(data.item);
+			purpose.setText(data.getPurposeString());
 		}
 
 		/*

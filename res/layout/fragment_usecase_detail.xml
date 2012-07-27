@@ -4,13 +4,51 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:id="@+id/profile_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/iv_photo"
         style="@style/PictureStyle.Large" />
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/tv_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_purpose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/comment_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/similar_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btn_similar_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="I have similar use of something" />
+
+        <Button
+            android:id="@+id/btn_similar_purpose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="I have similar use of something" />
+    </LinearLayout>
 
 </LinearLayout>
