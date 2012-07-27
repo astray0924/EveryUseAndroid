@@ -27,6 +27,7 @@ public class UseCase implements Parcelable {
 	public int favorites_count;
 	public int wows_count;
 	public int metoos_count;
+	public CurrentUserComment current_user_comment;
 	
 	public static class CurrentUserComment {
 		public Comment favorite;
