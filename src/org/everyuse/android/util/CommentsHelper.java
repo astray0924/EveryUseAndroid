@@ -1,15 +1,10 @@
 package org.everyuse.android.util;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.everyuse.android.R;
 import org.everyuse.android.model.User;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -17,14 +12,15 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class CommentsHelper {
-	private static HttpClient client = new DefaultHttpClient();
+	private static AsyncHttpClient client;
+	
 	public static final int SCRAP = 0;
 	public static final int WOW = 1;
 	public static final int METOO = 2;
 
 	private Context context;
 	private User user;
-	private String user_credential;
+	private String user_credentials;
 	private long use_case_id;
 
 	public CommentsHelper() {
@@ -34,8 +30,11 @@ public class CommentsHelper {
 	public CommentsHelper(Context context, long use_case_id) {
 		this.context = context;
 		this.user = UserHelper.getCurrentUser(context);
-		this.user_credential = user.single_access_token;
+		this.user_credentials = user.single_access_token;
 		this.use_case_id = use_case_id;
+		
+		client = new AsyncHttpClient();
+		client.addHeader("Content-type", "application/x-www-form-urlencoded");
 	}
 
 	public void setUseCaseID(long use_case_id) {
@@ -48,7 +47,7 @@ public class CommentsHelper {
 					context.getString(R.string.msg_missing_use_case_id));
 		}
 
-		return postComment(SCRAP, use_case_id, user_credential);
+		return postComment(SCRAP);
 	}
 
 	public boolean postWow() {
@@ -57,7 +56,7 @@ public class CommentsHelper {
 					context.getString(R.string.msg_missing_use_case_id));
 		}
 
-		return postComment(WOW, use_case_id, user_credential);
+		return postComment(WOW);
 	}
 
 	public boolean postMetoo() {
@@ -65,8 +64,8 @@ public class CommentsHelper {
 			throw new IllegalStateException(
 					context.getString(R.string.msg_missing_use_case_id));
 		}
-		
-		return postComment(METOO, use_case_id, user_credential);
+
+		return postComment(METOO);
 	}
 
 	public boolean deleteScrap(int comment_id) {
@@ -81,91 +80,54 @@ public class CommentsHelper {
 		return deleteComment(METOO, comment_id);
 	}
 
-	private boolean postComment(int type, long use_case_id,
-			String user_credentials) {
+	private boolean postComment(int type) {
 		final String url = getURL(type);
-
-		AsyncHttpClient client = new AsyncHttpClient();
-		RequestParams params = new RequestParams();
-		params.put("comment[use_case_id]", String.valueOf(use_case_id));
-		params.put("user_credentials", user_credentials);
 		
-		Toast.makeText(context, params.toString(), Toast.LENGTH_SHORT).show();
+		RequestParams params = new RequestParams();
+		params.put("comment[user_id]", String.valueOf(user.id));
+		params.put("comment[use_case_id]", String.valueOf(use_case_id));
 
 		client.post(url, params, new AsyncHttpResponseHandler() {
+
 			@Override
 			public void onSuccess(String response) {
 				Toast.makeText(context, "success", Toast.LENGTH_SHORT).show();
 			}
 
 			@Override
-			public void onFailure(Throwable throwable) {
-				Toast.makeText(context, "failed", Toast.LENGTH_SHORT).show();
-				Toast.makeText(context, throwable.toString(), Toast.LENGTH_SHORT).show();
-//				Toast.makeText(context, params, Toast.LENGTH_SHORT).show();
+			public void onFailure(Throwable error, String content) {
+				Log.d("Comments", content);
 			}
 		});
 
 		return true;
-
-		// HttpPost httpPost = new HttpPost(url);
-		//
-		// try {
-		// List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-		// pairs.add(new BasicNameValuePair("use_case_id", String
-		// .valueOf(use_case_id)));
-		// pairs.add(new BasicNameValuePair("user_credentials",
-		// user_credentials));
-		// httpPost.setEntity(new UrlEncodedFormEntity(pairs));
-		//
-		// } catch (UnsupportedEncodingException ue) {
-		// ue.printStackTrace();
-		// return false;
-		// }
-		//
-		// try {
-		// HttpResponse response = client.execute(httpPost);
-		// int statusCode = response.getStatusLine().getStatusCode();
-		//
-		// if (statusCode >= 300) { // error occurred
-		// return false;
-		// } else {
-		// return true;
-		// }
-		// } catch (ClientProtocolException e) {
-		// e.printStackTrace();
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
-		//
-		// return false;
 	}
 
 	private boolean deleteComment(int type, int comment_id) {
-		String url = getURL(type) + "/" + comment_id;
-		HttpDelete httpDelete = new HttpDelete(url);
-
-		try {
-			client.execute(httpDelete);
-
-			return true;
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+//		String url = getURL(type) + "/" + comment_id;
+//		HttpDelete httpDelete = new HttpDelete(url);
+//
+//		try {
+//			client.execute(httpDelete);
+//
+//			return true;
+//		} catch (ClientProtocolException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//
 		return false;
 	}
 
 	private static String getURL(int type) {
 		switch (type) {
 		case SCRAP:
-			return URLHelper.COMMENTS_SCRAP_URL;
+			return URLHelper.COMMENTS_SCRAP_URL + ".json";
 		case WOW:
-			return URLHelper.COMMENTS_WOW_URL;
+			return URLHelper.COMMENTS_WOW_URL + ".json";
 		case METOO:
-			return URLHelper.COMMENTS_METOO_URL;
+			return URLHelper.COMMENTS_METOO_URL + ".json";
 		default:
 			return null;
 		}
