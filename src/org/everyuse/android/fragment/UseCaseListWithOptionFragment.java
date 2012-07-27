@@ -1,10 +1,8 @@
 package org.everyuse.android.fragment;
 
 import org.everyuse.android.R;
-import org.everyuse.android.model.UseCaseListOption;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +90,7 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 					getString(R.string.msg_missing_data_url));
 		}
 
-		UseCaseListOption option_value = getSelectedOption();
+		String option_value = getSelectedOption();
 		if (option_value == null || option_value.equals("")) {
 			throw new IllegalArgumentException(
 					getString(R.string.msg_missing_option_value));
@@ -100,24 +98,16 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 
 		// build query string using parameters
 		return super.buildDataURLWithQuery(data_url_raw) + "&" + option_name
-				+ "=" + String.valueOf(option_value).toLowerCase();
+				+ "=" + option_value.toLowerCase();
 	}
 
-	private UseCaseListOption getSelectedOption() {
+	private String getSelectedOption() {
 		if (sp_option == null) {
 			throw new IllegalStateException("Spinner is not initialized!");
 		}
 
-		String selected = sp_option.getSelectedItem().toString().toLowerCase()
+		return sp_option.getSelectedItem().toString().toLowerCase()
 				.replaceAll("\\s", "");
-
-		for (UseCaseListOption op : UseCaseListOption.values()) {
-			if (selected.equals(op.toString().toLowerCase())) {
-				return op;
-			}
-		}
-
-		return null;
 
 	}
 }

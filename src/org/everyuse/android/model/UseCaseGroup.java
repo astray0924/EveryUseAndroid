@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
+public class UseCaseGroup implements Comparable<UseCaseGroup> {
 	public String photo_url_thumb;
 	public String title;
 	public ArrayList<UseCase> children;
@@ -82,36 +82,6 @@ public class UseCaseGroup implements Parcelable, Comparable<UseCaseGroup> {
 		return group_list;
 	}
 
-	public void writeToParcel(Parcel dest, int flag) {
-		dest.writeString(title);
-		dest.writeString(photo_url_thumb);
-
-		UseCase[] item_array = new UseCase[children.size()];
-		dest.writeParcelableArray(children.toArray(item_array), 0);
-	}
-
-	public static final Creator<UseCaseGroup> CREATOR = new Creator<UseCaseGroup>() {
-
-		public UseCaseGroup createFromParcel(Parcel source) {
-			String title = source.readString();
-			String photo_url = source.readString();
-			List<Parcelable> encoded_items = Arrays.asList(source
-					.readParcelableArray(UseCaseListOption.class
-							.getClassLoader()));
-			ArrayList<UseCase> items = new ArrayList<UseCase>();
-
-			for (Parcelable e : encoded_items) {
-				items.add((UseCase) e);
-			}
-
-			return new UseCaseGroup(title, photo_url, items);
-		}
-
-		public UseCaseGroup[] newArray(int size) {
-			return new UseCaseGroup[size];
-		}
-
-	};
 
 	@Override
 	public int compareTo(UseCaseGroup another) {
