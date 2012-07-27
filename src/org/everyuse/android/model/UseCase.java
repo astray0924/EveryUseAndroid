@@ -30,6 +30,14 @@ public class UseCase implements Parcelable {
 	public CurrentUserComment current_user_comment;
 
 	private static Gson gson = new Gson();
+	
+	public String getPurposeString() {
+		if (purpose_type == null) {
+			purpose_type = "";
+		}
+		
+		return purpose_type + " " + purpose;
+	}
 
 	public static class CurrentUserComment {
 		public Comment favorite;

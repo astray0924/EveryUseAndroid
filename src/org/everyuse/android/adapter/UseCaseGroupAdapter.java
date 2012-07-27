@@ -6,13 +6,12 @@ package org.everyuse.android.adapter;
 import java.util.List;
 
 import org.everyuse.android.R;
+import org.everyuse.android.adapter.UseCaseSingleAdapter.UseCaseSingleViewHolder;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.model.UseCaseGroup;
 import org.everyuse.android.util.ImageDownloader;
-import org.everyuse.android.widget.UseCaseSingleViewHolder;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,7 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 	private List<UseCaseGroup> group_list;
 
 	public UseCaseGroupAdapter() {
-		
+
 	}
 
 	public UseCaseGroupAdapter(Context context, List<UseCaseGroup> group_list) {
@@ -75,7 +74,9 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 
 			UseCaseSingleViewHolder holder = new UseCaseSingleViewHolder();
 			holder.photo = (ImageView) convertView.findViewById(R.id.iv_photo);
-			holder.item = (TextView) convertView.findViewById(R.id.text);
+			holder.item = (TextView) convertView.findViewById(R.id.tv_item);
+			holder.purpose = (TextView) convertView
+					.findViewById(R.id.tv_purpose);
 
 			convertView.setTag(holder);
 		}
@@ -88,6 +89,7 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 				.getTag();
 		image_downloader.download(use_case.getPhotoThumbURL(), holder.photo);
 		holder.item.setText(use_case.item);
+		holder.purpose.setText(use_case.getPurposeString());
 
 		return convertView;
 	}

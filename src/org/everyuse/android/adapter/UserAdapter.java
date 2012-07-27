@@ -3,10 +3,8 @@ package org.everyuse.android.adapter;
 import java.util.List;
 
 import org.everyuse.android.R;
-import org.everyuse.android.model.UseCase;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.ImageDownloader;
-import org.everyuse.android.widget.UseCaseSingleViewHolder;
 
 import android.content.Context;
 import android.view.LayoutInflater;

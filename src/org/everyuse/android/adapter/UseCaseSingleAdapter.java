@@ -5,7 +5,6 @@ import java.util.List;
 import org.everyuse.android.R;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.ImageDownloader;
-import org.everyuse.android.widget.UseCaseSingleViewHolder;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -54,7 +53,7 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 				.getTag();
 		image_downloader.download(use_case.getPhotoThumbURL(), holder.photo);
 		holder.item.setText(use_case.item);
-		holder.purpose.setText(use_case.purpose);
+		holder.purpose.setText(use_case.getPurposeString());
 
 		return convertView;
 	}
@@ -73,6 +72,12 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 
 	public long getItemId(int position) {
 		return position;
+	}
+	
+	public static class UseCaseSingleViewHolder {
+		public ImageView photo;
+		public TextView item;
+		public TextView purpose;
 	}
 
 }
