@@ -20,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -36,8 +37,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 	private ItemsPagerAdapter pager_adapter;
 	private ViewPager pager;
 	private static ImageDownloader image_downloader;
-
-	private static CommentsHelper commentsHelper;
 
 	/*
 	 * (non-Javadoc)
@@ -68,11 +67,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 		// image downloader 초기화
 		image_downloader = new ImageDownloader();
-
-		// 코멘트 헬퍼 초기화
-		// use_case_id는 시작 아이템의 것으로 함
-		commentsHelper = new CommentsHelper(this, data_list.get(start_index).id);
-
 	}
 
 	private void handleIntent(Intent intent) {
@@ -101,8 +95,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		@Override
 		public Fragment getItem(int position) {
 			UseCase data = data_list.get(position);
-			commentsHelper.setUseCaseID(data.id);
-
 			return DetailFragment.newInstance(data);
 		}
 
@@ -115,6 +107,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 	public static class DetailFragment extends Fragment {
 		private static String DATA = "DATA";
+		private CommentsHelper commentsHelper;
 
 		public DetailFragment() {
 
@@ -151,29 +144,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		@Override
 		public void onActivityCreated(Bundle savedInstanceState) {
 			super.onActivityCreated(savedInstanceState);
-
-			// 코멘트 버튼 초기화
-			ToggleButton tgl_wow = (ToggleButton) getActivity().findViewById(
-					R.id.tgl_wow);
-			tgl_wow.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					commentsHelper.postWow();
-				}
-
-			});
-
-			ToggleButton tgl_metoo = (ToggleButton) getActivity().findViewById(
-					R.id.tgl_metoo);
-			tgl_metoo.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					commentsHelper.postMetoo();
-				}
-
-			});
 		}
 
 		/*
@@ -184,6 +154,13 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
+
+			UseCase data = (UseCase) getArguments().getParcelable(DATA);
+			long use_case_id = data.id;
+
+			// 코멘트 헬퍼 초기화
+			// use_case_id는 시작 아이템의 것으로 함
+			commentsHelper = new CommentsHelper(getActivity(), use_case_id);
 		}
 
 		/*
@@ -202,6 +179,29 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 					.inflate(R.layout.fragment_usecase_detail, null);
 			UseCase data = getArguments().getParcelable(DATA);
 			display(page, data);
+
+			// 코멘트 버튼 초기화
+			ToggleButton tgl_wow = (ToggleButton) page
+					.findViewById(R.id.tgl_wow);
+			tgl_wow.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show();
+				}
+
+			});
+
+			ToggleButton tgl_metoo = (ToggleButton) page
+					.findViewById(R.id.tgl_metoo);
+			tgl_metoo.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+
+				}
+
+			});
 
 			return page;
 		}
