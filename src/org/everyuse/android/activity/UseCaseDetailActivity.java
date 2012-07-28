@@ -173,26 +173,28 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			Log.d("DetailActivity", "onCreateView()");
-
 			View page = inflater
 					.inflate(R.layout.fragment_usecase_detail, null);
 			UseCase data = getArguments().getParcelable(DATA);
 			display(page, data);
 
 			// 코멘트 버튼 초기화
-			ToggleButton tgl_wow = (ToggleButton) page
+			final ToggleButton tgl_wow = (ToggleButton) page
 					.findViewById(R.id.tgl_wow);
 			tgl_wow.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show();
+					if (tgl_wow.isChecked()) {
+						commentsHelper.postWow();						
+					} else {
+//						commentsHelper.deleteWow();
+					}
 				}
 
 			});
 
-			ToggleButton tgl_metoo = (ToggleButton) page
+			final ToggleButton tgl_metoo = (ToggleButton) page
 					.findViewById(R.id.tgl_metoo);
 			tgl_metoo.setOnClickListener(new OnClickListener() {
 
