@@ -20,11 +20,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -105,14 +100,16 @@ public class MainActivity extends SherlockFragmentActivity implements
 		int id = item.getItemId();
 		switch (id) {
 		case R.id.menu_new:
-			Intent create_intent = new Intent(MainActivity.this, CreateActivity.class);
+			Intent create_intent = new Intent(MainActivity.this,
+					CreateActivity.class);
 			startActivity(create_intent);
 			break;
 
 		case R.id.menu_search:
 			break;
 		case R.id.menu_settings:
-			Intent pref_intent = new Intent(MainActivity.this, MainPreferenceActivity.class);
+			Intent pref_intent = new Intent(MainActivity.this,
+					MainPreferenceActivity.class);
 			startActivity(pref_intent);
 			break;
 		case R.id.menu_logout:
@@ -179,42 +176,53 @@ public class MainActivity extends SherlockFragmentActivity implements
 		private final int CATEOGORY = 3;
 		private final int MY = 4;
 
+		private final int TAB_COUNT = 5;
+
 		private List<Fragment> fragment_list = new ArrayList<Fragment>();
 
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 
-			initFragments(fm);
-		}
-
-		private void initFragments(FragmentManager fm) {
-
-			fragment_list.add(TOP, UseCaseListWithOptionFragment.newInstance(
-					URLHelper.USE_CASES_TOP_URL, R.array.comment));
-
-			fragment_list.add(FEED,
-					UseCaseListFragment.newInstance(URLHelper
-							.getMyFeedsURL(UserHelper
-									.getCurrentUser(MainActivity.this).id)));
-
-			fragment_list.add(RECENT, UseCaseListFragment
-					.newInstance(URLHelper.USE_CASES_RECENT_URL));
-
-			fragment_list.add(CATEOGORY, UseCaseGroupListFragment.newInstance(
-					URLHelper.USE_CASE_GROUPS_URL, R.array.use_case));
-
-			fragment_list.add(MY, UserProfileFragment.newInstance(UserHelper
-					.getCurrentUser(MainActivity.this)));
+			for (int i = 0; i < TAB_COUNT; i++) {
+				fragment_list.add(i, null);
+			}
 		}
 
 		@Override
 		public Fragment getItem(int i) {
+			if (fragment_list.get(i) == null) {
+				fragment_list.add(i, getFragment(i));
+			}
+
 			return fragment_list.get(i);
+		}
+
+		private Fragment getFragment(int index) {
+			switch (index) {
+			case TOP:
+				return UseCaseListWithOptionFragment.newInstance(
+						URLHelper.USE_CASES_TOP_URL, R.array.comment);
+			case FEED:
+				int user_id = UserHelper.getCurrentUser(MainActivity.this).id;
+				return UseCaseListFragment.newInstance(URLHelper
+						.getMyFeedsURL(user_id));
+			case RECENT:
+				return UseCaseListFragment
+						.newInstance(URLHelper.USE_CASES_RECENT_URL);
+			case CATEOGORY:
+				return UseCaseGroupListFragment.newInstance(
+						URLHelper.USE_CASE_GROUPS_URL, R.array.use_case);
+			case MY:
+				return UserProfileFragment.newInstance(UserHelper
+						.getCurrentUser(MainActivity.this));
+			default:
+				throw new IllegalStateException("Tab index out of bound.");
+			}
 		}
 
 		@Override
 		public int getCount() {
-			return fragment_list.size();
+			return TAB_COUNT;
 		}
 
 		@Override

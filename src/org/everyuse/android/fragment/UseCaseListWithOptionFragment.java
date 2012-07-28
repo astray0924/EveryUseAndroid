@@ -66,7 +66,7 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
-				resetList();
+				refresh();
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {

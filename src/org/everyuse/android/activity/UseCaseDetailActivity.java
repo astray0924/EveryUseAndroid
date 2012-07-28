@@ -131,7 +131,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			return f;
 		}
 
-		private void fillPage(View page, UseCase data) {
+		private void display(View page, UseCase data) {
 			ImageView usecase_photo = (ImageView) page
 					.findViewById(R.id.iv_usecase_photo);
 			TextView item = (TextView) page.findViewById(R.id.tv_item);
@@ -201,7 +201,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			View page = inflater
 					.inflate(R.layout.fragment_usecase_detail, null);
 			UseCase data = getArguments().getParcelable(DATA);
-			fillPage(page, data);
+			display(page, data);
 
 			return page;
 		}

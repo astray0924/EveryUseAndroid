@@ -233,7 +233,7 @@ public class UseCaseListFragment extends ListFragment {
 		startActivity(intent);
 	}
 
-	protected void resetList() {
+	protected void refresh() {
 		resetPage();
 		mDataList.clear();
 		mAdapter.notifyDataSetChanged();
