@@ -27,31 +27,15 @@ public class UseCase implements Parcelable {
 	public int favorites_count;
 	public int wows_count;
 	public int metoos_count;
-	public CurrentUserComment current_user_comment;
 
 	private static Gson gson = new Gson();
-	
+
 	public String getPurposeString() {
 		if (purpose_type == null) {
 			purpose_type = "";
 		}
-		
+
 		return purpose_type + " " + purpose;
-	}
-
-	public static class CurrentUserComment {
-		public Comment favorite;
-		public Comment wow;
-		public Comment metoo;
-	}
-
-	public static class Comment {
-		public int user_id;
-		public int use_case_id;
-		
-		public static Comment parseSingleFromJSON(JSONObject json) {
-			return gson.fromJson(json.toString(), Comment.class);
-		}
 	}
 
 	public UseCase() {
@@ -88,10 +72,6 @@ public class UseCase implements Parcelable {
 		return getPhotoBaseURL() + "/large/" + photo_file_name;
 	}
 
-	public String getPurposeText() {
-		return purpose_type.equals("") ? purpose : purpose_type + ":" + purpose;
-	}
-
 	public String toString() {
 		return "Item: " + item + ", Purpose: " + purpose;
 	}
@@ -102,6 +82,7 @@ public class UseCase implements Parcelable {
 
 	public static UseCase parseSingleFromJSON(JSONObject json)
 			throws JSONException {
+
 		return gson.fromJson(json.toString(), UseCase.class);
 	}
 
@@ -125,8 +106,6 @@ public class UseCase implements Parcelable {
 
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(gson.toJson(this));
-		
-		Log.d("UseCase", gson.toJson(this));
 	}
 
 	public static final Parcelable.Creator<UseCase> CREATOR = new Parcelable.Creator<UseCase>() {

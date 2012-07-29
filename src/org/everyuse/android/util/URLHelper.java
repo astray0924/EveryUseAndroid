@@ -14,7 +14,7 @@ public class URLHelper {
 	public static String USER_SESSIONS_URL = BASE_URL + "/user_sessions";
 	public static String PHOTOS_URL = BASE_URL + "/photos";
 	public static String SEARCH_URL = BASE_URL + "/search";
-	private static String COMMENTS_BASE_URL = BASE_URL + "/comments";
+	public static String COMMENTS_BASE_URL = BASE_URL + "/comments";
 	public static String COMMENTS_SCRAP_URL = COMMENTS_BASE_URL + "/favorite";
 	public static String COMMENTS_WOW_URL = COMMENTS_BASE_URL + "/wow";
 	public static String COMMENTS_METOO_URL = COMMENTS_BASE_URL + "/metoo";

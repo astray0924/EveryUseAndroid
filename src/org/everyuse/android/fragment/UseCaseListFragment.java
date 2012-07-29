@@ -112,8 +112,9 @@ public class UseCaseListFragment extends ListFragment {
 
 		});
 
-//		TextView tv_empty = (TextView) getActivity().findViewById(android.R.id.empty);
-//		mListView.setEmptyView(tv_empty);
+		// TextView tv_empty = (TextView)
+		// getActivity().findViewById(android.R.id.empty);
+		// mListView.setEmptyView(tv_empty);
 	}
 
 	protected String buildDataURLWithQuery(String data_url_raw) {
@@ -143,8 +144,6 @@ public class UseCaseListFragment extends ListFragment {
 		@Override
 		protected Boolean doInBackground(String... args) {
 			String data_url = args[0];
-
-			Log.d("data_url", data_url + "");
 
 			if (data_url == null || data_url.equals("")) {
 				throw new IllegalArgumentException(
