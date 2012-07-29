@@ -21,7 +21,7 @@ public class UseCase implements Parcelable {
 	public String item;
 	public String purpose;
 	public String purpose_type;
-	public String photo_file_name;
+	public String converted_file_name;
 	public Date created_at;
 	public Date updated_at;
 	public int favorites_count;
@@ -48,7 +48,7 @@ public class UseCase implements Parcelable {
 		this.item = use_case.item;
 		this.purpose = use_case.purpose;
 		this.purpose_type = use_case.purpose_type;
-		this.photo_file_name = use_case.photo_file_name;
+		this.converted_file_name = use_case.converted_file_name;
 		this.created_at = use_case.created_at;
 		this.updated_at = use_case.updated_at;
 		this.favorites_count = use_case.favorites_count;
@@ -65,11 +65,11 @@ public class UseCase implements Parcelable {
 	}
 
 	public String getPhotoThumbURL() {
-		return getPhotoBaseURL() + "/thumb/" + photo_file_name;
+		return getPhotoBaseURL() + "/thumb/" + converted_file_name;
 	}
 
 	public String getPhotoLargeURL() {
-		return getPhotoBaseURL() + "/large/" + photo_file_name;
+		return getPhotoBaseURL() + "/large/" + converted_file_name;
 	}
 
 	public String toString() {
