@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.everyuse.android.R;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.CommentsHelper;
+import org.everyuse.android.util.CommentsHelper.Comments;
+import org.everyuse.android.util.CommentsHelper.OnCommentsUpdateHandler;
 import org.everyuse.android.util.ImageDownloader;
 
 import android.content.Intent;
@@ -13,14 +15,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -51,7 +51,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		// handle intent
 		handleIntent(getIntent());
 
-		// Set up the action bar.
+		// initialize
 		initialize();
 	}
 
@@ -67,6 +67,9 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 		// image downloader 초기화
 		image_downloader = new ImageDownloader();
+
+		// Comment helper 부착
+
 	}
 
 	private void handleIntent(Intent intent) {
@@ -109,6 +112,10 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		private static String DATA = "DATA";
 		private CommentsHelper commentsHelper;
 
+		// Views
+		ToggleButton tgl_wow;
+		ToggleButton tgl_metoo;
+
 		public DetailFragment() {
 
 		}
@@ -122,28 +129,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			f.setArguments(args);
 
 			return f;
-		}
-
-		private void display(View page, UseCase data) {
-			ImageView usecase_photo = (ImageView) page
-					.findViewById(R.id.iv_usecase_photo);
-			TextView item = (TextView) page.findViewById(R.id.tv_item);
-			TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);
-
-			image_downloader.download(data.getPhotoLargeURL(), usecase_photo);
-			item.setText(data.item);
-			purpose.setText(data.getPurposeString());
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
-		 */
-		@Override
-		public void onActivityCreated(Bundle savedInstanceState) {
-			super.onActivityCreated(savedInstanceState);
 		}
 
 		/*
@@ -161,6 +146,15 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			// 코멘트 헬퍼 초기화
 			// use_case_id는 시작 아이템의 것으로 함
 			commentsHelper = new CommentsHelper(getActivity(), use_case_id);
+			commentsHelper
+					.setOnCommentsUpdateHandler(new OnCommentsUpdateHandler() {
+
+						@Override
+						public void onUpdate(Comments comments) {
+							updateCommentButtonState(comments);
+						}
+
+					});
 		}
 
 		/*
@@ -179,14 +173,13 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			display(page, data);
 
 			// 코멘트 버튼 초기화
-			final ToggleButton tgl_wow = (ToggleButton) page
-					.findViewById(R.id.tgl_wow);
+			tgl_wow = (ToggleButton) page.findViewById(R.id.tgl_wow);
 			tgl_wow.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					if (tgl_wow.isChecked()) {
-						commentsHelper.postWow();						
+						commentsHelper.postWow();
 					} else {
 						commentsHelper.deleteWow();
 					}
@@ -194,14 +187,13 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 			});
 
-			final ToggleButton tgl_metoo = (ToggleButton) page
-					.findViewById(R.id.tgl_metoo);
+			tgl_metoo = (ToggleButton) page.findViewById(R.id.tgl_metoo);
 			tgl_metoo.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					if (tgl_metoo.isChecked()) {
-						commentsHelper.postMetoo();						
+						commentsHelper.postMetoo();
 					} else {
 						commentsHelper.deleteMetoo();
 					}
@@ -211,5 +203,43 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 			return page;
 		}
+
+		private void display(View page, UseCase data) {
+			// TODO findViewById는 onCreateView 등에서 한번만 호출하도록 하자
+			ImageView usecase_photo = (ImageView) page
+					.findViewById(R.id.iv_usecase_photo);
+			TextView item = (TextView) page.findViewById(R.id.tv_item);
+			TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);
+
+			image_downloader.download(data.getPhotoLargeURL(), usecase_photo);
+			item.setText(data.item);
+			purpose.setText(data.getPurposeString());
+		}
+
+		private void updateCommentButtonState(Comments comments) {
+			if (comments.isWowed()) {
+				tgl_wow.setChecked(true);
+			} else {
+				tgl_wow.setChecked(false);
+			}
+
+			if (comments.isMetooed()) {
+				tgl_metoo.setChecked(true);
+			} else {
+				tgl_metoo.setChecked(false);
+			}
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
+		 */
+		@Override
+		public void onActivityCreated(Bundle savedInstanceState) {
+			super.onActivityCreated(savedInstanceState);
+		}
+
 	}
 }

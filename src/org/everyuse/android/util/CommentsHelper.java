@@ -22,14 +22,10 @@ public class CommentsHelper {
 	private int user_id;
 	private long use_case_id;
 
-	private CurrentUserComments comments;
+	private Comments comments;
 	private static Gson gson = new Gson();
 
-	public class CurrentUserComments {
-		public Comment current_user_favorite;
-		public Comment current_user_wow;
-		public Comment current_user_metoo;
-	}
+	private OnCommentsUpdateHandler handler;
 
 	public class Comment {
 		public int id;
@@ -37,8 +33,35 @@ public class CommentsHelper {
 		public long use_case_id;
 	}
 
+	public class Comments {
+		public Comment favorite;
+		public Comment wow;
+		public Comment metoo;
+
+		public boolean isFavorited() {
+			return (favorite != null);
+		}
+
+		public boolean isWowed() {
+			return (wow != null);
+		}
+
+		public boolean isMetooed() {
+			return (metoo != null);
+
+		}
+	}
+
 	public CommentsHelper() {
 
+	}
+
+	public interface OnCommentsUpdateHandler {
+		public void onUpdate(Comments comments);
+	}
+
+	public void setOnCommentsUpdateHandler(OnCommentsUpdateHandler handler) {
+		this.handler = handler;
 	}
 
 	public CommentsHelper(final Context context, long use_case_id) {
@@ -50,10 +73,10 @@ public class CommentsHelper {
 		client.addHeader("Content-type", "application/x-www-form-urlencoded");
 
 		// 보는 글에 달린 현재 사용자의 댓글들을 가져옴
-		fetchCurrentUserComments();
+		updateCurrentUserComments();
 	}
 
-	private void fetchCurrentUserComments() {
+	private void updateCurrentUserComments() {
 		String url = URLHelper.COMMENTS_BASE_URL + ".json";
 		RequestParams params = new RequestParams();
 		params.put("comment[user_id]", String.valueOf(user_id));
@@ -63,7 +86,7 @@ public class CommentsHelper {
 
 			@Override
 			public void onSuccess(String response) {
-				comments = gson.fromJson(response, CurrentUserComments.class);
+				comments = gson.fromJson(response, Comments.class);
 
 				Log.d("Comments", gson.toJson(comments));
 			}
@@ -72,6 +95,19 @@ public class CommentsHelper {
 			public void onFailure(Throwable error, String content) {
 				Toast.makeText(context, "Failed to retrieve user comments.",
 						Toast.LENGTH_LONG).show();
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see com.loopj.android.http.AsyncHttpResponseHandler#onFinish()
+			 */
+			@Override
+			public void onFinish() {
+				if (handler != null) {
+					handler.onUpdate(comments);
+				}
+
 			}
 		});
 	}
@@ -108,31 +144,31 @@ public class CommentsHelper {
 	}
 
 	public boolean deleteScrap() {
-		if (comments.current_user_favorite == null) {
+		if (comments.favorite == null) {
 			return true;
 		}
 
-		int comment_id = comments.current_user_favorite.id;
+		int comment_id = comments.favorite.id;
 
 		return deleteComment(SCRAP, comment_id);
 	}
 
 	public boolean deleteWow() {
-		if (comments.current_user_wow == null) {
+		if (comments.wow == null) {
 			return true;
 		}
 
-		int comment_id = comments.current_user_wow.id;
+		int comment_id = comments.wow.id;
 
 		return deleteComment(WOW, comment_id);
 	}
 
 	public boolean deleteMetoo() {
-		if (comments.current_user_metoo == null) {
+		if (comments.metoo == null) {
 			return true;
 		}
 
-		int comment_id = comments.current_user_metoo.id;
+		int comment_id = comments.metoo.id;
 
 		return deleteComment(METOO, comment_id);
 	}
@@ -148,18 +184,29 @@ public class CommentsHelper {
 
 			@Override
 			public void onSuccess(String response) {
+
 				Toast.makeText(context, "post success", Toast.LENGTH_SHORT)
 						.show();
+
 			}
 
 			@Override
 			public void onFailure(Throwable error, String content) {
 				Log.d("Comments", content);
 			}
-		});
 
-		// 코멘트를 올린 다음, 현재 사용자의 코멘트를 정보를 업데이트함
-		fetchCurrentUserComments();
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see com.loopj.android.http.AsyncHttpResponseHandler#onFinish()
+			 */
+			@Override
+			public void onFinish() {
+				// 코멘트를 올린 다음, 현재 사용자의 코멘트를 정보를 업데이트함
+				updateCurrentUserComments();
+			}
+
+		});
 
 		return true;
 	}
@@ -179,12 +226,20 @@ public class CommentsHelper {
 				Log.d("Comments", content);
 			}
 
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see com.loopj.android.http.AsyncHttpResponseHandler#onFinish()
+			 */
+			@Override
+			public void onFinish() {
+				// 코멘트를 올린 다음, 현재 사용자의 코멘트를 정보를 업데이트함
+				updateCurrentUserComments();
+			}
+
 		});
 
-		// 코멘트를 삭제한 다음, 현재 사용자의 코멘트를 정보를 업데이트함
-		fetchCurrentUserComments();
-
-		return false;
+		return true;
 	}
 
 	private static String getURL(int type) {
