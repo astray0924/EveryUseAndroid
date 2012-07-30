@@ -50,7 +50,6 @@ public class CommentsHelper {
 		client.addHeader("Content-type", "application/x-www-form-urlencoded");
 
 		// 보는 글에 달린 현재 사용자의 댓글들을 가져옴
-
 		fetchCurrentUserComments();
 	}
 
@@ -59,7 +58,7 @@ public class CommentsHelper {
 		RequestParams params = new RequestParams();
 		params.put("comment[user_id]", String.valueOf(user_id));
 		params.put("comment[use_case_id]", String.valueOf(use_case_id));
-		
+
 		client.get(url, params, new AsyncHttpResponseHandler() {
 
 			@Override
@@ -71,7 +70,8 @@ public class CommentsHelper {
 
 			@Override
 			public void onFailure(Throwable error, String content) {
-				Log.d("Comments", content);
+				Toast.makeText(context, "Failed to retrieve user comments.",
+						Toast.LENGTH_LONG).show();
 			}
 		});
 	}
@@ -107,20 +107,38 @@ public class CommentsHelper {
 		return postComment(METOO);
 	}
 
-	public boolean deleteScrap(int comment_id) {
+	public boolean deleteScrap() {
+		if (comments.current_user_favorite == null) {
+			return true;
+		}
+
+		int comment_id = comments.current_user_favorite.id;
+
 		return deleteComment(SCRAP, comment_id);
 	}
 
-	public boolean deleteWow(int comment_id) {
+	public boolean deleteWow() {
+		if (comments.current_user_wow == null) {
+			return true;
+		}
+
+		int comment_id = comments.current_user_wow.id;
+
 		return deleteComment(WOW, comment_id);
 	}
 
-	public boolean deleteMetoo(int comment_id) {
+	public boolean deleteMetoo() {
+		if (comments.current_user_metoo == null) {
+			return true;
+		}
+
+		int comment_id = comments.current_user_metoo.id;
+
 		return deleteComment(METOO, comment_id);
 	}
 
 	private boolean postComment(int type) {
-		final String url = getURL(type);
+		final String url = getURL(type) + ".json";
 
 		RequestParams params = new RequestParams();
 		params.put("comment[user_id]", String.valueOf(user_id));
@@ -130,7 +148,8 @@ public class CommentsHelper {
 
 			@Override
 			public void onSuccess(String response) {
-				Toast.makeText(context, "success", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "post success", Toast.LENGTH_SHORT)
+						.show();
 			}
 
 			@Override
@@ -139,16 +158,20 @@ public class CommentsHelper {
 			}
 		});
 
+		// 코멘트를 올린 다음, 현재 사용자의 코멘트를 정보를 업데이트함
+		fetchCurrentUserComments();
+
 		return true;
 	}
 
 	private boolean deleteComment(int type, int comment_id) {
-		String url = getURL(type) + "/" + comment_id;
+		String url = getURL(type) + "/" + comment_id + ".json";
 		client.delete(url, new AsyncHttpResponseHandler() {
 
 			@Override
 			public void onSuccess(String response) {
-				Toast.makeText(context, "success", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "delete success", Toast.LENGTH_SHORT)
+						.show();
 			}
 
 			@Override
@@ -158,17 +181,20 @@ public class CommentsHelper {
 
 		});
 
+		// 코멘트를 삭제한 다음, 현재 사용자의 코멘트를 정보를 업데이트함
+		fetchCurrentUserComments();
+
 		return false;
 	}
 
 	private static String getURL(int type) {
 		switch (type) {
 		case SCRAP:
-			return URLHelper.COMMENTS_SCRAP_URL + ".json";
+			return URLHelper.COMMENTS_SCRAP_URL;
 		case WOW:
-			return URLHelper.COMMENTS_WOW_URL + ".json";
+			return URLHelper.COMMENTS_WOW_URL;
 		case METOO:
-			return URLHelper.COMMENTS_METOO_URL + ".json";
+			return URLHelper.COMMENTS_METOO_URL;
 		default:
 			return null;
 		}

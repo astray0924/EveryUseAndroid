@@ -188,7 +188,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 					if (tgl_wow.isChecked()) {
 						commentsHelper.postWow();						
 					} else {
-//						commentsHelper.deleteWow();
+						commentsHelper.deleteWow();
 					}
 				}
 
@@ -200,7 +200,11 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 				@Override
 				public void onClick(View v) {
-
+					if (tgl_metoo.isChecked()) {
+						commentsHelper.postMetoo();						
+					} else {
+						commentsHelper.deleteMetoo();
+					}
 				}
 
 			});
