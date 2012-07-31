@@ -5,9 +5,9 @@
 
         <ListPreference
             android:dialogTitle="@string/pref_dialog_user_group"
-            android:entries="@array/user_group_list_preference"
-            android:entryValues="@array/user_group_values_list_preference"
-            android:key="pref_user_group"
+            android:entries="@array/user_group_list"
+            android:entryValues="@array/user_group_values_list"
+            android:key="user_group"
             android:summary="@string/pref_summary_user_group"
             android:title="@string/pref_title_user_group" />
     </PreferenceCategory>

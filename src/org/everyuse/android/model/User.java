@@ -14,6 +14,7 @@ public class User implements Parcelable {
 	public String email;
 	public String persistence_token;
 	public String single_access_token;
+	public String user_group;
 
 	private static final Gson gson = new Gson();
 
@@ -22,16 +23,17 @@ public class User implements Parcelable {
 	}
 
 	public User(int id, String username, String email,
-			String persistence_token, String single_access_token) {
+			String persistence_token, String single_access_token, String user_group) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.persistence_token = persistence_token;
 		this.single_access_token = single_access_token;
+		this.user_group = user_group;
 	}
 
 	public User(User user) {
-		this(user.id, user.username, user.email, user.persistence_token, user.single_access_token);
+		this(user.id, user.username, user.email, user.persistence_token, user.single_access_token, user.user_group);
 	}
 
 	public User(Parcel source) {

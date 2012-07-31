@@ -32,8 +32,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class RegisterActivity extends Activity {
@@ -41,12 +43,14 @@ public class RegisterActivity extends Activity {
 	private EditText et_email;
 	private EditText et_password;
 	private EditText et_password_confirm;
+	private Spinner sp_user_group;
 
 	// 필드값들
 	private String str_username;
 	private String str_email;
 	private String str_password;
 	private String str_password_confirm;
+	private String str_user_group;
 
 	private User new_user;
 
@@ -66,6 +70,15 @@ public class RegisterActivity extends Activity {
 		et_password = (EditText) findViewById(R.id.et_password);
 		et_password_confirm = (EditText) findViewById(R.id.et_password_confirm);
 
+		// 유저 그룹
+		sp_user_group = (Spinner) findViewById(R.id.sp_user_group);
+		ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter
+				.createFromResource(this, R.array.user_group_list,
+						android.R.layout.simple_spinner_item);
+		spinner_adapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		sp_user_group.setAdapter(spinner_adapter);
+
 		// initalize buttons
 		Button btn_register_done = (Button) findViewById(R.id.btn_register_done);
 		btn_register_done.setOnClickListener(new OnClickListener() {
@@ -77,6 +90,8 @@ public class RegisterActivity extends Activity {
 				str_email = et_email.getText().toString();
 				str_password = et_password.getText().toString();
 				str_password_confirm = et_password_confirm.getText().toString();
+				str_user_group = sp_user_group.getSelectedItem().toString()
+						.toLowerCase();
 
 				if (str_username.equals("") || str_email.equals("")
 						|| str_password.equals("")
@@ -123,6 +138,8 @@ public class RegisterActivity extends Activity {
 			params.add(new BasicNameValuePair("user[password]", str_password));
 			params.add(new BasicNameValuePair("user[password_confirmation]",
 					str_password_confirm));
+			params.add(new BasicNameValuePair("user[user_group]",
+					str_user_group));
 
 			try {
 				HttpEntity entity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
@@ -137,7 +154,7 @@ public class RegisterActivity extends Activity {
 
 						if (code >= 300) { // error occurred
 							String[] fields = { "username", "email",
-									"password", "password_confirmation" };
+									"password", "password_confirmation", "user_group" };
 							msg_error = ErrorHelper.getMostProminentError(
 									res_string, fields);
 
@@ -178,9 +195,10 @@ public class RegisterActivity extends Activity {
 			indicator.dismiss();
 
 			if (result) {
-				Toast.makeText(getApplicationContext(), getString(R.string.msg_register_success),
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.msg_register_success),
 						Toast.LENGTH_SHORT).show();
-				
+
 				// store into shared preferences
 				UserHelper.storeUser(getApplicationContext(), new_user);
 

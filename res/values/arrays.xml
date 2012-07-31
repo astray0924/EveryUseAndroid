@@ -24,14 +24,14 @@
         <item>Me too</item>
     </string-array>
     
-    <string-array name="user_group_list_preference">
-        <item>Student</item>
-        <item>Teacher</item>  
+    <string-array name="user_group_list">
+        <item>housewife</item>
+        <item>student</item>  
     </string-array>
 
-    <string-array name="user_group_values_list_preference">
-        <item>student</item>
-        <item>teacher</item>  
+    <string-array name="user_group_values_list">
+        <item>housewife</item>
+        <item>student</item>  
     </string-array>
 
 </resources>

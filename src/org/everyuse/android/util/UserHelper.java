@@ -26,6 +26,7 @@ public class UserHelper {
 		editor.putString("email", user.email);
 		editor.putString("persistence_token", user.persistence_token);
 		editor.putString("single_access_token", user.single_access_token);
+		editor.putString("user_group", user.user_group);
 		editor.commit();
 	}
 
@@ -37,11 +38,12 @@ public class UserHelper {
 		String email = prefs.getString("email", "");
 		String persistence_token = prefs.getString("persistence_token", "");
 		String single_access_token = prefs.getString("single_access_token", "");
+		String user_group = prefs.getString("user_group", "");
 
 		if (id == 0) {
 			return null;
 		} else {
-			return new User(id, username, email, persistence_token, single_access_token);
+			return new User(id, username, email, persistence_token, single_access_token, user_group);
 		}
 
 	}

@@ -34,6 +34,7 @@
     <string name="tv_email">EMAIL</string>
     <string name="tv_password">PASSWORD</string>
     <string name="tv_password_confirm">CONFIRM PASSWORD</string>
+    <string name="tv_user_group">USER GROUP</string>
     <string name="tv_item">I used this item</string>
     <string name="tv_purpose">for this action</string>
     <string name="tv_place">At this place</string>
