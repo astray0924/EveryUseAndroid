@@ -75,7 +75,6 @@ public class CreateActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create);
-
 		setTitle(R.string.title_activity_create);
 
 		// UI 초기화
@@ -86,8 +85,8 @@ public class CreateActivity extends Activity {
 		et_item = (EditText) findViewById(R.id.et_item);
 		et_purpose = (EditText) findViewById(R.id.et_purpose);
 		iv_photo = (ImageView) findViewById(R.id.iv_photo);
-
 		sp_purpose_type = (Spinner) findViewById(R.id.sp_purpose_type);
+		
 		ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter
 				.createFromResource(this, R.array.purpose,
 						android.R.layout.simple_spinner_item);

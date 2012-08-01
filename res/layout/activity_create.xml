@@ -33,18 +33,18 @@
             android:gravity="center"
             android:orientation="horizontal" >
 
-            <Spinner
-                android:id="@+id/sp_purpose_type"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="3" />
-
             <EditText
                 android:id="@+id/et_purpose"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="text" />
+
+            <Spinner
+                android:id="@+id/sp_purpose_type"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3" />
         </LinearLayout>
 
         <LinearLayout
@@ -58,12 +58,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:text="@string/tv_photo" />
-            
+
             <ImageButton
                 android:id="@+id/btn_photo_select"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/ic_content_new_dark" />
+                android:background="@drawable/ic_content_new_picture_dark" />
         </LinearLayout>
 
         <ImageView
