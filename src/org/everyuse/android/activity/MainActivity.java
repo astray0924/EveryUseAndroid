@@ -142,6 +142,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 			alert.setCancelable(true);
 			alert.show();
 			break;
+		case R.id.menu_about:
+			break;
 		}
 
 		return super.onOptionsItemSelected(item);

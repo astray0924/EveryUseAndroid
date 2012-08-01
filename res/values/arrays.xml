@@ -23,15 +23,32 @@
         <item>Wow</item>
         <item>Me too</item>
     </string-array>
-    
     <string-array name="user_group_list">
         <item>housewife</item>
-        <item>student</item>  
+        <item>student</item>
     </string-array>
-
     <string-array name="user_group_values_list">
         <item>housewife</item>
-        <item>student</item>  
+        <item>student</item>
+    </string-array>
+    <string-array name="place_student">
+        <item>N/A</item>
+        <item>기숙사</item>
+        <item>연구실</item>
+        <item>카페</item>
+        <item>식당</item>
+        <item>실외</item>
+        <item>어디든</item>
+        <item>기타</item>
+    </string-array>
+    <string-array name="place_housewife">
+        <item>N/A</item>
+        <item>거실</item>
+        <item>화장실</item>
+        <item>주방</item>
+        <item>외부식당</item>
+        <item>실외</item>
+        <item>기타</item>
     </string-array>
 
 </resources>

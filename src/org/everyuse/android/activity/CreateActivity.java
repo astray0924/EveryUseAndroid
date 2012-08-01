@@ -56,6 +56,7 @@ public class CreateActivity extends Activity {
 	private EditText et_item;
 	private EditText et_purpose;
 	private Spinner sp_purpose_type;
+	private Spinner sp_place;
 	private ImageButton btn_photo_select;
 	private ImageView iv_photo;
 
@@ -69,6 +70,7 @@ public class CreateActivity extends Activity {
 	String input_item;
 	String input_purpose;
 	String input_purpose_type;
+	String input_place;
 	File input_photo_file;
 
 	@Override
@@ -84,15 +86,34 @@ public class CreateActivity extends Activity {
 	private void initUI() {
 		et_item = (EditText) findViewById(R.id.et_item);
 		et_purpose = (EditText) findViewById(R.id.et_purpose);
-		iv_photo = (ImageView) findViewById(R.id.iv_photo);
+
+		// purpose type Spinner 초기화
 		sp_purpose_type = (Spinner) findViewById(R.id.sp_purpose_type);
-		
-		ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter
+		ArrayAdapter<CharSequence> purpose_type_adapter = ArrayAdapter
 				.createFromResource(this, R.array.purpose,
 						android.R.layout.simple_spinner_item);
-		spinner_adapter
+		purpose_type_adapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		sp_purpose_type.setAdapter(spinner_adapter);
+		sp_purpose_type.setAdapter(purpose_type_adapter);
+
+		// 장소 Spinner 초기화
+		sp_place = (Spinner) findViewById(R.id.sp_place);
+		int place_array_id = 0;
+		String user_group = UserHelper.getCurrentUser(this).user_group;
+		if (user_group.equals("housewife")) {
+			place_array_id = R.array.place_housewife;
+		} else if (user_group.equals("student")) {
+			place_array_id = R.array.place_student;
+		}
+		ArrayAdapter<CharSequence> place_adapter = ArrayAdapter
+				.createFromResource(this, place_array_id,
+						android.R.layout.simple_spinner_item);
+		place_adapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		sp_place.setAdapter(place_adapter);
+
+		// 사진 ImageView 초기화
+		iv_photo = (ImageView) findViewById(R.id.iv_photo);
 
 		btn_photo_select = (ImageButton) findViewById(R.id.btn_photo_select);
 		btn_photo_select.setOnClickListener(new OnClickListener() {
@@ -192,6 +213,7 @@ public class CreateActivity extends Activity {
 			input_purpose = et_purpose.getText().toString();
 			input_purpose_type = sp_purpose_type.getSelectedItem().toString()
 					.toLowerCase();
+			input_place = sp_place.getSelectedItem().toString().toLowerCase();
 			input_photo_file = photo_file;
 
 		}
@@ -208,11 +230,14 @@ public class CreateActivity extends Activity {
 			try {
 				User user = UserHelper.getCurrentUser(getApplicationContext());
 
-				entity.addPart("use_case[item]", new StringBody(input_item, Charset.forName("UTF-8")));
+				entity.addPart("use_case[item]", new StringBody(input_item,
+						Charset.forName("UTF-8")));
 				entity.addPart("use_case[purpose]", new StringBody(
 						input_purpose, Charset.forName("UTF-8")));
 				entity.addPart("use_case[purpose_type]", new StringBody(
 						input_purpose_type, Charset.forName("UTF-8")));
+				entity.addPart("use_case[place]", new StringBody(input_place,
+						Charset.forName("UTF-8")));
 				entity.addPart("use_case[photo]", new FileBody(
 						input_photo_file, "image/png"));
 				entity.addPart("user_credentials", new StringBody(
@@ -274,10 +299,8 @@ public class CreateActivity extends Activity {
 
 				Intent intent = new Intent(CreateActivity.this,
 						UseCaseDetailActivity.class);
-				intent.putExtra(UseCaseDetailActivity.EXTRA_DATA,
-						created);
+				intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, created);
 				startActivity(intent);
-
 
 				finish();
 			} else {
