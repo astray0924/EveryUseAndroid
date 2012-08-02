@@ -3,6 +3,7 @@ package org.everyuse.android.fragment;
 import org.everyuse.android.R;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

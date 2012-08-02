@@ -18,6 +18,7 @@ import org.everyuse.android.R;
 import org.everyuse.android.activity.UseCaseDetailActivity;
 import org.everyuse.android.adapter.UseCaseGroupAdapter;
 import org.everyuse.android.model.UseCaseGroup;
+import org.everyuse.android.util.UserHelper;
 import org.everyuse.android.widget.DynamicExpandableListView;
 import org.everyuse.android.widget.DynamicExpandableListView.OnListLoadListener;
 import org.everyuse.android.widget.ExpandableListFragment;
@@ -194,6 +195,7 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
 		params.add(new BasicNameValuePair(option_name, String.valueOf(
 				option_value).toLowerCase()));
+		params.add(new BasicNameValuePair("user_group", UserHelper.getCurrentUser(getActivity()).user_group));
 		String query_string = URLEncodedUtils.format(params, "UTF-8");
 
 		return data_url_raw + ".json" + "?" + query_string;
@@ -201,10 +203,12 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 
 	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
 		private HttpClient client;
+		private List<UseCaseGroup> fetched_data_list;
 
 		@Override
 		protected void onPreExecute() {
 			client = new DefaultHttpClient();
+			fetched_data_list = new ArrayList<UseCaseGroup>();
 		}
 
 		@Override
@@ -235,9 +239,8 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 						JSONArray data_list = new JSONArray(res_string);
 
 						// if no items were fetched, end the list
-						if (data_list.length() == 0) {
-							// mListView.setLoadEndFlag(true);
-							return true;
+						if (data_list.length() < PER_PAGE) {
+							mListView.setLoadEnded(true);
 						}
 
 						for (int i = 0; i < data_list.length(); i++) {
@@ -245,7 +248,7 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 							UseCaseGroup group = UseCaseGroup
 									.parseSingleFromJSON(json);
 
-							mDataList.add(group);
+							fetched_data_list.add(group);
 						}
 
 						success = true;
@@ -265,6 +268,9 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 		@Override
 		protected void onPostExecute(Boolean success) {
 			if (success) {
+				for (UseCaseGroup group : fetched_data_list) {
+					mDataList.add(group);
+				}
 				mAdapter.notifyDataSetChanged();
 				increasePage();
 			} else {

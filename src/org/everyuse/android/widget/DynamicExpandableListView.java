@@ -62,7 +62,7 @@ public class DynamicExpandableListView extends ExpandableListView implements
 		this.mHandler = handler;
 	}
 
-	public void setLoadEndFlag(boolean isEnded) {
+	public void setLoadEnded(boolean isEnded) {
 		mLoadEnded = isEnded;
 
 		if (mLoadEnded) {
