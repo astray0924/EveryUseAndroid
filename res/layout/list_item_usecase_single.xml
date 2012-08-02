@@ -8,7 +8,9 @@
     <ImageView
         android:id="@+id/iv_photo"
         android:layout_width="64dp"
-        android:layout_height="64dp" />
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:layout_margin="4dp" />
 
     <TextView
         android:id="@+id/tv_item"
@@ -69,5 +71,5 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="7dip"
         android:src="@android:drawable/sym_action_call"/>
-</TwoLineListItem>
+</TwoLineListItem>
 -->
