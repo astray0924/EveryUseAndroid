@@ -100,7 +100,7 @@ public class CreateActivity extends Activity {
 		sp_place = (Spinner) findViewById(R.id.sp_place);
 		int place_array_id = 0;
 		String user_group = UserHelper.getCurrentUser(this).user_group;
-		if (user_group.equals("housewife")) {
+		if (user_group.equals("housewife")) {				// TODO 이 코드는 다른곳으로 빼자
 			place_array_id = R.array.place_housewife;
 		} else if (user_group.equals("student")) {
 			place_array_id = R.array.place_student;
