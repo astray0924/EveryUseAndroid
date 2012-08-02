@@ -15,6 +15,10 @@ public class UseCaseGroup implements Comparable<UseCaseGroup> {
 	public String photo_url_thumb;
 	public String title;
 	public ArrayList<UseCase> children;
+	
+	public String getGroupTitle() {
+		return title + " (" + children.size() + ")";
+	}
 
 	public UseCaseGroup(String title) {
 		this.title = title;
