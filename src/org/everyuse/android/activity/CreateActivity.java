@@ -72,7 +72,7 @@ public class CreateActivity extends Activity {
 	private String input_purpose_type;
 	private String input_place;
 	private File input_photo_file;
-	
+
 	// EXTRAs
 	public static final String EXTRA_ITEM = "item";
 	public static final String EXTRA_PURPOSE = "purpose";
@@ -87,20 +87,20 @@ public class CreateActivity extends Activity {
 
 		// UI 초기화
 		initUI();
-		
+
 		// handle intent
 		handleIntent(getIntent());
 	}
-	
+
 	private void handleIntent(Intent intent) {
 		if (intent != null) {
 			pre_item = intent.getStringExtra(EXTRA_ITEM);
 			pre_purpose = intent.getStringExtra(EXTRA_PURPOSE);
-			
+
 			if (pre_item != null) {
 				et_item.setText(pre_item);
 			}
-			
+
 			if (pre_purpose != null) {
 				et_purpose.setText(pre_purpose);
 			}
@@ -124,17 +124,22 @@ public class CreateActivity extends Activity {
 		sp_place = (Spinner) findViewById(R.id.sp_place);
 		int place_array_id = 0;
 		String user_group = UserHelper.getCurrentUser(this).user_group;
-		if (user_group.equals("housewife")) {				// TODO 이 코드는 다른곳으로 빼자
+		if (user_group.equals("housewife")) { // TODO 이 코드는 다른곳으로 빼자
 			place_array_id = R.array.place_housewife;
 		} else if (user_group.equals("student")) {
 			place_array_id = R.array.place_student;
+		} else {
+			// TODO 유저 그룹이 잘못 설정된 경우임
 		}
-		ArrayAdapter<CharSequence> place_adapter = ArrayAdapter
-				.createFromResource(this, place_array_id,
-						android.R.layout.simple_spinner_item);
-		place_adapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		sp_place.setAdapter(place_adapter);
+
+		if (place_array_id != 0) {
+			ArrayAdapter<CharSequence> place_adapter = ArrayAdapter
+					.createFromResource(this, place_array_id,
+							android.R.layout.simple_spinner_item);
+			place_adapter
+					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			sp_place.setAdapter(place_adapter);
+		}
 
 		// 사진 ImageView 초기화
 		iv_photo = (ImageView) findViewById(R.id.iv_photo);
@@ -233,11 +238,23 @@ public class CreateActivity extends Activity {
 			indicator.setMessage("Please wait...");
 			indicator.show();
 
+			// 입력된 'item'
 			input_item = et_item.getText().toString();
+			
+			// 입력된 'purpose'
 			input_purpose = et_purpose.getText().toString();
-			input_purpose_type = sp_purpose_type.getSelectedItem().toString()
-					.toLowerCase();
-			input_place = sp_place.getSelectedItem().toString().toLowerCase();
+
+			// purpose type이 선택되지 않았다면, 그냥 빈 String으로 입력
+			Object purpose_type_selected = sp_purpose_type.getSelectedItem();
+			input_purpose_type = (purpose_type_selected == null) ? ""
+					: purpose_type_selected.toString().toLowerCase();
+
+			// place가 선택되지 않았다면, 그냥 빈 String으로 입력
+			Object place_selected = sp_place.getSelectedItem();
+			input_place = (place_selected == null) ? "" : sp_place
+					.getSelectedItem().toString().toLowerCase();
+			
+			// 선택된 사진
 			input_photo_file = photo_file;
 
 		}

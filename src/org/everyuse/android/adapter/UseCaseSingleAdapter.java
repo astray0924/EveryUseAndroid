@@ -41,6 +41,8 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 			holder.item = (TextView) convertView.findViewById(R.id.tv_item);
 			holder.purpose = (TextView) convertView
 					.findViewById(R.id.tv_purpose);
+			holder.other_info = (TextView) convertView
+					.findViewById(R.id.tv_other_info);
 
 			convertView.setTag(holder);
 		}
@@ -53,7 +55,8 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 				.getTag();
 		image_downloader.download(use_case.getPhotoThumbURL(), holder.photo);
 		holder.item.setText(use_case.item);
-		holder.purpose.setText(use_case.getPurposeString());
+		holder.purpose.setText(use_case.purpose);
+		holder.other_info.setText(use_case.getOtherInfoString());
 
 		return convertView;
 	}
@@ -73,11 +76,12 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
-	
+
 	public static class UseCaseSingleViewHolder {
 		public ImageView photo;
 		public TextView item;
 		public TextView purpose;
+		public TextView other_info;
 	}
 
 }

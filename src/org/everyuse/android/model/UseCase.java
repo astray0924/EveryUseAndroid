@@ -1,5 +1,6 @@
 package org.everyuse.android.model;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,6 @@ import org.json.JSONObject;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -29,6 +29,7 @@ public class UseCase implements Parcelable {
 	public int metoos_count;
 
 	private static Gson gson = new Gson();
+	private static DateFormat date_format = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
 	public String getPurposeString() {
 		if (purpose_type == null) {
@@ -36,6 +37,22 @@ public class UseCase implements Parcelable {
 		}
 
 		return purpose_type + " " + purpose;
+	}
+	
+	public String getOtherInfoString() {
+		return "by " + username + ", " + getDateString(created_at);
+	}
+	
+	private String getDateString(Date date) {
+		Date today = new Date();
+		String today_str = date_format.format(today);
+		String compare_str = date_format.format(date);
+		
+		if (today_str.equals(compare_str)) {
+			return "Today";
+		} else {
+			return compare_str;
+		}
 	}
 
 	public UseCase() {

@@ -60,12 +60,16 @@
             <ToggleButton
                 android:id="@+id/tgl_wow"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textOff="Wow"
+                android:textOn="Wow" />
 
             <ToggleButton
                 android:id="@+id/tgl_metoo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textOff="Me too"
+                android:textOn="Me too" />
         </LinearLayout>
 
         <LinearLayout
