@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -110,15 +111,16 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 	public static class DetailFragment extends Fragment {
 		private static String DATA = "DATA";
+		private UseCase data;
 		private CommentsHelper commentsHelper;
 
 		// Views
-		ToggleButton tgl_wow;
-		ToggleButton tgl_metoo;
+		private ToggleButton tgl_wow;
+		private ToggleButton tgl_metoo;
 
 		public DetailFragment() {
-
 		}
+
 
 		public static DetailFragment newInstance(UseCase data) {
 			DetailFragment f = new DetailFragment();
@@ -167,8 +169,8 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View page = inflater
-					.inflate(R.layout.fragment_usecase_detail, null);
+			final View page = inflater.inflate(
+					R.layout.fragment_usecase_detail, null);
 			UseCase data = getArguments().getParcelable(DATA);
 			display(page, data);
 
@@ -201,11 +203,47 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 			});
 
+			Button btn_similar_item = (Button) page
+					.findViewById(R.id.btn_similar_item);
+			btn_similar_item.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View view) {
+					TextView tv_item = (TextView) page
+							.findViewById(R.id.tv_item);
+					String pre_item = tv_item.getText().toString();
+
+					Intent intent = new Intent(getActivity(),
+							CreateActivity.class);
+					intent.putExtra(CreateActivity.EXTRA_ITEM, pre_item);
+					startActivity(intent);
+				}
+
+			});
+
+			Button btn_similar_purpose = (Button) page
+					.findViewById(R.id.btn_similar_purpose);
+			btn_similar_purpose.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View view) {
+					TextView tv_purpose = (TextView) page
+							.findViewById(R.id.tv_purpose);
+					String pre_purpose = tv_purpose.getText().toString();
+
+					Intent intent = new Intent(getActivity(),
+							CreateActivity.class);
+					intent.putExtra(CreateActivity.EXTRA_PURPOSE, pre_purpose);
+					startActivity(intent);
+
+				}
+
+			});
+
 			return page;
 		}
 
 		private void display(View page, UseCase data) {
-			// TODO findViewById는 onCreateView 등에서 한번만 호출하도록 하자
 			ImageView usecase_photo = (ImageView) page
 					.findViewById(R.id.iv_usecase_photo);
 			TextView item = (TextView) page.findViewById(R.id.tv_item);
@@ -213,7 +251,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 			image_downloader.download(data.getPhotoLargeURL(), usecase_photo);
 			item.setText(data.item);
-			purpose.setText(data.getPurposeString());
+			purpose.setText(data.purpose);
 		}
 
 		private void updateCommentButtonState(Comments comments) {

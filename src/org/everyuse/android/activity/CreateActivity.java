@@ -67,11 +67,17 @@ public class CreateActivity extends Activity {
 	private static final int PICK_FROM_ALBUM = 1;
 
 	// input
-	String input_item;
-	String input_purpose;
-	String input_purpose_type;
-	String input_place;
-	File input_photo_file;
+	private String input_item;
+	private String input_purpose;
+	private String input_purpose_type;
+	private String input_place;
+	private File input_photo_file;
+	
+	// EXTRAs
+	public static final String EXTRA_ITEM = "item";
+	public static final String EXTRA_PURPOSE = "purpose";
+	private String pre_item;
+	private String pre_purpose;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +87,24 @@ public class CreateActivity extends Activity {
 
 		// UI 초기화
 		initUI();
+		
+		// handle intent
+		handleIntent(getIntent());
+	}
+	
+	private void handleIntent(Intent intent) {
+		if (intent != null) {
+			pre_item = intent.getStringExtra(EXTRA_ITEM);
+			pre_purpose = intent.getStringExtra(EXTRA_PURPOSE);
+			
+			if (pre_item != null) {
+				et_item.setText(pre_item);
+			}
+			
+			if (pre_purpose != null) {
+				et_purpose.setText(pre_purpose);
+			}
+		}
 	}
 
 	private void initUI() {
