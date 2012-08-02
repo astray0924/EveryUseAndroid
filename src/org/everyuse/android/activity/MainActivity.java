@@ -210,7 +210,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 						.getMyFeedsURL(user_id));
 			case RECENT:
 				return UseCaseListFragment
-						.newInstance(URLHelper.USE_CASES_RECENT_URL);
+						.newInstance(URLHelper.USE_CASES_RECENT_URL, true);
 			case CATEOGORY:
 				return UseCaseGroupListFragment.newInstance(
 						URLHelper.USE_CASE_GROUPS_URL, R.array.use_case);

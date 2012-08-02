@@ -52,14 +52,23 @@ public class UseCaseListFragment extends ListFragment {
 
 	public static final String EXTRA_DATA_LIST = "data_list";
 	public static final String EXTRA_DATA_URL = "data_url_raw";
-	public static final String EXTRA_DATA_LOAD_ENDED = "load_ended";
+	public static final String EXTRA_REFRESH_ON_START = "refresh_start";
 	private String data_url;
 	private String data_url_raw;
+	private boolean refresh_on_start = false;
 
 	public static UseCaseListFragment newInstance(String data_url) {
 		UseCaseListFragment f = new UseCaseListFragment();
 		Bundle b = new Bundle();
 		b.putString(EXTRA_DATA_URL, data_url);
+		f.setArguments(b);
+		return f;
+	}
+	
+	public static UseCaseListFragment newInstance(String data_url, boolean refresh_on_start) {
+		UseCaseListFragment f = newInstance(data_url);
+		Bundle b = f.getArguments();
+		b.putBoolean(EXTRA_REFRESH_ON_START, refresh_on_start);
 		f.setArguments(b);
 		return f;
 	}
@@ -75,20 +84,23 @@ public class UseCaseListFragment extends ListFragment {
 		Bundle args = getArguments();
 		if (args != null) {
 			data_url_raw = args.getString(EXTRA_DATA_URL);
+			refresh_on_start = args.getBoolean(EXTRA_REFRESH_ON_START);
 		}
 
 	}
-	
-	
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.support.v4.app.Fragment#onStart()
 	 */
 	@Override
 	public void onStart() {
 		super.onStart();
-		
-		refresh();
+
+		if (refresh_on_start) {
+			refresh();
+		}
 	}
 
 	/*
@@ -103,8 +115,11 @@ public class UseCaseListFragment extends ListFragment {
 		initialize();
 	}
 
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onSaveInstanceState(android.os.Bundle)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * android.support.v4.app.Fragment#onSaveInstanceState(android.os.Bundle)
 	 */
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -147,14 +162,14 @@ public class UseCaseListFragment extends ListFragment {
 
 		// build query string using parameters
 		String user_group = UserHelper.getCurrentUser(getActivity()).user_group;
-		
+
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("page", String
 				.valueOf(getCurrentPage())));
 		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
 		params.add(new BasicNameValuePair("user_group", user_group));
 		String query_string = URLEncodedUtils.format(params, "UTF-8");
-		
+
 		Log.d("data_url", data_url_raw + ".json" + "?" + query_string);
 
 		return data_url_raw + ".json" + "?" + query_string;
@@ -162,10 +177,12 @@ public class UseCaseListFragment extends ListFragment {
 
 	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
 		private HttpClient client;
+		private List<UseCase> fetched_data_list;
 
 		@Override
 		protected void onPreExecute() {
 			client = new DefaultHttpClient();
+			fetched_data_list = new ArrayList<UseCase>();
 		}
 
 		@Override
@@ -196,13 +213,13 @@ public class UseCaseListFragment extends ListFragment {
 						// if no items were fetched, end the list
 						if (data_list.length() < PER_PAGE) {
 							mListView.setLoadEnded(true);
-						} 
+						}
 
 						for (int i = 0; i < data_list.length(); i++) {
 							JSONObject json = data_list.getJSONObject(i);
 							UseCase u = UseCase.parseSingleFromJSON(json);
 
-							mDataList.add(u);
+							fetched_data_list.add(u);
 						}
 
 						success = true;
@@ -222,6 +239,10 @@ public class UseCaseListFragment extends ListFragment {
 		@Override
 		protected void onPostExecute(Boolean success) {
 			if (success) {
+				for (UseCase u : fetched_data_list) {
+					mDataList.add(u);
+				}
+				
 				mAdapter.notifyDataSetChanged();
 				increasePage();
 			} else {
@@ -259,7 +280,7 @@ public class UseCaseListFragment extends ListFragment {
 		resetPage();
 		mDataList.clear();
 		mAdapter.notifyDataSetChanged();
-		
+
 		mListView.setLoadEnded(false);
 	}
 
@@ -274,6 +295,5 @@ public class UseCaseListFragment extends ListFragment {
 	protected synchronized void resetPage() {
 		page = START_PAGE;
 	}
-	
-	
+
 }
