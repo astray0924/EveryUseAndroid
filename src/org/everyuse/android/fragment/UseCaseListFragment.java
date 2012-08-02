@@ -18,6 +18,7 @@ import org.everyuse.android.R;
 import org.everyuse.android.activity.UseCaseDetailActivity;
 import org.everyuse.android.adapter.UseCaseSingleAdapter;
 import org.everyuse.android.model.UseCase;
+import org.everyuse.android.util.UserHelper;
 import org.everyuse.android.widget.DynamicListView;
 import org.everyuse.android.widget.DynamicListView.OnListLoadListener;
 import org.json.JSONArray;
@@ -51,6 +52,7 @@ public class UseCaseListFragment extends ListFragment {
 
 	public static final String EXTRA_DATA_LIST = "data_list";
 	public static final String EXTRA_DATA_URL = "data_url_raw";
+	public static final String EXTRA_DATA_LOAD_ENDED = "load_ended";
 	private String data_url;
 	private String data_url_raw;
 
@@ -76,6 +78,18 @@ public class UseCaseListFragment extends ListFragment {
 		}
 
 	}
+	
+	
+
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onStart()
+	 */
+	@Override
+	public void onStart() {
+		super.onStart();
+		
+		refresh();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -87,6 +101,14 @@ public class UseCaseListFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		initialize();
+	}
+
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
 	}
 
 	private void initialize() {
@@ -124,11 +146,16 @@ public class UseCaseListFragment extends ListFragment {
 		}
 
 		// build query string using parameters
+		String user_group = UserHelper.getCurrentUser(getActivity()).user_group;
+		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("page", String
 				.valueOf(getCurrentPage())));
 		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
+		params.add(new BasicNameValuePair("user_group", user_group));
 		String query_string = URLEncodedUtils.format(params, "UTF-8");
+		
+		Log.d("data_url", data_url_raw + ".json" + "?" + query_string);
 
 		return data_url_raw + ".json" + "?" + query_string;
 	}
@@ -168,12 +195,8 @@ public class UseCaseListFragment extends ListFragment {
 
 						// if no items were fetched, end the list
 						if (data_list.length() < PER_PAGE) {
-							mListView.setLoadEndFlag(true);
-
-							if (data_list.length() == 0) {
-								return true;
-							}
-						}
+							mListView.setLoadEnded(true);
+						} 
 
 						for (int i = 0; i < data_list.length(); i++) {
 							JSONObject json = data_list.getJSONObject(i);
@@ -236,7 +259,8 @@ public class UseCaseListFragment extends ListFragment {
 		resetPage();
 		mDataList.clear();
 		mAdapter.notifyDataSetChanged();
-		mListView.setLoadEndFlag(false);
+		
+		mListView.setLoadEnded(false);
 	}
 
 	protected synchronized int getCurrentPage() {
@@ -250,4 +274,6 @@ public class UseCaseListFragment extends ListFragment {
 	protected synchronized void resetPage() {
 		page = START_PAGE;
 	}
+	
+	
 }

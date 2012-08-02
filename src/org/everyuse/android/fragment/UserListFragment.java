@@ -165,7 +165,7 @@ public class UserListFragment extends ListFragment {
 
 						// if no items were fetched, end the list
 						if (data_list.length() < PER_PAGE) {
-							mListView.setLoadEndFlag(true);
+							mListView.setLoadEnded(true);
 
 							if (data_list.length() == 0) {
 								return true;
@@ -232,7 +232,7 @@ public class UserListFragment extends ListFragment {
 		resetPage();
 		mDataList.clear();
 		mAdapter.notifyDataSetChanged();
-		mListView.setLoadEndFlag(false);
+		mListView.setLoadEnded(false);
 	}
 
 	protected synchronized int getCurrentPage() {

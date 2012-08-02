@@ -60,7 +60,7 @@ public class DynamicListView extends ListView implements OnScrollListener {
 		this.mHandler = handler;
 	}
 
-	public void setLoadEndFlag(boolean isEnded) {
+	public void setLoadEnded(boolean isEnded) {
 		mLoadEnded = isEnded;
 
 		if (mLoadEnded) {
