@@ -28,7 +28,6 @@ import org.everyuse.android.util.UserHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -52,7 +51,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class CreateActivity extends Activity {
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
+public class CreateActivity extends SherlockActivity {
 	private EditText et_item;
 	private EditText et_purpose;
 	private Spinner sp_purpose_type;
@@ -90,6 +93,25 @@ public class CreateActivity extends Activity {
 
 		// handle intent
 		handleIntent(getIntent());
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.create, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		switch (id) {
+		case R.id.menu_create:
+			// 서버로 데이터 전송
+			new SubmitTask().execute();
+			break;
+		}
+		
+		return true;
 	}
 
 	private void handleIntent(Intent intent) {
@@ -177,17 +199,17 @@ public class CreateActivity extends Activity {
 			}
 
 		});
-
-		Button btn_submit = (Button) findViewById(R.id.btn_submit);
-		btn_submit.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// 서버로 데이터 전송
-				new SubmitTask().execute();
-			}
-
-		});
+//
+//		Button btn_submit = (Button) findViewById(R.id.btn_submit);
+//		btn_submit.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// 서버로 데이터 전송
+//				new SubmitTask().execute();
+//			}
+//
+//		});
 	}
 
 	/**

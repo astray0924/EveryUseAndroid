@@ -77,6 +77,8 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 			holder.item = (TextView) convertView.findViewById(R.id.tv_item);
 			holder.purpose = (TextView) convertView
 					.findViewById(R.id.tv_purpose);
+			holder.other_info = (TextView) convertView
+					.findViewById(R.id.tv_other_info);
 
 			convertView.setTag(holder);
 		}
@@ -89,7 +91,8 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 				.getTag();
 		image_downloader.download(use_case.getPhotoThumbURL(), holder.photo);
 		holder.item.setText(use_case.item);
-		holder.purpose.setText(use_case.getPurposeString());
+		holder.purpose.setText(use_case.purpose);
+		holder.other_info.setText(use_case.getOtherInfoString());
 
 		return convertView;
 	}
@@ -147,7 +150,7 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 				null);
 		TextView tv_title = (TextView) group_view
 				.findViewById(R.id.tv_group_title);
-		tv_title.setText(group_list.get(groupPosition).title);
+		tv_title.setText(group_list.get(groupPosition).getGroupTitle());
 
 		return group_view;
 	}

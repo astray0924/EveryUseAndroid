@@ -12,6 +12,7 @@
     <string name="title_activity_create">Create a use</string>
     
     <!-- menus -->
+    <string name="menu_create">Create</string>
     <string name="menu_search">Search</string>
     <string name="menu_new">Add new item</string>
     <string name="menu_settings">Settings</string>
