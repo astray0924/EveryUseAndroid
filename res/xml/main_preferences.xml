@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <!--
     <PreferenceCategory android:title="@string/pref_category_user_group" >
         <ListPreference
             android:dialogTitle="@string/pref_dialog_user_group"
@@ -9,6 +10,7 @@
             android:key="user_group"
             android:summary="@string/pref_summary_user_group"
             android:title="@string/pref_title_user_group" />
-    </PreferenceCategory>
+    </PreferenceCategory>
+    -->
 
 </PreferenceScreen>
