@@ -23,7 +23,8 @@ public class User implements Parcelable {
 	}
 
 	public User(int id, String username, String email,
-			String persistence_token, String single_access_token, String user_group) {
+			String persistence_token, String single_access_token,
+			String user_group) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
@@ -33,7 +34,8 @@ public class User implements Parcelable {
 	}
 
 	public User(User user) {
-		this(user.id, user.username, user.email, user.persistence_token, user.single_access_token, user.user_group);
+		this(user.id, user.username, user.email, user.persistence_token,
+				user.single_access_token, user.user_group);
 	}
 
 	public User(Parcel source) {
@@ -65,4 +67,19 @@ public class User implements Parcelable {
 		}
 
 	};
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof User) {
+			return ((User) other).id == this.id;
+		} else {
+			return false;
+		}
+	}
+
 }

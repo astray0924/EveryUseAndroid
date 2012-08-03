@@ -1,6 +1,7 @@
 package org.everyuse.android.model;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,8 +31,9 @@ public class UseCase implements Parcelable {
 	public int metoos_count;
 
 	private static Gson gson = new Gson();
-	private static DateFormat date_format = DateFormat
+	private static DateFormat year_month_day_format = DateFormat
 			.getDateInstance(DateFormat.MEDIUM);
+	private static DateFormat datetime_format = new SimpleDateFormat("MMM d, yyyy, hh:mm aaa");
 
 	public String getPurposeString() {
 		if (purpose_type == null) {
@@ -47,13 +49,13 @@ public class UseCase implements Parcelable {
 
 	private String getDateString(Date date) {
 		Date today = new Date();
-		String today_str = date_format.format(today);
-		String compare_str = date_format.format(date);
+		String today_str = year_month_day_format.format(today);
+		String compare_str = year_month_day_format.format(date);
 
 		if (today_str.equals(compare_str)) {
 			return "Today";
 		} else {
-			return compare_str;
+			return datetime_format.format(date);
 		}
 	}
 

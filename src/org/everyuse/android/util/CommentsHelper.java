@@ -52,11 +52,11 @@ public class CommentsHelper {
 			return (metoo != null);
 
 		}
-		
+
 		public int getWowCount() {
 			return wow_count;
 		}
-		
+
 		public int getMetooCount() {
 			return metoo_count;
 		}
@@ -183,7 +183,7 @@ public class CommentsHelper {
 		return deleteComment(METOO, comment_id);
 	}
 
-	private boolean postComment(int type) {
+	private boolean postComment(final int type) {
 		final String url = getURL(type) + ".json";
 
 		RequestParams params = new RequestParams();
@@ -195,8 +195,8 @@ public class CommentsHelper {
 			@Override
 			public void onSuccess(String response) {
 
-				Toast.makeText(context, "post success", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(context, getCommentedString(type),
+						Toast.LENGTH_SHORT).show();
 
 			}
 
@@ -221,14 +221,15 @@ public class CommentsHelper {
 		return true;
 	}
 
-	private boolean deleteComment(int type, int comment_id) {
+	private boolean deleteComment(final int type, int comment_id) {
 		String url = getURL(type) + "/" + comment_id + ".json";
 		client.delete(url, new AsyncHttpResponseHandler() {
 
 			@Override
 			public void onSuccess(String response) {
-				Toast.makeText(context, "delete success", Toast.LENGTH_SHORT)
-						.show();
+
+				Toast.makeText(context, getUnCommentedString(type),
+						Toast.LENGTH_SHORT).show();
 			}
 
 			@Override
@@ -262,6 +263,32 @@ public class CommentsHelper {
 			return URLHelper.COMMENTS_METOO_URL;
 		default:
 			return null;
+		}
+	}
+
+	private static String getCommentedString(int type) {
+		switch (type) {
+		case SCRAP:
+			return "Scraped!";
+		case WOW:
+			return "Wow!";
+		case METOO:
+			return "Metoo!";
+		default:
+			return "";
+		}
+	}
+
+	private static String getUnCommentedString(int type) {
+		switch (type) {
+		case SCRAP:
+			return "UnScraped!";
+		case WOW:
+			return "UnWow!";
+		case METOO:
+			return "UnMetoo!";
+		default:
+			return "";
 		}
 	}
 

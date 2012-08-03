@@ -11,6 +11,7 @@ import org.everyuse.android.util.ImageDownloader;
 import org.everyuse.android.util.RelationshipHelper;
 import org.everyuse.android.util.RelationshipHelper.OnRelationshipUpdateHandler;
 import org.everyuse.android.util.RelationshipHelper.Relationship;
+import org.everyuse.android.util.UserHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -203,6 +204,11 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 			// follow 버튼 초기화
 			tgl_follow = (ToggleButton) page.findViewById(R.id.tgl_follow);
+			
+			if (data.writer_id == UserHelper.getCurrentUser(getActivity()).id) {
+				tgl_follow.setVisibility(View.INVISIBLE);
+			}
+			
 			tgl_follow.setOnClickListener(new OnClickListener() {
 
 				@Override

@@ -148,10 +148,6 @@ public class UseCaseListFragment extends ListFragment {
 			}
 
 		});
-
-		// TextView tv_empty = (TextView)
-		// getActivity().findViewById(android.R.id.empty);
-		// mListView.setEmptyView(tv_empty);
 	}
 
 	protected String buildDataURLWithQuery(String data_url_raw) {
@@ -280,7 +276,6 @@ public class UseCaseListFragment extends ListFragment {
 		resetPage();
 		mDataList.clear();
 		mAdapter.notifyDataSetChanged();
-
 		mListView.setLoadEnded(false);
 	}
 

@@ -63,7 +63,9 @@
             <ToggleButton
                 android:id="@+id/tgl_scrap"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textOff="Scrap"
+                android:textOn="UnScrap" />
         </LinearLayout>
 
         <RelativeLayout

@@ -6,6 +6,7 @@ import org.everyuse.android.fragment.UserListFragment;
 import org.everyuse.android.fragment.UserProfileFragment;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.URLHelper;
+import org.everyuse.android.util.UserHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.widget.TextView;
 
 public class UserProfileDetailActivity extends FragmentActivity {
 	private User user;
@@ -40,6 +42,51 @@ public class UserProfileDetailActivity extends FragmentActivity {
 
 		handleIntent(getIntent());
 	}
+	
+	private String getTitle(int menu_selected) {
+		User current_user = UserHelper.getCurrentUser(this);
+		String username = "";
+		String title = "";
+		
+		if (current_user.equals(user)) {
+			username = "My";
+		} else {
+			username = user.username + "\'s";
+		}
+
+		// 유저 이름 (혹은 My)를 스트링에 붙여넣는다
+		title += username + " ";
+
+		// 선택된 메뉴에 따라 title을 달리한다.
+		switch (menu_selected) {
+
+		case MENU_SHARED:
+			title += "Shared Uses";
+			break;
+		case MENU_COMMENTED:
+			title += "Commented Uses";
+			break;
+		case MENU_SCRAPED:
+			title += "Scraped Uses";
+			break;
+		case MENU_FOLLOWING:
+			title += "Following";
+			break;
+		case MENU_FOLLOWER:
+			title += "Follower";
+			break;
+		case MENU_USER:
+			title += "Profile";
+			break;
+		}
+		
+		return title;
+	}
+
+//	private void setTitle(String title) {
+//		TextView tv_title = (TextView) findViewById(R.id.tv_title);
+//		tv_title.setText(title);
+//	}
 
 	private void initFragmentManager() {
 		fragmentManager = getSupportFragmentManager();
@@ -56,6 +103,8 @@ public class UserProfileDetailActivity extends FragmentActivity {
 		}
 
 		setFragment(menu_selected);
+		String title = getTitle(menu_selected);
+		setTitle(title);
 	}
 
 	private void setFragment(int menu_selected) {
