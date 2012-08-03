@@ -17,7 +17,8 @@ import com.google.gson.Gson;
 
 public class UseCase implements Parcelable {
 	public long id;
-	public String username;
+	public int writer_id;
+	public String writer_name;
 	public String item;
 	public String purpose;
 	public String purpose_type;
@@ -29,7 +30,8 @@ public class UseCase implements Parcelable {
 	public int metoos_count;
 
 	private static Gson gson = new Gson();
-	private static DateFormat date_format = DateFormat.getDateInstance(DateFormat.MEDIUM);
+	private static DateFormat date_format = DateFormat
+			.getDateInstance(DateFormat.MEDIUM);
 
 	public String getPurposeString() {
 		if (purpose_type == null) {
@@ -38,16 +40,16 @@ public class UseCase implements Parcelable {
 
 		return purpose_type + " " + purpose;
 	}
-	
+
 	public String getOtherInfoString() {
-		return "by " + username + ", " + getDateString(created_at);
+		return "by " + writer_name + ", " + getDateString(created_at);
 	}
-	
+
 	private String getDateString(Date date) {
 		Date today = new Date();
 		String today_str = date_format.format(today);
 		String compare_str = date_format.format(date);
-		
+
 		if (today_str.equals(compare_str)) {
 			return "Today";
 		} else {
@@ -61,7 +63,8 @@ public class UseCase implements Parcelable {
 
 	public UseCase(UseCase use_case) {
 		this.id = use_case.id;
-		this.username = use_case.username;
+		this.writer_id = use_case.writer_id;
+		this.writer_name = use_case.writer_name;
 		this.item = use_case.item;
 		this.purpose = use_case.purpose;
 		this.purpose_type = use_case.purpose_type;

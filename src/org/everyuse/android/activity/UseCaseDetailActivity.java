@@ -8,6 +8,9 @@ import org.everyuse.android.util.CommentsHelper;
 import org.everyuse.android.util.CommentsHelper.Comments;
 import org.everyuse.android.util.CommentsHelper.OnCommentsUpdateHandler;
 import org.everyuse.android.util.ImageDownloader;
+import org.everyuse.android.util.RelationshipHelper;
+import org.everyuse.android.util.RelationshipHelper.OnRelationshipUpdateHandler;
+import org.everyuse.android.util.RelationshipHelper.Relationship;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -113,8 +116,10 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		private static String DATA = "DATA";
 		private UseCase data;
 		private CommentsHelper commentsHelper;
+		private RelationshipHelper relationshipHelper;
 
 		// Views
+		private ToggleButton tgl_follow;
 		private ToggleButton tgl_wow;
 		private ToggleButton tgl_metoo;
 		private ToggleButton tgl_scrap;
@@ -157,6 +162,29 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 						}
 
 					});
+
+			// RelationshipHelper 초기화
+			relationshipHelper = new RelationshipHelper(getActivity(),
+					data.writer_id);
+			relationshipHelper
+					.setOnRelationshipUpdateHandler(new OnRelationshipUpdateHandler() {
+
+						@Override
+						public void onUpdate(Relationship relationship) {
+							updateRelationshipUpdateState(relationship);
+						}
+
+					});
+
+			relationshipHelper.updateRelationshipInfo();
+		}
+
+		private void updateRelationshipUpdateState(Relationship relationship) {
+			if (relationship != null) { // not following
+				tgl_follow.setChecked(true);
+			} else {
+				tgl_follow.setChecked(false);
+			}
 		}
 
 		/*
@@ -172,6 +200,22 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			final View page = inflater.inflate(
 					R.layout.fragment_usecase_detail, null);
 			UseCase data = getArguments().getParcelable(DATA);
+
+			// follow 버튼 초기화
+			tgl_follow = (ToggleButton) page.findViewById(R.id.tgl_follow);
+			tgl_follow.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View view) {
+					if (tgl_follow.isChecked()) {
+						relationshipHelper.followUser();
+					} else {
+						relationshipHelper.unfollowUser();
+					}
+
+				}
+
+			});
 
 			// 코멘트 버튼 초기화
 			tgl_wow = (ToggleButton) page.findViewById(R.id.tgl_wow);
@@ -266,7 +310,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 					.findViewById(R.id.tv_username);
 
 			// 사용자 정보 출력
-			tv_username.setText(data.username);
+			tv_username.setText(data.writer_name);
 
 			// Content panel
 			ImageView usecase_photo = (ImageView) page

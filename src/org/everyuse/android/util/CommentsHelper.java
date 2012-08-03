@@ -83,10 +83,10 @@ public class CommentsHelper {
 		client.addHeader("Content-type", "application/x-www-form-urlencoded");
 
 		// 보는 글에 달린 현재 사용자의 댓글들을 가져옴
-		updateCurrentUserComments();
+		updateCurrentUserCommentsInfo();
 	}
 
-	private void updateCurrentUserComments() {
+	private void updateCurrentUserCommentsInfo() {
 		String url = URLHelper.COMMENTS_BASE_URL + ".json";
 		RequestParams params = new RequestParams();
 		params.put("comment[user_id]", String.valueOf(user_id));
@@ -213,7 +213,7 @@ public class CommentsHelper {
 			@Override
 			public void onFinish() {
 				// 코멘트를 올린 다음, 현재 사용자의 코멘트를 정보를 업데이트함
-				updateCurrentUserComments();
+				updateCurrentUserCommentsInfo();
 			}
 
 		});
@@ -244,7 +244,7 @@ public class CommentsHelper {
 			@Override
 			public void onFinish() {
 				// 코멘트를 올린 다음, 현재 사용자의 코멘트를 정보를 업데이트함
-				updateCurrentUserComments();
+				updateCurrentUserCommentsInfo();
 			}
 
 		});

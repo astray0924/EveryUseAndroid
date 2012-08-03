@@ -18,6 +18,7 @@ public class URLHelper {
 	public static String COMMENTS_SCRAP_URL = COMMENTS_BASE_URL + "/favorite";
 	public static String COMMENTS_WOW_URL = COMMENTS_BASE_URL + "/wow";
 	public static String COMMENTS_METOO_URL = COMMENTS_BASE_URL + "/metoo";
+	public static String RELATIONSHIP_URL = BASE_URL + "/relationship";
 
 	public static String getMyFollowerURL(int user_id) {
 		if (user_id <= 0) {
