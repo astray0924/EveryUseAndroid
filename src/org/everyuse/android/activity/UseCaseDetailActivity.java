@@ -200,15 +200,82 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 				Bundle savedInstanceState) {
 			final View page = inflater.inflate(
 					R.layout.fragment_usecase_detail, null);
+			return page;
+		}
+
+		private void display(View page, UseCase data) {
+			// 사용자 정보 보여주는 뷰 초기화
+			View profile_panel = page.findViewById(R.id.profile_panel);
+			ImageView iv_user_photo = (ImageView) profile_panel
+					.findViewById(R.id.iv_user_photo);
+			TextView tv_username = (TextView) profile_panel
+					.findViewById(R.id.tv_username);
+
+			// 사용자 정보 출력
+			tv_username.setText(data.writer_name);
+
+			// Content panel
+			ImageView usecase_photo = (ImageView) page
+					.findViewById(R.id.iv_usecase_photo);
+			TextView item = (TextView) page.findViewById(R.id.tv_item);
+			TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);
+
+			image_downloader.download(data.getPhotoLargeURL(), usecase_photo);
+			item.setText(data.item);
+			purpose.setText(data.purpose);
+		}
+
+		private void updateCommentButtonState(Comments comments) {
+			// update "Wow" button state
+			if (comments.isWowed()) {
+				tgl_wow.setChecked(true);
+			} else {
+				tgl_wow.setChecked(false);
+			}
+			String wow_count = String.valueOf(comments.getWowCount());
+			tgl_wow.setText(wow_count);
+			tgl_wow.setTextOn(wow_count + "");
+			tgl_wow.setTextOff(wow_count + "");
+
+			// update "Me too" button state
+			if (comments.isMetooed()) {
+				tgl_metoo.setChecked(true);
+			} else {
+				tgl_metoo.setChecked(false);
+			}
+			String metoo_count = String.valueOf(comments.getMetooCount());
+			tgl_metoo.setText(metoo_count);
+			tgl_metoo.setTextOn(metoo_count);
+			tgl_metoo.setTextOff(metoo_count);
+
+			// update "Scrap" button state
+			if (comments.isScrapped()) {
+				tgl_scrap.setChecked(true);
+			} else {
+				tgl_scrap.setChecked(false);
+			}
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
+		 */
+		@Override
+		public void onActivityCreated(Bundle savedInstanceState) {
+			super.onActivityCreated(savedInstanceState);
+
+			final View page = getView();
 			UseCase data = getArguments().getParcelable(DATA);
 
 			// follow 버튼 초기화
 			tgl_follow = (ToggleButton) page.findViewById(R.id.tgl_follow);
-			
+
 			if (data.writer_id == UserHelper.getCurrentUser(getActivity()).id) {
 				tgl_follow.setVisibility(View.INVISIBLE);
 			}
-			
+
 			tgl_follow.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -304,71 +371,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			});
 
 			display(page, data);
-			return page;
-		}
-
-		private void display(View page, UseCase data) {
-			// 사용자 정보 보여주는 뷰 초기화
-			View profile_panel = page.findViewById(R.id.profile_panel);
-			ImageView iv_user_photo = (ImageView) profile_panel
-					.findViewById(R.id.iv_user_photo);
-			TextView tv_username = (TextView) profile_panel
-					.findViewById(R.id.tv_username);
-
-			// 사용자 정보 출력
-			tv_username.setText(data.writer_name);
-
-			// Content panel
-			ImageView usecase_photo = (ImageView) page
-					.findViewById(R.id.iv_usecase_photo);
-			TextView item = (TextView) page.findViewById(R.id.tv_item);
-			TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);
-
-			image_downloader.download(data.getPhotoLargeURL(), usecase_photo);
-			item.setText(data.item);
-			purpose.setText(data.purpose);
-		}
-
-		private void updateCommentButtonState(Comments comments) {
-			// update "Wow" button state
-			if (comments.isWowed()) {
-				tgl_wow.setChecked(true);
-			} else {
-				tgl_wow.setChecked(false);
-			}
-			String wow_count = String.valueOf(comments.getWowCount());
-			tgl_wow.setText(wow_count);
-			tgl_wow.setTextOn(wow_count + "");
-			tgl_wow.setTextOff(wow_count + "");
-
-			// update "Me too" button state
-			if (comments.isMetooed()) {
-				tgl_metoo.setChecked(true);
-			} else {
-				tgl_metoo.setChecked(false);
-			}
-			String metoo_count = String.valueOf(comments.getMetooCount());
-			tgl_metoo.setText(metoo_count);
-			tgl_metoo.setTextOn(metoo_count);
-			tgl_metoo.setTextOff(metoo_count);
-
-			// update "Scrap" button state
-			if (comments.isScrapped()) {
-				tgl_scrap.setChecked(true);
-			} else {
-				tgl_scrap.setChecked(false);
-			}
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
-		 */
-		@Override
-		public void onActivityCreated(Bundle savedInstanceState) {
-			super.onActivityCreated(savedInstanceState);
 		}
 
 	}
