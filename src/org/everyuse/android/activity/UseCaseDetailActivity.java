@@ -286,7 +286,10 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			} else {
 				tgl_wow.setChecked(false);
 			}
-			tgl_wow.setText(String.valueOf(comments.getWowCount()));
+			String wow_count = String.valueOf(comments.getWowCount());
+			tgl_wow.setText(wow_count);
+			tgl_wow.setTextOn(wow_count + "");
+			tgl_wow.setTextOff(wow_count + "");
 
 			// update "Me too" button state
 			if (comments.isMetooed()) {
@@ -294,7 +297,10 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			} else {
 				tgl_metoo.setChecked(false);
 			}
-			tgl_metoo.setText(String.valueOf(comments.getMetooCount()));
+			String metoo_count = String.valueOf(comments.getMetooCount());
+			tgl_metoo.setText(metoo_count);
+			tgl_metoo.setTextOn(metoo_count);
+			tgl_metoo.setTextOff(metoo_count);
 
 			// update "Scrap" button state
 			if (comments.isScrapped()) {

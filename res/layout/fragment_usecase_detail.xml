@@ -32,10 +32,10 @@
                 android:id="@+id/tgl_follow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textOn="Following"
-                android:textOff="Follow"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:textOff="Follow"
+                android:textOn="Following" />
         </RelativeLayout>
 
         <LinearLayout
