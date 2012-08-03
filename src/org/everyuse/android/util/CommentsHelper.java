@@ -37,6 +37,8 @@ public class CommentsHelper {
 		public Comment favorite;
 		public Comment wow;
 		public Comment metoo;
+		public int wow_count;
+		public int metoo_count;
 
 		public boolean isScrapped() {
 			return (favorite != null);
@@ -49,6 +51,14 @@ public class CommentsHelper {
 		public boolean isMetooed() {
 			return (metoo != null);
 
+		}
+		
+		public int getWowCount() {
+			return wow_count;
+		}
+		
+		public int getMetooCount() {
+			return metoo_count;
 		}
 	}
 
