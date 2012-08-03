@@ -140,7 +140,7 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
-				resetList();
+				refresh();
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {
@@ -311,11 +311,11 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 		return true;
 	}
 
-	protected void resetList() {
+	protected void refresh() {
 		resetPage();
 		mDataList.clear();
 		mAdapter.notifyDataSetChanged();
-		// mListView.setLoadEndFlag(false);
+		mListView.setLoadEnded(false);
 	}
 
 	protected synchronized int getCurrentPage() {

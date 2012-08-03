@@ -36,7 +36,7 @@
                 android:layout_centerVertical="true" />
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/content_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,10 +61,8 @@
             <ToggleButton
                 android:id="@+id/tgl_scrap"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
-        </RelativeLayout>
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/comment_panel"
@@ -73,6 +71,7 @@
             android:orientation="horizontal" >
 
             <TextView
+                android:id="@+id/tv_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -84,9 +83,8 @@
                 android:id="@+id/tgl_wow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="30dp"
+                android:layout_toRightOf="@id/tv_comment"
                 android:textOff="Wow"
                 android:textOn="Wow" />
 
@@ -94,6 +92,7 @@
                 android:id="@+id/tgl_metoo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/tgl_wow"
                 android:textOff="Me too"
                 android:textOn="Me too" />
         </RelativeLayout>
