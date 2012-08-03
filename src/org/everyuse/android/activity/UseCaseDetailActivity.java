@@ -117,10 +117,10 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		// Views
 		private ToggleButton tgl_wow;
 		private ToggleButton tgl_metoo;
+		private ToggleButton tgl_scrap;
 
 		public DetailFragment() {
 		}
-
 
 		public static DetailFragment newInstance(UseCase data) {
 			DetailFragment f = new DetailFragment();
@@ -172,7 +172,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			final View page = inflater.inflate(
 					R.layout.fragment_usecase_detail, null);
 			UseCase data = getArguments().getParcelable(DATA);
-			display(page, data);
 
 			// 코멘트 버튼 초기화
 			tgl_wow = (ToggleButton) page.findViewById(R.id.tgl_wow);
@@ -198,6 +197,20 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 						commentsHelper.postMetoo();
 					} else {
 						commentsHelper.deleteMetoo();
+					}
+				}
+
+			});
+
+			tgl_scrap = (ToggleButton) page.findViewById(R.id.tgl_scrap);
+			tgl_scrap.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if (tgl_scrap.isChecked()) {
+						commentsHelper.postScrap();
+					} else {
+						commentsHelper.deleteScrap();
 					}
 				}
 
@@ -240,10 +253,22 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 			});
 
+			display(page, data);
 			return page;
 		}
 
 		private void display(View page, UseCase data) {
+			// 사용자 정보 보여주는 뷰 초기화
+			View profile_panel = page.findViewById(R.id.profile_panel);
+			ImageView iv_user_photo = (ImageView) profile_panel
+					.findViewById(R.id.iv_user_photo);
+			TextView tv_username = (TextView) profile_panel
+					.findViewById(R.id.tv_username);
+
+			// 사용자 정보 출력
+			tv_username.setText(data.username);
+
+			// Content panel
 			ImageView usecase_photo = (ImageView) page
 					.findViewById(R.id.iv_usecase_photo);
 			TextView item = (TextView) page.findViewById(R.id.tv_item);
@@ -255,16 +280,25 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		}
 
 		private void updateCommentButtonState(Comments comments) {
+			// update "Wow" button state
 			if (comments.isWowed()) {
 				tgl_wow.setChecked(true);
 			} else {
 				tgl_wow.setChecked(false);
 			}
 
+			// update "Me too" button state
 			if (comments.isMetooed()) {
 				tgl_metoo.setChecked(true);
 			} else {
 				tgl_metoo.setChecked(false);
+			}
+
+			// update "Scrap" button state
+			if (comments.isScrapped()) {
+				tgl_scrap.setChecked(true);
+			} else {
+				tgl_scrap.setChecked(false);
 			}
 		}
 

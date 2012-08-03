@@ -38,7 +38,7 @@ public class CommentsHelper {
 		public Comment wow;
 		public Comment metoo;
 
-		public boolean isFavorited() {
+		public boolean isScrapped() {
 			return (favorite != null);
 		}
 

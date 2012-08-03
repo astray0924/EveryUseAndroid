@@ -9,23 +9,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/profile_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="horizontal" >
 
             <ImageView
                 android:id="@+id/iv_user_photo"
-                style="@style/PictureStyle.Thumb" />
+                style="@style/PictureStyle.Thumb"
+                android:layout_centerVertical="true" />
 
             <TextView
                 android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/iv_user_photo"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <LinearLayout
+            <ToggleButton
+                android:id="@+id/tgl_follow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/content_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,29 +49,44 @@
             <TextView
                 android:id="@+id/tv_item"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
                 android:id="@+id/tv_purpose"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <LinearLayout
+            <ToggleButton
+                android:id="@+id/tgl_scrap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/comment_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="horizontal" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tv_comment" />
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="@string/tv_comment"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <ToggleButton
                 android:id="@+id/tgl_wow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
                 android:textOff="Wow"
                 android:textOn="Wow" />
 
@@ -70,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:textOff="Me too"
                 android:textOn="Me too" />
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/similar_panel"
