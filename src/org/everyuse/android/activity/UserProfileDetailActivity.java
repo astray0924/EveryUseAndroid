@@ -128,13 +128,13 @@ public class UserProfileDetailActivity extends FragmentActivity {
 
 		case MENU_SHARED:
 			return UseCaseListWithOptionFragment.newInstance(
-					URLHelper.getMySharedURL(user.id), R.array.use_case_time);
+					URLHelper.getMySharedURL(user.id), R.array.use_case_time, true);
 		case MENU_COMMENTED:
 			return UseCaseListWithOptionFragment.newInstance(
-					URLHelper.getMyCommentedURL(user.id), R.array.comment);
+					URLHelper.getMyCommentedURL(user.id), R.array.comment, true);
 		case MENU_SCRAPED:
 			return UseCaseListWithOptionFragment.newInstance(
-					URLHelper.getMyScrapedURL(user.id), R.array.use_case_time);
+					URLHelper.getMyScrapedURL(user.id), R.array.use_case_time, true);
 		case MENU_FOLLOWING:
 			return UserListFragment.newInstance(URLHelper
 					.getMyFollowingURL(user.id));
