@@ -174,8 +174,8 @@ public class DetailFragment extends Fragment {
 	}
 
 	private void hideCommentButtons() {
-		View comment_panel = getView().findViewById(R.id.comment_panel);
-		comment_panel.setVisibility(View.GONE);
+		tgl_wow.setEnabled(false);
+		tgl_metoo.setEnabled(false);
 		tgl_scrap.setVisibility(View.GONE);
 	}
 

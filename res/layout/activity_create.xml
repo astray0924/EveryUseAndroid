@@ -80,7 +80,7 @@
         <ImageView
             android:id="@+id/iv_photo"
             style="@style/PictureStyle.Preview"
-            contentDescription="Picture to add" />
+            android:contentDescription="Picture to add" />
 
         <!--
         <Button

@@ -231,7 +231,7 @@ public class CreateActivity extends SherlockActivity {
 					getExternalCacheDir());
 		} catch (IOException e) {
 			e.printStackTrace();
-			Toast.makeText(this, "Failed to create temp file", 200).show();
+			Toast.makeText(this, "Failed to create temp file", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
