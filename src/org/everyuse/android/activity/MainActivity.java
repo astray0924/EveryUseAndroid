@@ -45,7 +45,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
-	
+
 	public static int selected_main_page;
 	public static final String EXTRA_SELECTED_PAGE = "selected_page";
 
@@ -92,24 +92,22 @@ public class MainActivity extends SherlockFragmentActivity implements
 					.setTabListener(this));
 		}
 	}
-	
-	
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onRestart()
 	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		Intent intent = getIntent();
-		if (intent != null) {			
-			int selected_main_page = intent.getIntExtra(EXTRA_SELECTED_PAGE, 0);
-			mViewPager.setCurrentItem(selected_main_page);
-		}
+
+//		Intent intent = getIntent();
+//		if (intent != null) {
+//			int selected_main_page = intent.getIntExtra(EXTRA_SELECTED_PAGE, 0);
+//			mViewPager.setCurrentItem(selected_main_page);
+//		}
 	}
-
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -231,11 +229,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 						URLHelper.USE_CASES_TOP_URL, R.array.comment);
 			case FEED:
 				int user_id = UserHelper.getCurrentUser(MainActivity.this).id;
-				return UseCaseListFragment.newInstance(URLHelper
-						.getMyFeedsURL(user_id), true);
+				return UseCaseListFragment.newInstance(
+						URLHelper.getMyFeedsURL(user_id), true);
 			case RECENT:
-				return UseCaseListFragment
-						.newInstance(URLHelper.USE_CASES_RECENT_URL, true);
+				return UseCaseListFragment.newInstance(
+						URLHelper.USE_CASES_RECENT_URL, true);
 			case CATEOGORY:
 				return UseCaseGroupListFragment.newInstance(
 						URLHelper.USE_CASE_GROUPS_URL, R.array.use_case);
