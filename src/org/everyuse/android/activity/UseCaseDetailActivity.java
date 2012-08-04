@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -120,8 +121,8 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public void onFollowUpdate(int page) {
-		// TODO Auto-generated method stub
-		
+//		Toast.makeText(this, "test", 200).show();	
+
 	}
 
 }
