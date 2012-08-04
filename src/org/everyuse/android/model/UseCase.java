@@ -33,7 +33,9 @@ public class UseCase implements Parcelable {
 	private static Gson gson = new Gson();
 	private static DateFormat year_month_day_format = DateFormat
 			.getDateInstance(DateFormat.MEDIUM);
-	private static DateFormat datetime_format = new SimpleDateFormat("MMM d, yyyy, hh:mm aaa");
+	
+	private static DateFormat today_format = new SimpleDateFormat("hh:mm aaa");
+	private static DateFormat other_day_format = new SimpleDateFormat("MMM d, yyyy, hh:mm aaa");
 
 	public String getPurposeString() {
 		if (purpose_type == null) {
@@ -53,9 +55,9 @@ public class UseCase implements Parcelable {
 		String compare_str = year_month_day_format.format(date);
 
 		if (today_str.equals(compare_str)) {
-			return "Today";
+			return "Today, " + today_format.format(date);
 		} else {
-			return datetime_format.format(date);
+			return other_day_format.format(date);
 		}
 	}
 

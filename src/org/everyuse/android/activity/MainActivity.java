@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -199,9 +200,32 @@ public class MainActivity extends SherlockFragmentActivity implements
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 
-			for (int i = 0; i < TAB_COUNT; i++) {
-				fragment_list.add(i, null);
-			}
+			initFragments();
+		}
+
+		private void initFragments() {
+			// add Top Fragment
+			fragment_list.add(TOP, UseCaseListWithOptionFragment.newInstance(
+					URLHelper.USE_CASES_TOP_URL, R.array.comment));
+
+			// add Feed Fragment
+			int user_id = UserHelper.getCurrentUserId(MainActivity.this);
+			fragment_list.add(
+					FEED,
+					UseCaseListFragment.newInstance(
+							URLHelper.getMyFeedsURL(user_id), true));
+
+			// add Recent Fragment
+			fragment_list.add(RECENT, UseCaseListFragment.newInstance(
+					URLHelper.USE_CASES_RECENT_URL, true));
+
+			// add Category Fragment
+			fragment_list.add(CATEOGORY, UseCaseGroupListFragment.newInstance(
+					URLHelper.USE_CASE_GROUPS_URL, R.array.use_case));
+
+			// add My Menu Fragment
+			fragment_list.add(MY, UserProfileFragment.newInstance(UserHelper
+					.getCurrentUser(MainActivity.this)));
 		}
 
 		@Override
@@ -214,26 +238,18 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 
 		private Fragment getFragment(int index) {
-			switch (index) {
-			case TOP:
-				return UseCaseListWithOptionFragment.newInstance(
-						URLHelper.USE_CASES_TOP_URL, R.array.comment);
-			case FEED:
-				int user_id = UserHelper.getCurrentUserId(MainActivity.this);
-				return UseCaseListFragment.newInstance(
-						URLHelper.getMyFeedsURL(user_id), true);
-			case RECENT:
-				return UseCaseListFragment.newInstance(
-						URLHelper.USE_CASES_RECENT_URL, true);
-			case CATEOGORY:
-				return UseCaseGroupListFragment.newInstance(
-						URLHelper.USE_CASE_GROUPS_URL, R.array.use_case);
-			case MY:
-				return UserProfileFragment.newInstance(UserHelper
-						.getCurrentUser(MainActivity.this));
-			default:
-				throw new IllegalStateException("Tab index out of bound.");
+			if (index >= getCount()) {
+				throw new IllegalArgumentException("Tab index out of bound");
 			}
+			
+			Fragment fragment = null;
+			try {
+				fragment = fragment_list.get(index);
+			} catch (IndexOutOfBoundsException e) {
+				Log.d("MainActivity", "Tab index out of bound");
+			}
+			
+			return fragment;
 		}
 
 		@Override
