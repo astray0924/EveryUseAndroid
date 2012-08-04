@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_photo"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/tv_purpose"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tv_item"
         android:layout_below="@id/tv_item"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/tv_other_info"
@@ -71,5 +71,5 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="7dip"
         android:src="@android:drawable/sym_action_call"/>
-</TwoLineListItem>
+</TwoLineListItem>
 -->
