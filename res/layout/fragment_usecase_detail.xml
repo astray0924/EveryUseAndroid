@@ -50,24 +50,34 @@
                 android:id="@+id/iv_usecase_photo"
                 style="@style/PictureStyle.Large" />
 
-            <TextView
-                android:id="@+id/tv_item"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:orientation="horizontal" >
 
-            <TextView
-                android:id="@+id/tv_purpose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/tv_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <ToggleButton
-                android:id="@+id/tgl_scrap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textOff="Scrap"
-                android:textOn="UnScrap" />
+                <TextView
+                    android:id="@+id/tv_purpose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/tv_item"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <ToggleButton
+                    android:id="@+id/tgl_scrap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textOff="Scrap"
+                    android:textOn="UnScrap" />
+            </RelativeLayout>
         </LinearLayout>
 
         <RelativeLayout

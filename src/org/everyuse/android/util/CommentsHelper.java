@@ -81,12 +81,9 @@ public class CommentsHelper {
 
 		client = new AsyncHttpClient();
 		client.addHeader("Content-type", "application/x-www-form-urlencoded");
-
-		// 보는 글에 달린 현재 사용자의 댓글들을 가져옴
-		updateCurrentUserCommentsInfo();
 	}
 
-	private void updateCurrentUserCommentsInfo() {
+	public void updateCurrentUserCommentsInfo() {
 		String url = URLHelper.COMMENTS_BASE_URL + ".json";
 		RequestParams params = new RequestParams();
 		params.put("comment[user_id]", String.valueOf(user_id));

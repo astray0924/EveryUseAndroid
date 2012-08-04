@@ -39,8 +39,8 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 	private ArrayList<UseCase> data_list;
 	private int start_index;
 
-	private ItemsPagerAdapter pager_adapter;
-	private ViewPager pager;
+	private static ViewPager pager;
+	private static ItemsPagerAdapter pager_adapter;
 	private static ImageDownloader image_downloader;
 
 	/*
@@ -164,6 +164,9 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 					});
 
+			// 코멘트 가져오기
+			commentsHelper.updateCurrentUserCommentsInfo();
+
 			// RelationshipHelper 초기화
 			relationshipHelper = new RelationshipHelper(getActivity(),
 					data.writer_id);
@@ -186,6 +189,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			} else {
 				tgl_follow.setChecked(false);
 			}
+
 		}
 
 		/*
@@ -256,6 +260,13 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			}
 		}
 
+		private void invalidateViewPageItems() {
+			// Force ViewPager to redraw it's children
+			int item_id = pager.getCurrentItem();
+			pager.setAdapter(pager_adapter);
+			pager.setCurrentItem(item_id);
+		}
+
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -286,6 +297,10 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 						relationshipHelper.unfollowUser();
 					}
 
+					// Force ViewPager to redraw it's children
+					// 이래야 다음 페이지가 같은 사용자일 경우, Following 상태가 제대로 업데이트됨
+					// 기본적으론 다음 페이지는 미리 그려지기 때문에, 다음 페이지의 Following 상태는 업데이트 안됨. 
+					invalidateViewPageItems();
 				}
 
 			});
@@ -372,6 +387,5 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 			display(page, data);
 		}
-
 	}
 }
