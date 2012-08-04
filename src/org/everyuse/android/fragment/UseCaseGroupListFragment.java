@@ -15,6 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
+import org.everyuse.android.activity.MainActivity;
 import org.everyuse.android.activity.UseCaseDetailActivity;
 import org.everyuse.android.adapter.UseCaseGroupAdapter;
 import org.everyuse.android.model.UseCaseGroup;
@@ -306,6 +307,7 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 				UseCaseDetailActivity.EXTRA_DATA_LIST,
 				mDataList.get(groupPosition).getChildren());
 		intent.putExtra(UseCaseDetailActivity.EXTRA_STRAT_INDEX, childPosition);
+		intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE, MainActivity.selected_main_page);
 		startActivity(intent);
 
 		return true;

@@ -30,6 +30,7 @@ import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
 
 public class UseCaseDetailActivity extends SherlockFragmentActivity {
 	public static String EXTRA_DATA = "DATA";
@@ -42,6 +43,8 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 	private static ViewPager pager;
 	private static ItemsPagerAdapter pager_adapter;
 	private static ImageDownloader image_downloader;
+	
+	private int selected_main_page;
 
 	/*
 	 * (non-Javadoc)
@@ -52,12 +55,29 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.activity_usecase_detail);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// handle intent
 		handleIntent(getIntent());
 
 		// initialize
 		initialize();
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.actionbarsherlock.app.SherlockActivity#onOptionsItemSelected(com.actionbarsherlock.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE, selected_main_page);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+		}
+		
+		return true;
 	}
 
 	private void initialize() {
@@ -92,6 +112,8 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			throw new IllegalStateException(
 					getString(R.string.msg_missing_data));
 		}
+		
+		selected_main_page = intent.getIntExtra(MainActivity.EXTRA_SELECTED_PAGE, 0);
 	}
 
 	private class ItemsPagerAdapter extends FragmentStatePagerAdapter {
@@ -266,6 +288,13 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			pager.setAdapter(pager_adapter);
 			pager.setCurrentItem(item_id);
 		}
+		
+		private void hideCommentButtons() {
+			View comment_panel = getView().findViewById(R.id.comment_panel);
+			comment_panel.setVisibility(View.GONE);
+			tgl_scrap.setVisibility(View.GONE);
+			tgl_follow.setVisibility(View.GONE);
+		}
 
 		/*
 		 * (non-Javadoc)
@@ -282,11 +311,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 			// follow 버튼 초기화
 			tgl_follow = (ToggleButton) page.findViewById(R.id.tgl_follow);
-
-			if (data.writer_id == UserHelper.getCurrentUser(getActivity()).id) {
-				tgl_follow.setVisibility(View.INVISIBLE);
-			}
-
 			tgl_follow.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -385,7 +409,12 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 			});
 
+			// 만약 글쓴이가 현재 사용자와 같다면 코멘트 및 팔로우 기능 해제
+			if (data.writer_id == UserHelper.getCurrentUser(getActivity()).id) {
+				hideCommentButtons();
+			}
 			display(page, data);
+
 		}
 	}
 }

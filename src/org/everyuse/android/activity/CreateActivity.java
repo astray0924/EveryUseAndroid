@@ -81,12 +81,14 @@ public class CreateActivity extends SherlockActivity {
 	public static final String EXTRA_PURPOSE = "purpose";
 	private String pre_item;
 	private String pre_purpose;
+	private int selected_main_page;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create);
 		setTitle(R.string.title_activity_create);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// UI 초기화
 		initUI();
@@ -94,13 +96,13 @@ public class CreateActivity extends SherlockActivity {
 		// handle intent
 		handleIntent(getIntent());
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.create, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
@@ -109,8 +111,13 @@ public class CreateActivity extends SherlockActivity {
 			// 서버로 데이터 전송
 			new SubmitTask().execute();
 			break;
+		case android.R.id.home:
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE, selected_main_page);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 		}
-		
+
 		return true;
 	}
 
@@ -126,6 +133,9 @@ public class CreateActivity extends SherlockActivity {
 			if (pre_purpose != null) {
 				et_purpose.setText(pre_purpose);
 			}
+			
+			// MainActivity에서 기존에 선택되었던 탭 index 가져오기
+			selected_main_page = intent.getIntExtra(MainActivity.EXTRA_SELECTED_PAGE, 0);
 		}
 	}
 
@@ -199,17 +209,17 @@ public class CreateActivity extends SherlockActivity {
 			}
 
 		});
-//
-//		Button btn_submit = (Button) findViewById(R.id.btn_submit);
-//		btn_submit.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// 서버로 데이터 전송
-//				new SubmitTask().execute();
-//			}
-//
-//		});
+		//
+		// Button btn_submit = (Button) findViewById(R.id.btn_submit);
+		// btn_submit.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// // 서버로 데이터 전송
+		// new SubmitTask().execute();
+		// }
+		//
+		// });
 	}
 
 	/**
@@ -262,7 +272,7 @@ public class CreateActivity extends SherlockActivity {
 
 			// 입력된 'item'
 			input_item = et_item.getText().toString();
-			
+
 			// 입력된 'purpose'
 			input_purpose = et_purpose.getText().toString();
 
@@ -275,7 +285,7 @@ public class CreateActivity extends SherlockActivity {
 			Object place_selected = sp_place.getSelectedItem();
 			input_place = (place_selected == null) ? "" : sp_place
 					.getSelectedItem().toString().toLowerCase();
-			
+
 			// 선택된 사진
 			input_photo_file = photo_file;
 

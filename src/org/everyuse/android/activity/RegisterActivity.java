@@ -25,7 +25,6 @@ import org.everyuse.android.util.UserHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -38,7 +37,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class RegisterActivity extends Activity {
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+
+public class RegisterActivity extends SherlockActivity {
 	private EditText et_username;
 	private EditText et_email;
 	private EditText et_password;

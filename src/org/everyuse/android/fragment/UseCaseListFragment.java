@@ -15,6 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
+import org.everyuse.android.activity.MainActivity;
 import org.everyuse.android.activity.UseCaseDetailActivity;
 import org.everyuse.android.adapter.UseCaseSingleAdapter;
 import org.everyuse.android.model.UseCase;
@@ -35,7 +36,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class UseCaseListFragment extends ListFragment {
@@ -269,6 +269,7 @@ public class UseCaseListFragment extends ListFragment {
 		intent.putParcelableArrayListExtra(
 				UseCaseDetailActivity.EXTRA_DATA_LIST, mDataList);
 		intent.putExtra(UseCaseDetailActivity.EXTRA_STRAT_INDEX, position);
+		intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE, MainActivity.selected_main_page);
 		startActivity(intent);
 	}
 

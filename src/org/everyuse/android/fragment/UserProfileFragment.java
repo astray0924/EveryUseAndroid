@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.everyuse.android.R;
+import org.everyuse.android.activity.MainActivity;
 import org.everyuse.android.activity.UserProfileDetailActivity;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.UserHelper;
@@ -117,6 +118,7 @@ public class UserProfileFragment extends ListFragment {
 		Intent intent = new Intent(getActivity(), UserProfileDetailActivity.class);
 		intent.putExtra(UserProfileDetailActivity.EXTRA_MENU_SELECTED, position);
 		intent.putExtra(UserProfileDetailActivity.EXTRA_USER, user);
+		intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE, MainActivity.selected_main_page);
 		startActivity(intent);
 	}
 

@@ -11,13 +11,14 @@ import org.everyuse.android.util.UserHelper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.widget.TextView;
 
-public class UserProfileDetailActivity extends FragmentActivity {
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
+
+public class UserProfileDetailActivity extends SherlockFragmentActivity {
 	private User user;
 
 	private FragmentManager fragmentManager;
@@ -32,22 +33,46 @@ public class UserProfileDetailActivity extends FragmentActivity {
 	public static final int MENU_FOLLOWING = 3;
 	public static final int MENU_FOLLOWER = 4;
 	public static final int MENU_USER = 5;
+	
+	private int selected_main_page;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_profile);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		initFragmentManager();
 
 		handleIntent(getIntent());
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.actionbarsherlock.app.SherlockActivity#onOptionsItemSelected(com.
+	 * actionbarsherlock.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE,
+					selected_main_page);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+		}
+
+		return true;
+	}
+
 	private String getTitle(int menu_selected) {
 		User current_user = UserHelper.getCurrentUser(this);
 		String username = "";
 		String title = "";
-		
+
 		if (current_user.equals(user)) {
 			username = "My";
 		} else {
@@ -79,14 +104,14 @@ public class UserProfileDetailActivity extends FragmentActivity {
 			title += "Profile";
 			break;
 		}
-		
+
 		return title;
 	}
 
-//	private void setTitle(String title) {
-//		TextView tv_title = (TextView) findViewById(R.id.tv_title);
-//		tv_title.setText(title);
-//	}
+	// private void setTitle(String title) {
+	// TextView tv_title = (TextView) findViewById(R.id.tv_title);
+	// tv_title.setText(title);
+	// }
 
 	private void initFragmentManager() {
 		fragmentManager = getSupportFragmentManager();
@@ -105,6 +130,9 @@ public class UserProfileDetailActivity extends FragmentActivity {
 		setFragment(menu_selected);
 		String title = getTitle(menu_selected);
 		setTitle(title);
+		
+		// main page index
+		selected_main_page = intent.getIntExtra(MainActivity.EXTRA_SELECTED_PAGE, 0);
 	}
 
 	private void setFragment(int menu_selected) {
@@ -128,13 +156,16 @@ public class UserProfileDetailActivity extends FragmentActivity {
 
 		case MENU_SHARED:
 			return UseCaseListWithOptionFragment.newInstance(
-					URLHelper.getMySharedURL(user.id), R.array.use_case_time, true);
+					URLHelper.getMySharedURL(user.id), R.array.use_case_time,
+					true);
 		case MENU_COMMENTED:
-			return UseCaseListWithOptionFragment.newInstance(
-					URLHelper.getMyCommentedURL(user.id), R.array.comment, true);
+			return UseCaseListWithOptionFragment
+					.newInstance(URLHelper.getMyCommentedURL(user.id),
+							R.array.comment, true);
 		case MENU_SCRAPED:
 			return UseCaseListWithOptionFragment.newInstance(
-					URLHelper.getMyScrapedURL(user.id), R.array.use_case_time, true);
+					URLHelper.getMyScrapedURL(user.id), R.array.use_case_time,
+					true);
 		case MENU_FOLLOWING:
 			return UserListFragment.newInstance(URLHelper
 					.getMyFollowingURL(user.id));
