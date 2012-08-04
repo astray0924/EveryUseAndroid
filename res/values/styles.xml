@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="EveryUseTheme" parent="@style/Theme.Sherlock">
-       
-    </style>
+    <style name="EveryUseTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar" />
 
     <style name="PictureStyle">
         <item name="android:layout_gravity">center</item>

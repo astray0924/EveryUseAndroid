@@ -39,6 +39,10 @@ public class UserHelper {
 		User current_user = getCurrentUser(context);
 		return (current_user.id == user_id);
 	}
+	
+	public static int getCurrentUserId(Context context) {
+		return getCurrentUser(context).id;
+	}
 
 	public static User getCurrentUser(Context context) {
 		SharedPreferences prefs = context

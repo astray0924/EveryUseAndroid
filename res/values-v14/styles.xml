@@ -1,5 +1,0 @@
-<resources>
-
-    <style name="EveryUseTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar" />
-
-</resources>

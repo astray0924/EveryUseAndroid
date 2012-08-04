@@ -219,7 +219,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 				return UseCaseListWithOptionFragment.newInstance(
 						URLHelper.USE_CASES_TOP_URL, R.array.comment);
 			case FEED:
-				int user_id = UserHelper.getCurrentUser(MainActivity.this).id;
+				int user_id = UserHelper.getCurrentUserId(MainActivity.this);
 				return UseCaseListFragment.newInstance(
 						URLHelper.getMyFeedsURL(user_id), true);
 			case RECENT:
