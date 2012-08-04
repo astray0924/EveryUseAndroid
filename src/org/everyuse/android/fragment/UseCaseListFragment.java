@@ -269,7 +269,6 @@ public class UseCaseListFragment extends ListFragment {
 		intent.putParcelableArrayListExtra(
 				UseCaseDetailActivity.EXTRA_DATA_LIST, mDataList);
 		intent.putExtra(UseCaseDetailActivity.EXTRA_STRAT_INDEX, position);
-		intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE, MainActivity.selected_main_page);
 		startActivity(intent);
 	}
 

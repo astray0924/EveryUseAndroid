@@ -46,7 +46,9 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 	private static ItemsPagerAdapter pager_adapter;
 	private static ImageDownloader image_downloader;
 
-	private int selected_main_page;
+	public interface OnFollowUpdateListener {
+		public void onFollowUpdate(int page);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -78,8 +80,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			Intent intent = new Intent(this, MainActivity.class);
-			intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE,
-					selected_main_page);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 		}
@@ -119,9 +119,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			throw new IllegalStateException(
 					getString(R.string.msg_missing_data));
 		}
-
-		selected_main_page = intent.getIntExtra(
-				MainActivity.EXTRA_SELECTED_PAGE, 0);
 	}
 
 	private class ItemsPagerAdapter extends FragmentStatePagerAdapter {

@@ -113,7 +113,6 @@ public class CreateActivity extends SherlockActivity {
 			break;
 		case android.R.id.home:
 			Intent intent = new Intent(this, MainActivity.class);
-			intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE, selected_main_page);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 		}
@@ -133,9 +132,6 @@ public class CreateActivity extends SherlockActivity {
 			if (pre_purpose != null) {
 				et_purpose.setText(pre_purpose);
 			}
-			
-			// MainActivity에서 기존에 선택되었던 탭 index 가져오기
-			selected_main_page = intent.getIntExtra(MainActivity.EXTRA_SELECTED_PAGE, 0);
 		}
 	}
 

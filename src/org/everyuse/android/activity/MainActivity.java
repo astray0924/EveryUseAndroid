@@ -46,9 +46,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 	 */
 	ViewPager mViewPager;
 
-	public static int selected_main_page;
-	public static final String EXTRA_SELECTED_PAGE = "selected_page";
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -122,7 +119,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 		case R.id.menu_new:
 			Intent create_intent = new Intent(MainActivity.this,
 					CreateActivity.class);
-			create_intent.putExtra(EXTRA_SELECTED_PAGE, selected_main_page);
 			startActivity(create_intent);
 			break;
 
@@ -131,7 +127,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 		case R.id.menu_settings:
 			Intent pref_intent = new Intent(MainActivity.this,
 					MainPreferenceActivity.class);
-			pref_intent.putExtra(EXTRA_SELECTED_PAGE, selected_main_page);
 			startActivity(pref_intent);
 			break;
 		case R.id.menu_logout:
@@ -182,7 +177,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
 		mViewPager.setCurrentItem(tab.getPosition());
-		selected_main_page = tab.getPosition();
 	}
 
 	@Override

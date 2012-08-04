@@ -307,7 +307,6 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 				UseCaseDetailActivity.EXTRA_DATA_LIST,
 				mDataList.get(groupPosition).getChildren());
 		intent.putExtra(UseCaseDetailActivity.EXTRA_STRAT_INDEX, childPosition);
-		intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE, MainActivity.selected_main_page);
 		startActivity(intent);
 
 		return true;

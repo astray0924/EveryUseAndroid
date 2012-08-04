@@ -130,8 +130,6 @@ public class UserProfileFragment extends ListFragment {
 				UserProfileDetailActivity.class);
 		intent.putExtra(UserProfileDetailActivity.EXTRA_MENU_SELECTED, position);
 		intent.putExtra(UserProfileDetailActivity.EXTRA_USER, user);
-		intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE,
-				MainActivity.selected_main_page);
 		startActivity(intent);
 	}
 
