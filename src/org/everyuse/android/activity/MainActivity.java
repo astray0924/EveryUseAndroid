@@ -12,15 +12,18 @@ import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -88,27 +91,21 @@ public class MainActivity extends SherlockFragmentActivity implements
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onRestart()
-	 */
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-//		Intent intent = getIntent();
-//		if (intent != null) {
-//			int selected_main_page = intent.getIntExtra(EXTRA_SELECTED_PAGE, 0);
-//			mViewPager.setCurrentItem(selected_main_page);
-//		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.main, menu);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+			SearchView searchView = (SearchView) menu
+					.findItem(R.id.menu_search).getActionView();
+			searchView.setSearchableInfo(searchManager
+					.getSearchableInfo(getComponentName()));
+		}
+
 		return super.onCreateOptionsMenu(menu);
 	}
 

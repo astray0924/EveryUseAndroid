@@ -15,10 +15,18 @@ public class SearchActivity extends SherlockActivity {
 		setContentView(R.layout.activity_search);
 
 		// Get the intent, verify the action and get the query
-		Intent intent = getIntent();
+		handleIntent(getIntent());
+	}
+
+	@Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+	private void handleIntent(Intent intent) {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
-//			doMySearch(query);
+			// doMySearch(query);
 		}
 	}
 }
