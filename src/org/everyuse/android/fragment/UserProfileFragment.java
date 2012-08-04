@@ -7,6 +7,7 @@ import org.everyuse.android.R;
 import org.everyuse.android.activity.MainActivity;
 import org.everyuse.android.activity.UserProfileDetailActivity;
 import org.everyuse.android.model.User;
+import org.everyuse.android.util.RelationshipHelper;
 import org.everyuse.android.util.UserHelper;
 
 import android.content.Intent;
@@ -18,11 +19,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class UserProfileFragment extends ListFragment {
 	private User user;
 	private List<String> menu_list = new ArrayList<String>();
 	public static final String EXTRA_USER = "user";
+
+	private RelationshipHelper relationshipHelper;
 
 	public UserProfileFragment() {
 		super();
@@ -63,7 +67,7 @@ public class UserProfileFragment extends ListFragment {
 		View view = inflater.inflate(R.layout.fragment_user_profile, null);
 		TextView tv_username = (TextView) view.findViewById(R.id.tv_username);
 		tv_username.setText(user.username);
-		
+
 		return view;
 	}
 
@@ -76,11 +80,18 @@ public class UserProfileFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		// 프로파일 메뉴 아이템 초기화
 		menu_list = buildMenuItemList();
-
 		ArrayAdapter<String> aa = new ArrayAdapter<String>(getActivity(),
 				R.layout.list_item_mypage_menu, menu_list);
 		setListAdapter(aa);
+
+		// follow 버튼 초기화
+		ToggleButton tgl_follow = (ToggleButton) getView().findViewById(
+				R.id.tgl_follow);
+		relationshipHelper = new RelationshipHelper(getActivity(), user.id,
+				tgl_follow);
+		relationshipHelper.updateRelationshipInfo();
 	}
 
 	private List<String> buildMenuItemList() {
@@ -115,10 +126,12 @@ public class UserProfileFragment extends ListFragment {
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Intent intent = new Intent(getActivity(), UserProfileDetailActivity.class);
+		Intent intent = new Intent(getActivity(),
+				UserProfileDetailActivity.class);
 		intent.putExtra(UserProfileDetailActivity.EXTRA_MENU_SELECTED, position);
 		intent.putExtra(UserProfileDetailActivity.EXTRA_USER, user);
-		intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE, MainActivity.selected_main_page);
+		intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE,
+				MainActivity.selected_main_page);
 		startActivity(intent);
 	}
 
