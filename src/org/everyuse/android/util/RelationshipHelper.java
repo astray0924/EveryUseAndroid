@@ -2,7 +2,10 @@ package org.everyuse.android.util;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -21,6 +24,8 @@ public class RelationshipHelper {
 
 	private OnRelationshipUpdateHandler handler;
 
+	private ToggleButton tgl_follow;
+
 	public static class Relationship {
 		public int id;
 		public int followed_id;
@@ -31,13 +36,47 @@ public class RelationshipHelper {
 		public void onUpdate(Relationship relationship);
 	}
 
-	public RelationshipHelper(final Context context, int writer_id) {
+	public RelationshipHelper(final Context context, int followed_id,
+			final ToggleButton tgl_follow) {
 		this.context = context;
 		this.follower_id = UserHelper.getCurrentUser(context).id;
-		this.followed_id = writer_id;
+		this.followed_id = followed_id;
+		this.tgl_follow = tgl_follow;
 
 		client = new AsyncHttpClient();
 		client.addHeader("Content-type", "application/x-www-form-urlencoded");
+
+		tgl_follow.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				if (tgl_follow.isChecked()) {
+					followUser();
+				} else {
+					unfollowUser();
+				}
+			}
+
+		});
+
+		// 만약 글쓴이가 현재 사용자와 같다면 코멘트 및 팔로우 기능 해제
+		if (UserHelper.isCurrentUser(context, followed_id)) {
+			hideFollowButton();
+		}
+
+	}
+
+	private void hideFollowButton() {
+		tgl_follow.setVisibility(View.GONE);
+	}
+
+	private void updateButtonState(Relationship relationship) {
+		if (relationship != null) { // not following
+			tgl_follow.setChecked(true);
+		} else {
+			tgl_follow.setChecked(false);
+		}
+
 	}
 
 	public void updateRelationshipInfo() {
@@ -52,7 +91,7 @@ public class RelationshipHelper {
 			@Override
 			public void onSuccess(String response) {
 				Log.d("Relationship", response);
-				
+
 				relationship = gson.fromJson(response, Relationship.class);
 
 			}
@@ -70,6 +109,8 @@ public class RelationshipHelper {
 			 */
 			@Override
 			public void onFinish() {
+				updateButtonState(relationship);
+
 				if (handler != null) {
 					handler.onUpdate(relationship);
 				}

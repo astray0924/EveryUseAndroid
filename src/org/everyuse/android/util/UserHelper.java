@@ -29,6 +29,16 @@ public class UserHelper {
 		editor.putString("user_group", user.user_group);
 		editor.commit();
 	}
+	
+	public static boolean isCurrentUser(Context context, User user) {
+		User current_user = getCurrentUser(context);
+		return (current_user.equals(user));
+	}
+	
+	public static boolean isCurrentUser(Context context, int user_id) {
+		User current_user = getCurrentUser(context);
+		return (current_user.id == user_id);
+	}
 
 	public static User getCurrentUser(Context context) {
 		SharedPreferences prefs = context

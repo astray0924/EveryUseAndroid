@@ -19,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -43,7 +45,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 	private static ViewPager pager;
 	private static ItemsPagerAdapter pager_adapter;
 	private static ImageDownloader image_downloader;
-	
+
 	private int selected_main_page;
 
 	/*
@@ -63,20 +65,25 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		// initialize
 		initialize();
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.actionbarsherlock.app.SherlockActivity#onOptionsItemSelected(com.actionbarsherlock.view.MenuItem)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.actionbarsherlock.app.SherlockActivity#onOptionsItemSelected(com.
+	 * actionbarsherlock.view.MenuItem)
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			Intent intent = new Intent(this, MainActivity.class);
-			intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE, selected_main_page);
+			intent.putExtra(MainActivity.EXTRA_SELECTED_PAGE,
+					selected_main_page);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 		}
-		
+
 		return true;
 	}
 
@@ -112,8 +119,9 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			throw new IllegalStateException(
 					getString(R.string.msg_missing_data));
 		}
-		
-		selected_main_page = intent.getIntExtra(MainActivity.EXTRA_SELECTED_PAGE, 0);
+
+		selected_main_page = intent.getIntExtra(
+				MainActivity.EXTRA_SELECTED_PAGE, 0);
 	}
 
 	private class ItemsPagerAdapter extends FragmentStatePagerAdapter {
@@ -125,7 +133,8 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 		@Override
 		public Fragment getItem(int position) {
 			UseCase data = data_list.get(position);
-			return DetailFragment.newInstance(data);
+			DetailFragment fragment = DetailFragment.newInstance(data);
+			return fragment;
 		}
 
 		@Override
@@ -188,30 +197,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 			// 코멘트 가져오기
 			commentsHelper.updateCurrentUserCommentsInfo();
-
-			// RelationshipHelper 초기화
-			relationshipHelper = new RelationshipHelper(getActivity(),
-					data.writer_id);
-			relationshipHelper
-					.setOnRelationshipUpdateHandler(new OnRelationshipUpdateHandler() {
-
-						@Override
-						public void onUpdate(Relationship relationship) {
-							updateRelationshipUpdateState(relationship);
-						}
-
-					});
-
-			relationshipHelper.updateRelationshipInfo();
-		}
-
-		private void updateRelationshipUpdateState(Relationship relationship) {
-			if (relationship != null) { // not following
-				tgl_follow.setChecked(true);
-			} else {
-				tgl_follow.setChecked(false);
-			}
-
 		}
 
 		/*
@@ -282,18 +267,10 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			}
 		}
 
-		private void invalidateViewPageItems() {
-			// Force ViewPager to redraw it's children
-			int item_id = pager.getCurrentItem();
-			pager.setAdapter(pager_adapter);
-			pager.setCurrentItem(item_id);
-		}
-		
 		private void hideCommentButtons() {
 			View comment_panel = getView().findViewById(R.id.comment_panel);
 			comment_panel.setVisibility(View.GONE);
 			tgl_scrap.setVisibility(View.GONE);
-			tgl_follow.setVisibility(View.GONE);
 		}
 
 		/*
@@ -311,23 +288,9 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 
 			// follow 버튼 초기화
 			tgl_follow = (ToggleButton) page.findViewById(R.id.tgl_follow);
-			tgl_follow.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View view) {
-					if (tgl_follow.isChecked()) {
-						relationshipHelper.followUser();
-					} else {
-						relationshipHelper.unfollowUser();
-					}
-
-					// Force ViewPager to redraw it's children
-					// 이래야 다음 페이지가 같은 사용자일 경우, Following 상태가 제대로 업데이트됨
-					// 기본적으론 다음 페이지는 미리 그려지기 때문에, 다음 페이지의 Following 상태는 업데이트 안됨. 
-					invalidateViewPageItems();
-				}
-
-			});
+			relationshipHelper = new RelationshipHelper(getActivity(),
+					data.writer_id, tgl_follow);
+			relationshipHelper.updateRelationshipInfo();
 
 			// 코멘트 버튼 초기화
 			tgl_wow = (ToggleButton) page.findViewById(R.id.tgl_wow);
@@ -410,7 +373,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity {
 			});
 
 			// 만약 글쓴이가 현재 사용자와 같다면 코멘트 및 팔로우 기능 해제
-			if (data.writer_id == UserHelper.getCurrentUser(getActivity()).id) {
+			if (UserHelper.isCurrentUser(getActivity(), data.writer_id)) {
 				hideCommentButtons();
 			}
 			display(page, data);

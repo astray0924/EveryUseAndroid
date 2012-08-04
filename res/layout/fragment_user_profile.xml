@@ -4,27 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/profile_panel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <ImageView
-            android:id="@+id/iv_user_photo"
-            style="@style/PictureStyle.Thumb"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_social_person" />
-
-        <TextView
-            android:id="@+id/tv_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/iv_user_photo"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </RelativeLayout>
+    <include layout="@layout/snippet_profile_panel" />
 
     <ListView
         android:id="@android:id/list"
