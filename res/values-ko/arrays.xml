@@ -24,8 +24,8 @@
         <item>Me too</item>
     </string-array>
     <string-array name="user_group_list">
-        <item>housewife</item>
-        <item>student</item>
+        <item>주부</item>
+        <item>학생</item>
     </string-array>
     <string-array name="user_group_values_list">
         <item>housewife</item>
