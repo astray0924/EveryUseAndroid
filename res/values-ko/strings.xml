@@ -9,7 +9,7 @@
     <string name="title_activity_index">EveryUse</string>
     <string name="title_activity_register">Create a new account</string>
     <string name="title_activity_main">EveryUse</string>
-    <string name="title_activity_create">Create a use</string>
+    <string name="title_activity_create">공유하기</string>
     
     <!-- menus -->
     <string name="menu_create">완료</string>
@@ -18,11 +18,11 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_about">About</string>
-    <string name="menu_shared">Uses I Shared</string>
-    <string name="menu_commented">Uses I Commented</string>
-    <string name="menu_scraped">Scraped uses</string>
-    <string name="menu_following">Following</string>
-    <string name="menu_follower">Follower</string>
+    <string name="menu_shared">내가 올린 사례</string>
+    <string name="menu_commented">코멘트 한 사례</string>
+    <string name="menu_scraped">스크랩 한 사례</string>
+    <string name="menu_following">내가 Follow하는 사용자</string>
+    <string name="menu_follower">나를 Follow하는 사용자</string>
 
     <!-- UI components -->
     <string name="btn_login">Login</string>
@@ -31,7 +31,9 @@
     <string name="btn_create">Create</string>
     <string name="btn_from_camera">Camera</string>
     <string name="btn_from_gallery">Gallery</string>
-    <string name="tv_photo">Add picture</string>
+    <string name="btn_similar_item">이 물건을 다른 목적으로 사용한 사례 올리기</string>
+    <string name="btn_similar_purpose">다른 물건을 이 목적으로 사용한 사례 올리기</string>
+    <string name="tv_photo">사진 올리기</string>
     <string name="tv_username">ID</string>
     <string name="tv_email">EMAIL</string>
     <string name="tv_password">PASSWORD</string>

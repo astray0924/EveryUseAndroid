@@ -27,6 +27,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:textOff="Follow"
-        android:textOn="Following" />
+        android:textOn="UnFollow" />
 
 </RelativeLayout>

@@ -1,5 +1,5 @@
 <resources>
-	
+
     <string name="app_name">EveryUse</string>
     <string name="title_top">Top</string>
     <string name="title_feed">Feed</string>
@@ -10,7 +10,7 @@
     <string name="title_activity_register">Create a new account</string>
     <string name="title_activity_main">EveryUse</string>
     <string name="title_activity_create">Create a use</string>
-    
+
     <!-- menus -->
     <string name="menu_create">Create Use</string>
     <string name="menu_search">Search</string>
@@ -31,6 +31,8 @@
     <string name="btn_create">Create</string>
     <string name="btn_from_camera">Camera</string>
     <string name="btn_from_gallery">Gallery</string>
+    <string name="btn_similar_item">I have similar use of something</string>
+    <string name="btn_similar_purpose">I have similar use of something</string>
     <string name="tv_photo">Add picture</string>
     <string name="tv_username">ID</string>
     <string name="tv_email">EMAIL</string>
@@ -66,7 +68,7 @@
     <string name="msg_wrong_user_id">user_id must be bigger than 0!</string>
     <string name="msg_user_session_invalid">User session is invalid!</string>
     <string name="msg_intent_parameter_not_set">Required intent parameter is not set!</string>
-    
+
     <!-- preferences -->
     <string name="pref_title_user_group">User Group</string>
     <string name="pref_category_user_group">User Group</string>
