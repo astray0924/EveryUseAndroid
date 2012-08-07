@@ -99,13 +99,13 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.main, menu);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-			SearchView searchView = (SearchView) menu
-					.findItem(R.id.menu_search).getActionView();
-			searchView.setSearchableInfo(searchManager
-					.getSearchableInfo(getComponentName()));
-		}
+//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//			SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//			SearchView searchView = (SearchView) menu
+//					.findItem(R.id.menu_search).getActionView();
+//			searchView.setSearchableInfo(searchManager
+//					.getSearchableInfo(getComponentName()));
+//		}
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -119,9 +119,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 					CreateActivity.class);
 			startActivity(create_intent);
 			break;
-
-		case R.id.menu_search:
-			break;
+		/*
+		 * case R.id.menu_search: break;
+		 */
 		case R.id.menu_settings:
 			Intent pref_intent = new Intent(MainActivity.this,
 					MainPreferenceActivity.class);
@@ -241,14 +241,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 			if (index >= getCount()) {
 				throw new IllegalArgumentException("Tab index out of bound");
 			}
-			
+
 			Fragment fragment = null;
 			try {
 				fragment = fragment_list.get(index);
 			} catch (IndexOutOfBoundsException e) {
 				Log.d("MainActivity", "Tab index out of bound");
 			}
-			
+
 			return fragment;
 		}
 
