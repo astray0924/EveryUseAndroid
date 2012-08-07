@@ -3,7 +3,7 @@ package org.everyuse.android.activity;
 import java.util.ArrayList;
 
 import org.everyuse.android.R;
-import org.everyuse.android.fragment.DetailFragment;
+import org.everyuse.android.fragment.UseCaseDetailFragment;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.ImageDownloader;
 
@@ -20,7 +20,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 public class UseCaseDetailActivity extends SherlockFragmentActivity implements
-		DetailFragment.OnFollowUpdateListener {
+		UseCaseDetailFragment.OnFollowUpdateListener {
 	public static String EXTRA_DATA = "DATA";
 	public static String EXTRA_DATA_LIST = "DATA_LIST";
 	public static String EXTRA_STRAT_INDEX = "START_INDEX";
@@ -108,7 +108,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 		@Override
 		public Fragment getItem(int position) {
 			UseCase data = data_list.get(position);
-			DetailFragment fragment = DetailFragment.newInstance(data);
+			UseCaseDetailFragment fragment = UseCaseDetailFragment.newInstance(data);
 			return fragment;
 		}
 

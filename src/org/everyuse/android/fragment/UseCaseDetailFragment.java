@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-public class DetailFragment extends Fragment {
+public class UseCaseDetailFragment extends Fragment {
 	private static String DATA = "DATA";
 	private static ImageDownloader image_downloader;
 	private CommentsHelper commentsHelper;
@@ -60,13 +60,13 @@ public class DetailFragment extends Fragment {
 		}
 	}
 
-	public DetailFragment() {
+	public UseCaseDetailFragment() {
 		// image downloader 초기화
 		image_downloader = new ImageDownloader();
 	}
 
-	public static DetailFragment newInstance(UseCase data) {
-		DetailFragment f = new DetailFragment();
+	public static UseCaseDetailFragment newInstance(UseCase data) {
+		UseCaseDetailFragment f = new UseCaseDetailFragment();
 
 		// supply single UseCase as an argument.
 		Bundle args = new Bundle();
