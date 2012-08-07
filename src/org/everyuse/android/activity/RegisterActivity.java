@@ -94,6 +94,13 @@ public class RegisterActivity extends SherlockActivity {
 				str_password_confirm = et_password_confirm.getText().toString();
 				str_user_group = sp_user_group.getSelectedItem().toString()
 						.toLowerCase();
+				
+				// TODO 제대로 구현 필요
+				if (str_user_group.equals("학생")) {
+					str_user_group = "student";
+				} else if (str_user_group.equals("주부")) {
+					str_user_group = "housewife";
+				}
 
 				if (str_username.equals("") || str_email.equals("")
 						|| str_password.equals("")
