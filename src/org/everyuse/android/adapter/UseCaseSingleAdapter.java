@@ -45,6 +45,10 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 					.findViewById(R.id.tv_purpose_type);
 			holder.other_info = (TextView) convertView
 					.findViewById(R.id.tv_other_info);
+			holder.wow_count = (TextView) convertView
+					.findViewById(R.id.tv_wow_count);
+			holder.metoo_count = (TextView) convertView
+					.findViewById(R.id.tv_metoo_count);
 
 			convertView.setTag(holder);
 		}
@@ -58,6 +62,8 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 		holder.purpose.setText(use_case.purpose);
 		holder.purpose_type.setText(use_case.purpose_type);
 		holder.other_info.setText(use_case.getOtherInfoString());
+		holder.wow_count.setText("Wow:" + use_case.wows_count);
+		holder.metoo_count.setText("Metoo:" + use_case.metoos_count);		
 
 		return convertView;
 	}
@@ -84,6 +90,8 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 		public TextView purpose;
 		public TextView purpose_type;
 		public TextView other_info;
+		public TextView wow_count;
+		public TextView metoo_count;
 	}
 
 }

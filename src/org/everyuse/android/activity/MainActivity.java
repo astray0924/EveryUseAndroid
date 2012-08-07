@@ -43,12 +43,21 @@ public class MainActivity extends SherlockFragmentActivity implements
 	 * intensive, it may be best to switch to a
 	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
-	SectionsPagerAdapter mSectionsPagerAdapter;
+	private SectionsPagerAdapter mSectionsPagerAdapter;
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
-	ViewPager mViewPager;
+	private ViewPager mViewPager;
+	
+	private static final String EXTRA_SELECTED_TAB = "selected_tab"; 
+	private int selected_tab;
+
+	@Override
+	public boolean onSearchRequested() {
+		// TODO Auto-generated method stub
+		return super.onSearchRequested();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +87,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 					@Override
 					public void onPageSelected(int position) {
 						actionBar.setSelectedNavigationItem(position);
+						selected_tab = position;
 					}
 				});
 
@@ -175,6 +185,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
 		mViewPager.setCurrentItem(tab.getPosition());
+		selected_tab = tab.getPosition();
 	}
 
 	@Override

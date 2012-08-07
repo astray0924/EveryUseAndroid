@@ -149,10 +149,10 @@ public class UseCaseDetailFragment extends Fragment {
 		} else {
 			tgl_wow.setChecked(false);
 		}
-		String wow_count = String.valueOf(comments.getWowCount());
+		String wow_count = "Wow: " + String.valueOf(comments.getWowCount());
 		tgl_wow.setText(wow_count);
-		tgl_wow.setTextOn(wow_count + "");
-		tgl_wow.setTextOff(wow_count + "");
+		tgl_wow.setTextOn(wow_count);
+		tgl_wow.setTextOff(wow_count);
 
 		// update "Me too" button state
 		if (comments.isMetooed()) {
@@ -160,7 +160,7 @@ public class UseCaseDetailFragment extends Fragment {
 		} else {
 			tgl_metoo.setChecked(false);
 		}
-		String metoo_count = String.valueOf(comments.getMetooCount());
+		String metoo_count = "Metoo:" + String.valueOf(comments.getMetooCount());
 		tgl_metoo.setText(metoo_count);
 		tgl_metoo.setTextOn(metoo_count);
 		tgl_metoo.setTextOff(metoo_count);
