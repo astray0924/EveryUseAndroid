@@ -41,6 +41,15 @@
                     android:layout_below="@id/tv_item"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
+                <TextView
+                    android:id="@+id/tv_purpose_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_item"
+                    android:layout_toRightOf="@id/tv_purpose"
+                    android:layout_marginLeft="4sp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
                 <ToggleButton
                     android:id="@+id/tgl_scrap"
                     android:layout_width="wrap_content"

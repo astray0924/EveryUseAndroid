@@ -136,10 +136,13 @@ public class UseCaseDetailFragment extends Fragment {
 				.findViewById(R.id.iv_usecase_photo);
 		TextView item = (TextView) page.findViewById(R.id.tv_item);
 		TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);
+		TextView purpose_type = (TextView) page
+				.findViewById(R.id.tv_purpose_type);
 
 		image_downloader.download(data.getPhotoLargeURL(), usecase_photo);
 		item.setText(data.item);
 		purpose.setText(data.purpose);
+		purpose_type.setText(data.purpose_type);
 	}
 
 	private void updateCommentButtonState(Comments comments) {
@@ -160,7 +163,8 @@ public class UseCaseDetailFragment extends Fragment {
 		} else {
 			tgl_metoo.setChecked(false);
 		}
-		String metoo_count = "Metoo:" + String.valueOf(comments.getMetooCount());
+		String metoo_count = "Metoo:"
+				+ String.valueOf(comments.getMetooCount());
 		tgl_metoo.setText(metoo_count);
 		tgl_metoo.setTextOn(metoo_count);
 		tgl_metoo.setTextOff(metoo_count);
