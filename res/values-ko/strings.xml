@@ -29,7 +29,7 @@
     <string name="btn_login">Login</string>
     <string name="btn_register">Register</string>
     <string name="btn_register_done">Done</string>
-    <string name="btn_create">Create</string>
+    <string name="btn_create">완료</string>
     <string name="btn_from_camera">Camera</string>
     <string name="btn_from_gallery">Gallery</string>
     <string name="btn_similar_item">이 물건을 다른 목적으로 사용한 사례 올리기</string>

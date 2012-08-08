@@ -82,13 +82,11 @@
             style="@style/PictureStyle.Preview"
             android:contentDescription="Picture to add" />
 
-        <!--
         <Button
             android:id="@+id/btn_submit"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_create" />
-        -->
+            android:text="@string/btn_create" />
     </LinearLayout>
 
 </ScrollView>

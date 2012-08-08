@@ -205,17 +205,17 @@ public class CreateActivity extends SherlockActivity {
 			}
 
 		});
-		//
-		// Button btn_submit = (Button) findViewById(R.id.btn_submit);
-		// btn_submit.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// // 서버로 데이터 전송
-		// new SubmitTask().execute();
-		// }
-		//
-		// });
+
+		Button btn_submit = (Button) findViewById(R.id.btn_submit);
+		btn_submit.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// 서버로 데이터 전송
+				new SubmitTask().execute();
+			}
+
+		});
 	}
 
 	/**
@@ -231,7 +231,8 @@ public class CreateActivity extends SherlockActivity {
 					getExternalCacheDir());
 		} catch (IOException e) {
 			e.printStackTrace();
-			Toast.makeText(this, "Failed to create temp file", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Failed to create temp file",
+					Toast.LENGTH_SHORT).show();
 			return;
 		}
 
