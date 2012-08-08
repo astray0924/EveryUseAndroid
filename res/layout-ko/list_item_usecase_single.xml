@@ -46,11 +46,11 @@
         android:textColor="?android:attr/textColorTertiary" />
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="12sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <TextView

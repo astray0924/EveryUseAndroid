@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="EveryUseTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar" />
 
@@ -8,7 +8,7 @@
         <item name="android:layout_margin">4dp</item>
         <item name="android:gravity">center</item>
         <item name="android:scaleType">fitCenter</item>
-        <item name="android:background">#FFFFFF</item>
+        <item name="android:src">@drawable/image_loading</item>
     </style>
 
     <style name="PictureStyle.Thumb">

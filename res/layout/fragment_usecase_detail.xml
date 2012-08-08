@@ -19,6 +19,7 @@
 
             <ImageView
                 android:id="@+id/iv_usecase_photo"
+                android:src="@drawable/image_loading"
                 style="@style/PictureStyle.Large" />
 
             <RelativeLayout

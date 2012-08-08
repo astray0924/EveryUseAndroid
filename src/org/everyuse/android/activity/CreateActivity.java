@@ -171,6 +171,10 @@ public class CreateActivity extends SherlockActivity {
 
 		// 사진 ImageView 초기화
 		iv_photo = (ImageView) findViewById(R.id.iv_photo);
+		
+		// 여기서 기본 스타일로 지정된 디폴트 이미지를 지움
+		iv_photo.setImageDrawable(null);
+		iv_photo.setBackgroundResource(android.R.color.background_dark);
 
 		btn_photo_select = (ImageButton) findViewById(R.id.btn_photo_select);
 		btn_photo_select.setOnClickListener(new OnClickListener() {
