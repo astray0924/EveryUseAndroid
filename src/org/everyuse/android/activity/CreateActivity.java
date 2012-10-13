@@ -151,14 +151,6 @@ public class CreateActivity extends SherlockActivity {
 		// 장소 Spinner 초기화
 		sp_place = (Spinner) findViewById(R.id.sp_place);
 		int place_array_id = 0;
-		String user_group = UserHelper.getCurrentUser(this).user_group;
-		if (user_group.equals("housewife")) { // TODO 이 코드는 다른곳으로 빼자
-			place_array_id = R.array.place_housewife;
-		} else if (user_group.equals("student")) {
-			place_array_id = R.array.place_student;
-		} else {
-			// TODO 유저 그룹이 잘못 설정된 경우임
-		}
 
 		if (place_array_id != 0) {
 			ArrayAdapter<CharSequence> place_adapter = ArrayAdapter

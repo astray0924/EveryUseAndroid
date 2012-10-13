@@ -197,8 +197,6 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
 		params.add(new BasicNameValuePair(option_name, String.valueOf(
 				option_value).toLowerCase()));
-		params.add(new BasicNameValuePair("user_group", UserHelper
-				.getCurrentUser(getActivity()).user_group));
 		String query_string = URLEncodedUtils.format(params, "UTF-8");
 
 		return data_url_raw + ".json" + "?" + query_string;

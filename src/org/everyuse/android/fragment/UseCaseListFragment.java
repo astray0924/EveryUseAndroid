@@ -157,13 +157,10 @@ public class UseCaseListFragment extends ListFragment {
 		}
 
 		// build query string using parameters
-		String user_group = UserHelper.getCurrentUser(getActivity()).user_group;
-
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("page", String
 				.valueOf(getCurrentPage())));
 		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
-		params.add(new BasicNameValuePair("user_group", user_group));
 		String query_string = URLEncodedUtils.format(params, "UTF-8");
 
 		Log.d("data_url", data_url_raw + ".json" + "?" + query_string);
