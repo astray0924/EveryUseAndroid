@@ -253,7 +253,7 @@ public class CommentsHelper {
 	private static String getURL(int type) {
 		switch (type) {
 		case SCRAP:
-			return URLHelper.COMMENTS_SCRAP_URL;
+			return URLHelper.COMMENTS_FAVORITE_URL;
 		case WOW:
 			return URLHelper.COMMENTS_WOW_URL;
 		case METOO:
