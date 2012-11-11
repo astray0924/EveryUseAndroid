@@ -44,9 +44,9 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class IndexActivity extends SherlockFragmentActivity {
-	private EditText et_username;
+	private EditText et_email;
 	private EditText et_password;
-	private String str_username;
+	private String str_email;
 	private String str_password;
 
 	@Override
@@ -109,7 +109,7 @@ public class IndexActivity extends SherlockFragmentActivity {
 
 	private void initUI() {
 		// initialize text fields
-		et_username = (EditText) findViewById(R.id.et_username);
+		et_email = (EditText) findViewById(R.id.et_email);
 		et_password = (EditText) findViewById(R.id.et_password);
 
 		// initialize buttons
@@ -119,10 +119,10 @@ public class IndexActivity extends SherlockFragmentActivity {
 			@Override
 			public void onClick(View arg0) {
 				// Get Username and Password String
-				str_username = et_username.getText().toString().trim();
-				str_password = et_password.getText().toString().trim();
+				str_email = et_email.getText().toString();
+				str_password = et_password.getText().toString();
 
-				if (str_username.equals("") || str_password.equals("")) {
+				if (str_email.equals("") || str_password.equals("")) {
 					Toast.makeText(getApplicationContext(),
 							R.string.msg_complete_form, Toast.LENGTH_SHORT)
 							.show();
@@ -165,14 +165,14 @@ public class IndexActivity extends SherlockFragmentActivity {
 		protected Boolean doInBackground(Void... args) {
 			HttpClient client = new DefaultHttpClient();
 
-			if (str_username.equals("") || str_password.equals("")) {
+			if (str_email.equals("") || str_password.equals("")) {
 				return null;
 			}
 
 			// Make Parameters
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("user_session[username]",
-					str_username));
+			params.add(new BasicNameValuePair("user_session[email]",
+					str_email));
 			params.add(new BasicNameValuePair("user_session[password]",
 					str_password));
 
@@ -192,7 +192,7 @@ public class IndexActivity extends SherlockFragmentActivity {
 						String res_string = EntityUtils.toString(res_entity);
 
 						if (code >= 300) { // error
-							String[] fields = { "username", "password" };
+							String[] fields = { "email", "password" };
 							error = ErrorHelper.getMostProminentError(
 									res_string, fields);
 

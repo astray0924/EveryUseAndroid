@@ -35,7 +35,7 @@
     <string name="btn_similar_item">I have similar use of something</string>
     <string name="btn_similar_purpose">I have similar use of something</string>
     <string name="tv_photo">Add picture</string>
-    <string name="tv_username">ID</string>
+    <string name="tv_username">USERNAME</string>
     <string name="tv_email">EMAIL</string>
     <string name="tv_password">PASSWORD</string>
     <string name="tv_password_confirm">CONFIRM PASSWORD</string>
