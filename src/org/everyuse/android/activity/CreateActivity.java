@@ -436,7 +436,7 @@ public class CreateActivity extends SherlockActivity {
 		String selectedImagePath;
 		// 1:MEDIA GALLERY --- query from MediaStore.Images.Media.DATA
 		String[] projection = { MediaStore.Images.Media.DATA };
-		Cursor cursor = managedQuery(uri, projection, null, null, null);
+		Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
 		if (cursor != null) {
 			int column_index = cursor
 					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -446,6 +446,7 @@ public class CreateActivity extends SherlockActivity {
 			selectedImagePath = uri.getPath();
 		}
 
+		cursor.close();
 		return selectedImagePath;
 	}
 
