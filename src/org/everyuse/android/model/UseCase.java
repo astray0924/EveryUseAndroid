@@ -15,6 +15,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class UseCase implements Parcelable {
 	public long id;
@@ -30,7 +31,7 @@ public class UseCase implements Parcelable {
 	public int wows_count;
 	public int metoos_count;
 
-	private static Gson gson = new Gson();
+	private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create();
 	private static DateFormat year_month_day_format = DateFormat
 			.getDateInstance(DateFormat.MEDIUM);
 	
