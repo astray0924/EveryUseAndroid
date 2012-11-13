@@ -171,7 +171,7 @@ public class IndexActivity extends SherlockFragmentActivity {
 
 			// Make Parameters
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("user_session[email]",
+			params.add(new BasicNameValuePair("user_session[username]",
 					str_email));
 			params.add(new BasicNameValuePair("user_session[password]",
 					str_password));
