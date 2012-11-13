@@ -95,7 +95,7 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 		holder.item.setText(use_case.item);
 		holder.purpose.setText(use_case.purpose);
 		holder.purpose_type.setText(use_case.purpose_type);
-		holder.other_info.setText(use_case.getOtherInfoString());
+		holder.other_info.setText(use_case.getMetaInfoString());
 
 		return convertView;
 	}

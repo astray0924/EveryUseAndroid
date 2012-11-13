@@ -36,7 +36,7 @@ public class UseCase implements Parcelable {
 			.getDateInstance(DateFormat.MEDIUM);
 	
 	private static DateFormat today_format = new SimpleDateFormat("hh:mm aaa");
-	private static DateFormat other_day_format = new SimpleDateFormat("MMM d, yyyy, hh:mm aaa");
+	private static DateFormat other_day_format = new SimpleDateFormat("yyyy-MM-dd");
 
 	public String getPurposeString() {
 		if (purpose_type == null) {
@@ -46,7 +46,7 @@ public class UseCase implements Parcelable {
 		return purpose_type + " " + purpose;
 	}
 
-	public String getOtherInfoString() {
+	public String getMetaInfoString() {
 		return "by " + writer_name + ", " + getDateString(created_at);
 	}
 
