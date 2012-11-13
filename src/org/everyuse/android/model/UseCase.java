@@ -31,7 +31,7 @@ public class UseCase implements Parcelable {
 	public int wows_count;
 	public int metoos_count;
 
-	private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create();
+	private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 	private static DateFormat year_month_day_format = DateFormat
 			.getDateInstance(DateFormat.MEDIUM);
 	
