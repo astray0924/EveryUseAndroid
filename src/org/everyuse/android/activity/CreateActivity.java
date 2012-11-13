@@ -81,7 +81,6 @@ public class CreateActivity extends SherlockActivity {
 	public static final String EXTRA_PURPOSE = "purpose";
 	private String pre_item;
 	private String pre_purpose;
-	private int selected_main_page;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +162,7 @@ public class CreateActivity extends SherlockActivity {
 
 		// 사진 ImageView 초기화
 		iv_photo = (ImageView) findViewById(R.id.iv_photo);
-		
+
 		// 여기서 기본 스타일로 지정된 디폴트 이미지를 지움
 		iv_photo.setImageDrawable(null);
 		iv_photo.setBackgroundResource(android.R.color.background_dark);
@@ -406,17 +405,10 @@ public class CreateActivity extends SherlockActivity {
 				// Resize and rotate the original bitmap
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 3;
-				Bitmap bitmap_resized = BitmapFactory.decodeFile(photo_path,
-						options);
-				Bitmap bitmap_rotated = rotateBitmap(bitmap_resized, 90);
+				Bitmap bitmap = rotateBitmap(
+						BitmapFactory.decodeFile(photo_path, options), 90);
 
-				// 임시 파일 삭제
-				File f = new File(photo_path);
-				if (f.exists()) {
-					f.delete();
-				}
-
-				new SaveBitmapToSD().execute(bitmap_rotated);
+				new SaveBitmapToSD().execute(bitmap);
 				break;
 			}
 			}
@@ -436,7 +428,8 @@ public class CreateActivity extends SherlockActivity {
 		String selectedImagePath;
 		// 1:MEDIA GALLERY --- query from MediaStore.Images.Media.DATA
 		String[] projection = { MediaStore.Images.Media.DATA };
-		Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+		Cursor cursor = getContentResolver().query(uri, projection, null, null,
+				null);
 		if (cursor != null) {
 			int column_index = cursor
 					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -446,7 +439,6 @@ public class CreateActivity extends SherlockActivity {
 			selectedImagePath = uri.getPath();
 		}
 
-		cursor.close();
 		return selectedImagePath;
 	}
 
