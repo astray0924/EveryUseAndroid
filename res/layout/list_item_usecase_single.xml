@@ -35,10 +35,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_item"
         android:layout_toRightOf="@id/tv_purpose_type"
+        android:maxEms="6"
+        android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/tv_other_info"
+        android:id="@+id/tv_meta_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tv_item"
