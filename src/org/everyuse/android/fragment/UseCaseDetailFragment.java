@@ -1,7 +1,7 @@
 package org.everyuse.android.fragment;
 
 import org.everyuse.android.R;
-import org.everyuse.android.activity.CreateActivity;
+import org.everyuse.android.activity.UseCaseCreateActivity;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.CommentsHelper;
 import org.everyuse.android.util.CommentsHelper.Comments;
@@ -264,8 +264,8 @@ public class UseCaseDetailFragment extends Fragment {
 				TextView tv_item = (TextView) page.findViewById(R.id.tv_item);
 				String pre_item = tv_item.getText().toString();
 
-				Intent intent = new Intent(getActivity(), CreateActivity.class);
-				intent.putExtra(CreateActivity.EXTRA_ITEM, pre_item);
+				Intent intent = new Intent(getActivity(), UseCaseCreateActivity.class);
+				intent.putExtra(UseCaseCreateActivity.EXTRA_ITEM, pre_item);
 				startActivity(intent);
 			}
 
@@ -281,8 +281,8 @@ public class UseCaseDetailFragment extends Fragment {
 						.findViewById(R.id.tv_purpose);
 				String pre_purpose = tv_purpose.getText().toString();
 
-				Intent intent = new Intent(getActivity(), CreateActivity.class);
-				intent.putExtra(CreateActivity.EXTRA_PURPOSE, pre_purpose);
+				Intent intent = new Intent(getActivity(), UseCaseCreateActivity.class);
+				intent.putExtra(UseCaseCreateActivity.EXTRA_PURPOSE, pre_purpose);
 				startActivity(intent);
 
 			}
