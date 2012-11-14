@@ -149,7 +149,7 @@ public class CreateActivity extends SherlockActivity {
 
 		// 장소 Spinner 초기화
 		sp_place = (Spinner) findViewById(R.id.sp_place);
-		int place_array_id = 0;
+		int place_array_id = R.array.place_student;		// TODO 장소 어레이는 일단 학생용으로...
 
 		if (place_array_id != 0) {
 			ArrayAdapter<CharSequence> place_adapter = ArrayAdapter
