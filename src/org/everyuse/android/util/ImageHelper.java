@@ -40,6 +40,7 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.hardware.Camera.Size;
 import android.view.View;
 
@@ -368,5 +369,24 @@ public final class ImageHelper {
 			}
 		}
 		return optimalSize;
+	}
+
+	public static Bitmap rotateBitmap(Bitmap b, int degrees) {
+		if (degrees != 0 && b != null) {
+			Matrix m = new Matrix();
+			m.setRotate(degrees, (float) b.getWidth() / 2,
+					(float) b.getHeight() / 2);
+			try {
+				Bitmap b2 = Bitmap.createBitmap(b, 0, 0, b.getWidth(),
+						b.getHeight(), m, true);
+				if (b != b2) {
+					b.recycle();
+					b = b2;
+				}
+			} catch (OutOfMemoryError ex) {
+				// We have no memory to rotate. Return the original bitmap.
+			}
+		}
+		return b;
 	}
 }

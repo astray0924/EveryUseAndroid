@@ -23,6 +23,7 @@ import org.everyuse.android.R;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.ErrorHelper;
+import org.everyuse.android.util.MediaHelper;
 import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
 import org.json.JSONException;
@@ -55,7 +56,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-public class CreateActivity extends SherlockActivity {
+public class UseCaseCreateActivity extends SherlockActivity {
 	private EditText et_item;
 	private EditText et_purpose;
 	private Spinner sp_purpose_type;
@@ -64,6 +65,7 @@ public class CreateActivity extends SherlockActivity {
 	private ImageView iv_photo;
 
 	// photo
+	private String camera_photo_uri_temp;
 	private Uri camera_photo_uri;
 	private File photo_file;
 	private static final int PICK_FROM_CAMERA = 0;
@@ -190,7 +192,7 @@ public class CreateActivity extends SherlockActivity {
 					}
 				};
 
-				new AlertDialog.Builder(CreateActivity.this)
+				new AlertDialog.Builder(UseCaseCreateActivity.this)
 						.setTitle("Select the method")
 						.setPositiveButton(getString(R.string.btn_from_camera),
 								cameraListener)
@@ -220,21 +222,9 @@ public class CreateActivity extends SherlockActivity {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 		// 임시로 사용할 파일의 경로를 생성
-		File temp_file = null;
-		try {
-			temp_file = File.createTempFile("everyuse_", ".png",
-					getExternalCacheDir());
-		} catch (IOException e) {
-			e.printStackTrace();
-			Toast.makeText(this, "Failed to create temp file",
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
-
-		camera_photo_uri = Uri.fromFile(temp_file);
-
+		camera_photo_uri = MediaHelper.getOutputMediaFileUri(MediaHelper.MEDIA_TYPE_IMAGE);
+		camera_photo_uri_temp = camera_photo_uri.toString();
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, camera_photo_uri);
-		intent.putExtra("return-data", true);
 		startActivityForResult(intent, PICK_FROM_CAMERA);
 	}
 
@@ -257,7 +247,7 @@ public class CreateActivity extends SherlockActivity {
 
 		@Override
 		protected void onPreExecute() {
-			indicator = new ProgressDialog(CreateActivity.this,
+			indicator = new ProgressDialog(UseCaseCreateActivity.this,
 					ProgressDialog.STYLE_SPINNER);
 			indicator.setMessage("Please wait...");
 			indicator.show();
@@ -359,17 +349,17 @@ public class CreateActivity extends SherlockActivity {
 			indicator.dismiss();
 
 			if (success) {
-				Toast.makeText(CreateActivity.this,
+				Toast.makeText(UseCaseCreateActivity.this,
 						R.string.msg_create_success, Toast.LENGTH_SHORT).show();
 
-				Intent intent = new Intent(CreateActivity.this,
+				Intent intent = new Intent(UseCaseCreateActivity.this,
 						UseCaseDetailActivity.class);
 				intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, created);
 				startActivity(intent);
 
 				finish();
 			} else {
-				Toast.makeText(CreateActivity.this, msg_error,
+				Toast.makeText(UseCaseCreateActivity.this, msg_error,
 						Toast.LENGTH_SHORT).show();
 			}
 		}
@@ -400,7 +390,7 @@ public class CreateActivity extends SherlockActivity {
 			}
 
 			case PICK_FROM_CAMERA: {
-				String photo_path = getPath(camera_photo_uri);
+				String photo_path = getPath(Uri.parse(camera_photo_uri_temp));
 
 				// Resize and rotate the original bitmap
 				BitmapFactory.Options options = new BitmapFactory.Options();
@@ -449,7 +439,7 @@ public class CreateActivity extends SherlockActivity {
 
 		@Override
 		protected void onPreExecute() {
-			indicator = new ProgressDialog(CreateActivity.this,
+			indicator = new ProgressDialog(UseCaseCreateActivity.this,
 					ProgressDialog.STYLE_SPINNER);
 			indicator.setMessage("Processing...");
 			indicator.show();

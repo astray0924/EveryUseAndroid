@@ -12,11 +12,9 @@ import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
 
 import android.app.AlertDialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,7 +22,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -50,8 +47,33 @@ public class MainActivity extends SherlockFragmentActivity implements
 	 */
 	private ViewPager mViewPager;
 	
-	private static final String EXTRA_SELECTED_TAB = "selected_tab"; 
-	private int selected_tab;
+	private static String SELECTED_TAB_KEY = "SELECTED_TAB_KEY";
+	private int selected_tab = 0;
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		saveSelectedTabPosition(selected_tab);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		selected_tab = getSelectedTabPosition();
+		getActionBar().setSelectedNavigationItem(selected_tab);
+	}
+	
+	private void saveSelectedTabPosition(int selected_tab) {
+		SharedPreferences.Editor editor = getPreferences(0).edit();
+		editor.putInt(SELECTED_TAB_KEY, selected_tab);
+		editor.commit();
+	}
+	
+	private int getSelectedTabPosition() {
+		return getPreferences(0).getInt(SELECTED_TAB_KEY, 0);
+	}
 
 	@Override
 	public boolean onSearchRequested() {
@@ -126,7 +148,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		switch (id) {
 		case R.id.menu_new:
 			Intent create_intent = new Intent(MainActivity.this,
-					CreateActivity.class);
+					UseCaseCreateActivity.class);
 			startActivity(create_intent);
 			break;
 		/*
