@@ -54,18 +54,25 @@ public class MainActivity extends SherlockFragmentActivity implements
 	protected void onPause() {
 		super.onPause();
 		
-		SharedPreferences.Editor editor = getPreferences(0).edit();
-		editor.putInt(SELECTED_TAB_KEY, selected_tab);
-		editor.commit();
+		saveSelectedTabPosition(selected_tab);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
-		SharedPreferences pref = getPreferences(0);
-		selected_tab = pref.getInt(SELECTED_TAB_KEY, 0);
+		selected_tab = getSelectedTabPosition();
 		getActionBar().setSelectedNavigationItem(selected_tab);
+	}
+	
+	private void saveSelectedTabPosition(int selected_tab) {
+		SharedPreferences.Editor editor = getPreferences(0).edit();
+		editor.putInt(SELECTED_TAB_KEY, selected_tab);
+		editor.commit();
+	}
+	
+	private int getSelectedTabPosition() {
+		return getPreferences(0).getInt(SELECTED_TAB_KEY, 0);
 	}
 
 	@Override
