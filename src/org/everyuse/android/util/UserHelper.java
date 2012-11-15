@@ -5,9 +5,6 @@ import org.everyuse.android.model.User;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-
 
 public class UserHelper {
 	public static boolean DEVELOPER_MODE = true;
@@ -19,7 +16,7 @@ public class UserHelper {
 
 		// store into shared preferences
 		SharedPreferences prefs = context.getSharedPreferences("USER",
-				Activity.MODE_WORLD_WRITEABLE);
+				Activity.MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putInt("id", user.id);
 		editor.putString("username", user.username);
@@ -28,24 +25,24 @@ public class UserHelper {
 		editor.putString("single_access_token", user.single_access_token);
 		editor.commit();
 	}
-	
+
 	public static boolean isCurrentUser(Context context, User user) {
 		User current_user = getCurrentUser(context);
 		return (current_user.equals(user));
 	}
-	
+
 	public static boolean isCurrentUser(Context context, int user_id) {
 		User current_user = getCurrentUser(context);
 		return (current_user.id == user_id);
 	}
-	
+
 	public static int getCurrentUserId(Context context) {
 		return getCurrentUser(context).id;
 	}
 
 	public static User getCurrentUser(Context context) {
-		SharedPreferences prefs = context
-				.getSharedPreferences("USER", Activity.MODE_WORLD_READABLE);
+		SharedPreferences prefs = context.getSharedPreferences("USER",
+				Activity.MODE_PRIVATE);
 		int id = prefs.getInt("id", 0);
 		String username = prefs.getString("username", "");
 		String email = prefs.getString("email", "");
@@ -55,37 +52,22 @@ public class UserHelper {
 		if (id == 0) {
 			return null;
 		} else {
-			return new User(id, username, email, persistence_token, single_access_token);
+			return new User(id, username, email, persistence_token,
+					single_access_token);
 		}
 
 	}
-	
+
 	public static boolean isAuthenticated(Context context) {
 		return (getCurrentUser(context) != null);
 	}
 
 	public static void disposeUser(Context context) {
 		SharedPreferences prefs = context.getSharedPreferences("USER",
-				Activity.MODE_WORLD_WRITEABLE);
+				Activity.MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.clear();
 		editor.commit();
 	}
 
-	public static Bitmap rotateBitmap(Bitmap b, int degrees) {
-		if (degrees != 0 && b != null) {
-			Matrix m = new Matrix();
-			m.setRotate(degrees, (float) b.getWidth() / 2, (float) b.getHeight() / 2);
-			try {
-				Bitmap b2 = Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), m, true);
-				if (b != b2) {
-					b.recycle();
-					b = b2;
-				}
-			} catch (OutOfMemoryError ex) {
-				// We have no memory to rotate. Return the original bitmap.
-			}
-		}
-		return b;
-	}
 }
