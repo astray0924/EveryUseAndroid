@@ -27,14 +27,11 @@ import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -44,19 +41,64 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class IndexActivity extends SherlockFragmentActivity {
+	// Strings for logging
+	private final String TAG = this.getClass().getSimpleName();
+	
 	private EditText et_email;
 	private EditText et_password;
 	private String str_email;
 	private String str_password;
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		Log.i(TAG, "onPause");
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		Log.i(TAG, "onStop");
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		Log.i(TAG, "onDestroy");
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		Log.i(TAG, "onResume");
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		Log.i(TAG, "onStart");
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		
+		Log.i(TAG, "onRestart");
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_index);
+		
+		Log.i(TAG, "onCreate");
 
 		initUI();
-
-//		checkConnectivity();
 
 		// TODO: 아이디와 패스워드를 저장하고, 시작 할때마다 로그인하는 방식으로 하자
 		if (isAuthenticated()) {
@@ -89,18 +131,6 @@ public class IndexActivity extends SherlockFragmentActivity {
 			alert.setCancelable(true);
 			alert.show();
 		}
-	}
-
-	private void checkConnectivity() {
-		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-		NetworkInfo mWifi = connManager
-				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-		if (!mWifi.isConnected()) {
-			WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-			wifiManager.setWifiEnabled(true);
-		}
-
 	}
 
 	private boolean isAuthenticated() {

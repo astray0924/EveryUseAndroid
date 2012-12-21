@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 public class UseCaseListWithOptionFragment extends UseCaseListFragment {
+	// Strings for logging
+	private final String TAG = this.getClass().getSimpleName();
 
 	private Spinner sp_option;
 	private int option_array_id;

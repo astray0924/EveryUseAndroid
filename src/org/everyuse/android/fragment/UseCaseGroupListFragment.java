@@ -46,6 +46,9 @@ import android.widget.Toast;
 
 public class UseCaseGroupListFragment extends ExpandableListFragment implements
 		OnChildClickListener {
+	// Strings for logging
+	private final String TAG = this.getClass().getSimpleName();
+		
 	protected ArrayList<UseCaseGroup> mDataList;
 	protected BaseExpandableListAdapter mAdapter;
 	protected DynamicExpandableListView mListView;

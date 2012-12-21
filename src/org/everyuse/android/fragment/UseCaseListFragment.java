@@ -39,6 +39,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class UseCaseListFragment extends ListFragment {
+	// Strings for logging
+	private final String TAG = this.getClass().getSimpleName();
+	
 	protected ArrayList<UseCase> mDataList;
 	protected BaseAdapter mAdapter;
 	protected DynamicListView mListView;

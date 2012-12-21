@@ -22,6 +22,9 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class UserProfileFragment extends ListFragment {
+	// Strings for logging
+	private final String TAG = this.getClass().getSimpleName();
+	
 	private User user;
 	private List<String> menu_list = new ArrayList<String>();
 	public static final String EXTRA_USER = "user";

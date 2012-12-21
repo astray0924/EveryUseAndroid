@@ -26,6 +26,9 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class UseCaseDetailFragment extends Fragment {
+	// Strings for logging
+	private final String TAG = this.getClass().getSimpleName();
+	
 	private static String DATA = "DATA";
 	private static ImageDownloader image_downloader;
 	private CommentsHelper commentsHelper;
