@@ -30,6 +30,26 @@
         <item name="android:contentDescription">preview image</item>
     </style>
 
+    <!-- TextViewStyle -->
+    <style name="TextViewStyle"></style>
+
+    <style name="TextViewStyle.Wrap">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TextViewStyle.Wrap.ListItemMainText">
+        <item name="android:textColor">@color/ThemeOrange</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:maxEms">6</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    
+    <style name="TextViewStyle.Wrap.ListItemCommentText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
     <!-- ButtonStyle -->
     <style name="ButtonStyle">
         <item name="android:layout_width">match_parent</item>

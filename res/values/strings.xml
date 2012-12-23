@@ -34,6 +34,7 @@
     <string name="btn_from_gallery">Gallery</string>
     <string name="btn_similar_item">I have similar use of something</string>
     <string name="btn_similar_purpose">I have similar use of something</string>
+    <string name="tv_sorted_by">Sorted by</string>
     <string name="tv_photo">Add picture</string>
     <string name="tv_username">USERNAME</string>
     <string name="tv_email">EMAIL</string>

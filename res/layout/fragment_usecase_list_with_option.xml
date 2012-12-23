@@ -4,22 +4,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+    <RelativeLayout style="@style/MatchWidth" >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sort by:" />
+            style="@style/Wrap"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@id/sp_option"
+            android:text="@string/tv_sorted_by" />
 
         <Spinner
             android:id="@+id/sp_option"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            style="@style/Wrap"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
             android:gravity="center" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <org.everyuse.android.widget.DynamicListView
         android:id="@android:id/list"
