@@ -38,13 +38,21 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="TextViewStyle.Wrap.ThemeOrange">
+        <item name="android:textColor">@color/ThemeOrange</item>
+    </style>
+
+    <style name="TextViewStyle.Wrap.ThemePink">
+        <item name="android:textColor">@color/ThemePink</item>
+    </style>
+
     <style name="TextViewStyle.Wrap.ListItemMainText">
         <item name="android:textColor">@color/ThemeOrange</item>
         <item name="android:textSize">18sp</item>
         <item name="android:maxEms">6</item>
         <item name="android:singleLine">true</item>
     </style>
-    
+
     <style name="TextViewStyle.Wrap.ListItemCommentText">
         <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>

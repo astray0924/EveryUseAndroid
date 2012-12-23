@@ -99,19 +99,9 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.create, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch (id) {
-		case R.id.menu_create:
-			// 서버로 데이터 전송
-			new SubmitTask().execute();
-			break;
 		case android.R.id.home:
 			Intent intent = new Intent(this, MainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
