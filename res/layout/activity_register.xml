@@ -1,63 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/MatchWidth"
     android:orientation="vertical" >
 
-    <!-- email -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_email" />
+        style="@style/MatchWidth"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/ThemePink" />
 
-    <EditText
-        android:id="@+id/et_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress" />
+    <LinearLayout
+        style="@style/Wrap"
+        android:layout_gravity="center_vertical"
+        android:background="@color/ThemeOrange"
+        android:orientation="vertical" >
 
-    <!-- username -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_username" />
+        <!-- Header -->
 
-    <EditText
-        android:id="@+id/et_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text" />
+        <TextView
+            style="@style/MatchWidth"
+            android:gravity="center"
+            android:text="@string/tv_header_signup"
+            android:textColor="@color/white" />
 
-    <!-- password -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_password" />
+        <!-- email -->
 
-    <EditText
-        android:id="@+id/et_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword" />
+        <TextView
+            style="@style/MatchWidth"
+            android:text="@string/tv_email" />
 
-    <!-- password confirmation -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_password_confirm" />
+        <EditText
+            android:id="@+id/et_email"
+            style="@style/MatchWidth"
+            android:hint="@string/hint_email"
+            android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/et_password_confirm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword" />
+        <!-- username -->
+
+        <TextView
+            style="@style/MatchWidth"
+            android:text="@string/tv_username" />
+
+        <EditText
+            android:id="@+id/et_username"
+            style="@style/MatchWidth"
+            android:hint="@string/hint_username"
+            android:inputType="text" />
+
+        <!-- password -->
+
+        <TextView
+            style="@style/MatchWidth"
+            android:text="@string/tv_password" />
+
+        <EditText
+            android:id="@+id/et_password"
+            style="@style/MatchWidth"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword" />
+
+        <!-- password confirmation -->
+
+        <TextView
+            style="@style/MatchWidth"
+            android:text="@string/tv_password_confirm" />
+
+        <EditText
+            android:id="@+id/et_password_confirm"
+            style="@style/MatchWidth"
+            android:hint="@string/hint_password_again"
+            android:inputType="textPassword" />
+    </LinearLayout>
 
     <!-- register button -->
+
     <Button
         android:id="@+id/btn_register_done"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/btn_register_done" />
+        style="@style/MatchWidth"
+        android:text="@string/btn_signup_done" />
 
 </LinearLayout>

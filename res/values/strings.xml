@@ -27,8 +27,8 @@
 
     <!-- UI components -->
     <string name="btn_login">Login</string>
-    <string name="btn_register">Register</string>
-    <string name="btn_register_done">Done</string>
+    <string name="btn_signup">Sign Up</string>
+    <string name="btn_signup_done">Sign Up</string>
     <string name="btn_create">Create</string>
     <string name="btn_from_camera">Camera</string>
     <string name="btn_from_gallery">Gallery</string>
@@ -45,7 +45,12 @@
     <string name="tv_place">At this place (optional)</string>
     <string name="tv_no_data">No data</string>
     <string name="tv_comment">Comment</string>
-    <string name="hint_search">Search Use Cases</string>
+    <string name="tv_header_signup">Sign Up</string>
+    <string name="hint_search">Search use cases</string>
+    <string name="hint_email">Your email</string>
+    <string name="hint_username">Your username</string>
+    <string name="hint_password">Your password</string>
+    <string name="hint_password_again">Confirm your password</string>
 
     <!-- messages -->
     <string name="msg_logout_prompt">Logout from the app?</string>

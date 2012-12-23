@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Custom colors -->
+    <color name="ThemeOrange">#e8685e</color>
+    <color name="ThemePink">#ec1765</color>
+
+    <!-- Normal colors -->
+    <color name="grey">#9599a0</color>
+    <color name="white">#ffffff</color>
+</resources>
