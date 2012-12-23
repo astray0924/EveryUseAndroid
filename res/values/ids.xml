@@ -4,5 +4,6 @@
     <item name="fragment_index" type="id"/>
     <item name="fragment_register" type="id"/>
     <item name="menu_refresh" type="id"/>
+    <item name="sp_sort_by" type="id"/>
 
 </resources>

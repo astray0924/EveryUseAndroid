@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MatchWidth" >
+
+    <TextView
+        style="@style/Wrap"
+        android:layout_centerInParent="true"
+        android:layout_toLeftOf="@id/sp_sort_by"
+        android:text="@string/tv_sorted_by" />
+
+    <Spinner
+        android:id="@id/sp_sort_by"
+        style="@style/Wrap"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:gravity="center" />
+
+</RelativeLayout>

@@ -4,21 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout style="@style/MatchWidth" >
-
-        <TextView
-            style="@style/Wrap"
-            android:layout_centerInParent="true"
-            android:layout_toLeftOf="@id/sp_option"
-            android:text="@string/tv_sorted_by" />
-
-        <Spinner
-            android:id="@+id/sp_option"
-            style="@style/Wrap"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:gravity="center" />
-    </RelativeLayout>
+    <include layout="@layout/snippet_sort_panel" />
 
     <org.everyuse.android.widget.DynamicListView
         android:id="@android:id/list"
