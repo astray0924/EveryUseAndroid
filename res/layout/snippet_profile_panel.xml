@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/profile_panel"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="70dp"
+    android:background="@color/ThemeOrange"
     android:orientation="horizontal" >
 
     <ImageView
@@ -10,15 +11,15 @@
         style="@style/PictureStyle.Thumb"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:contentDescription="@string/iv_profile_photo_description"
         android:src="@drawable/ic_social_person" />
 
     <TextView
         android:id="@+id/tv_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/Wrap"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/iv_user_photo"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textSize="20sp" />
 
     <ToggleButton
         android:id="@+id/tgl_follow"

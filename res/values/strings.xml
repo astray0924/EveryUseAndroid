@@ -45,13 +45,15 @@
     <string name="tv_purpose">for this action</string>
     <string name="tv_place">At this place (optional)</string>
     <string name="tv_no_data">No data</string>
-    <string name="tv_comment">Comment</string>
+    <string name="tv_comment">COMMENTS</string>
     <string name="tv_header_signup">Sign Up</string>
     <string name="hint_search">Search use cases</string>
     <string name="hint_email">Your email</string>
     <string name="hint_username">Your username</string>
     <string name="hint_password">Your password</string>
     <string name="hint_password_again">Confirm your password</string>
+    <string name="iv_profile_photo_description">Profile Photo</string>
+    <string name="iv_usecase_photo_description">UseCase Image</string>
 
     <!-- messages -->
     <string name="msg_logout_prompt">Logout from the app?</string>
