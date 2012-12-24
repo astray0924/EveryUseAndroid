@@ -3,6 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
+    <ListView
+        android:id="@android:id/list"
+        style="@style/Match" />
+
+    <TextView
+        android:id="@android:id/empty"
+        style="@style/Wrap"
+        android:text="@string/tv_no_result" />
 
 </LinearLayout>

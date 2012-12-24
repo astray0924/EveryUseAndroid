@@ -48,6 +48,7 @@
     <string name="tv_no_data">No data</string>
     <string name="tv_comment">COMMENTS</string>
     <string name="tv_header_signup">Sign Up</string>
+    <string name="tv_no_result">no result</string>
     <string name="hint_search">Search use cases</string>
     <string name="hint_email">Your email</string>
     <string name="hint_username">Your username</string>
