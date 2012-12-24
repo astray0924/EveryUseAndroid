@@ -10,6 +10,7 @@
     <string name="title_activity_register">Create a new account</string>
     <string name="title_activity_main">EveryUse</string>
     <string name="title_activity_create">Create a use</string>
+    <string name="title_activity_search">Search use case</string>
 
     <!-- menus -->
     <string name="menu_create">Create Use</string>

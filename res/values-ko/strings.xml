@@ -45,7 +45,7 @@
     <string name="tv_place">사용한 장소 (선택)</string>
     <string name="tv_no_data">No data</string>
     <string name="tv_comment">COMMENTS</string>
-    <string name="hint_search">Search Use Cases</string>
+    <string name="hint_search">Search use cases</string>
 
     <!-- messages -->
     <string name="msg_logout_prompt">Logout from the app?</string>

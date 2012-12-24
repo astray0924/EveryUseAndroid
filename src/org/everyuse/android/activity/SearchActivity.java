@@ -19,9 +19,11 @@ public class SearchActivity extends SherlockActivity {
 	}
 
 	@Override
-    protected void onNewIntent(Intent intent) {
-        handleIntent(intent);
-    }
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+		handleIntent(intent);
+	}
 
 	private void handleIntent(Intent intent) {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {

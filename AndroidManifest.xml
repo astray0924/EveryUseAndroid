@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    
+
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="15" />
@@ -32,6 +32,9 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".activity.SearchActivity" />
         </activity>
         <activity
             android:name=".activity.RegisterActivity"
@@ -66,7 +69,8 @@
         <activity
             android:name=".activity.SearchActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_main"
+            android:label="@string/title_activity_search"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
