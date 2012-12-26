@@ -134,7 +134,7 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 					getString(R.string.msg_missing_option_array));
 		}
 
-		sp_option = (Spinner) getView().findViewById(R.id.sp_option);
+		sp_option = (Spinner) getView().findViewById(R.id.sp_sort_by);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
 				getActivity(), option_array_id,
 				android.R.layout.simple_spinner_item);

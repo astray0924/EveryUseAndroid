@@ -62,8 +62,8 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 		holder.purpose.setText(use_case.purpose);
 		holder.purpose_type.setText(use_case.purpose_type);
 		holder.meta_info.setText(use_case.getMetaInfoString());
-		holder.wow_count.setText("Wow:" + use_case.wows_count);
-		holder.metoo_count.setText("Metoo:" + use_case.metoos_count);		
+		holder.wow_count.setText(String.valueOf(use_case.wows_count));
+		holder.metoo_count.setText(String.valueOf(use_case.metoos_count));		
 
 		return convertView;
 	}

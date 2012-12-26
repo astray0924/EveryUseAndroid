@@ -12,6 +12,8 @@ import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +24,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -46,31 +49,31 @@ public class MainActivity extends SherlockFragmentActivity implements
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	private ViewPager mViewPager;
-	
+
 	private static String SELECTED_TAB_KEY = "SELECTED_TAB_KEY";
 	private int selected_tab = 0;
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
+
 		saveSelectedTabPosition(selected_tab);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		selected_tab = getSelectedTabPosition();
 		getActionBar().setSelectedNavigationItem(selected_tab);
 	}
-	
+
 	private void saveSelectedTabPosition(int selected_tab) {
 		SharedPreferences.Editor editor = getPreferences(0).edit();
 		editor.putInt(SELECTED_TAB_KEY, selected_tab);
 		editor.commit();
 	}
-	
+
 	private int getSelectedTabPosition() {
 		return getPreferences(0).getInt(SELECTED_TAB_KEY, 0);
 	}
@@ -131,15 +134,12 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.main, menu);
 
-//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-//			SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//			SearchView searchView = (SearchView) menu
-//					.findItem(R.id.menu_search).getActionView();
-//			searchView.setSearchableInfo(searchManager
-//					.getSearchableInfo(getComponentName()));
-//		}
-
-		return super.onCreateOptionsMenu(menu);
+		// Associate searchable configuration with the SearchView
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		
+		return true;
 	}
 
 	@Override

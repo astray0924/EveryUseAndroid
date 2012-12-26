@@ -2,8 +2,8 @@
 <resources>
 
     <string-array name="purpose">
-        <item>위해</item>
-        <item>로써</item>
+        <item>~을(를) 위해</item>
+        <item>~로써</item>
     </string-array>
     <string-array name="use_case">
         <item>Item</item>

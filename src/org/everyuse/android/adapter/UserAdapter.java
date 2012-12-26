@@ -17,7 +17,6 @@ import android.widget.TextView;
 public class UserAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private List<User> data_list;
-	private ImageDownloader image_downloader;
 
 	public UserAdapter() {
 
@@ -27,7 +26,6 @@ public class UserAdapter extends BaseAdapter {
 		this.inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.data_list = data_list;
-		this.image_downloader = new ImageDownloader();
 	}
 
 	@Override
