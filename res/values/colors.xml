@@ -4,8 +4,10 @@
     <!-- Custom colors -->
     <color name="ThemeOrange">#e8685e</color>
     <color name="ThemePink">#ec1765</color>
+    <color name="pressed_everyuse">#CCe8675e</color>
 
     <!-- Normal colors -->
     <color name="grey">#9599a0</color>
     <color name="white">#ffffff</color>
+
 </resources>
