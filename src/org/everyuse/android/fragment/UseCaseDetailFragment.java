@@ -28,7 +28,7 @@ import android.widget.ToggleButton;
 public class UseCaseDetailFragment extends Fragment {
 	// Strings for logging
 	private final String TAG = this.getClass().getSimpleName();
-	
+
 	private static String DATA = "DATA";
 	private static ImageDownloader image_downloader;
 	private CommentsHelper commentsHelper;
@@ -105,7 +105,7 @@ public class UseCaseDetailFragment extends Fragment {
 				});
 
 		// 코멘트 가져오기
-		commentsHelper.updateCurrentUserCommentsInfo();
+		commentsHelper.updateCommentsInfo();
 	}
 
 	/*
@@ -138,7 +138,8 @@ public class UseCaseDetailFragment extends Fragment {
 		ImageView usecase_photo = (ImageView) page
 				.findViewById(R.id.iv_usecase_photo);
 		TextView item = (TextView) page.findViewById(R.id.tv_item);
-		TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);;
+		TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);
+		;
 
 		image_downloader.download(data.getPhotoLargeURL(), usecase_photo);
 		item.setText(data.item);
@@ -152,7 +153,7 @@ public class UseCaseDetailFragment extends Fragment {
 		} else {
 			tgl_wow.setChecked(false);
 		}
-		String wow_count = "Wow: " + String.valueOf(comments.getWowCount());
+		String wow_count = String.valueOf(comments.getWowCount());
 		tgl_wow.setText(wow_count);
 		tgl_wow.setTextOn(wow_count);
 		tgl_wow.setTextOff(wow_count);
@@ -163,8 +164,7 @@ public class UseCaseDetailFragment extends Fragment {
 		} else {
 			tgl_metoo.setChecked(false);
 		}
-		String metoo_count = "Metoo:"
-				+ String.valueOf(comments.getMetooCount());
+		String metoo_count = String.valueOf(comments.getMetooCount());
 		tgl_metoo.setText(metoo_count);
 		tgl_metoo.setTextOn(metoo_count);
 		tgl_metoo.setTextOff(metoo_count);
@@ -264,7 +264,8 @@ public class UseCaseDetailFragment extends Fragment {
 				TextView tv_item = (TextView) page.findViewById(R.id.tv_item);
 				String pre_item = tv_item.getText().toString();
 
-				Intent intent = new Intent(getActivity(), UseCaseCreateActivity.class);
+				Intent intent = new Intent(getActivity(),
+						UseCaseCreateActivity.class);
 				intent.putExtra(UseCaseCreateActivity.EXTRA_ITEM, pre_item);
 				startActivity(intent);
 			}
@@ -281,8 +282,10 @@ public class UseCaseDetailFragment extends Fragment {
 						.findViewById(R.id.tv_purpose);
 				String pre_purpose = tv_purpose.getText().toString();
 
-				Intent intent = new Intent(getActivity(), UseCaseCreateActivity.class);
-				intent.putExtra(UseCaseCreateActivity.EXTRA_PURPOSE, pre_purpose);
+				Intent intent = new Intent(getActivity(),
+						UseCaseCreateActivity.class);
+				intent.putExtra(UseCaseCreateActivity.EXTRA_PURPOSE,
+						pre_purpose);
 				startActivity(intent);
 
 			}

@@ -43,11 +43,13 @@
 
                 <ToggleButton
                     android:id="@+id/tgl_scrap"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="32dp"
+                    android:layout_height="48dp"
+                    android:layout_marginRight="16dp"
                     android:layout_alignParentRight="true"
-                    android:textOff="Scrap"
-                    android:textOn="UnScrap" />
+                    android:background="@drawable/scrap_button_selector"
+                    android:textOff=""
+                    android:textOn="" />
             </RelativeLayout>
         </LinearLayout>
 

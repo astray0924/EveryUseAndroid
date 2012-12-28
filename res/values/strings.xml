@@ -11,6 +11,7 @@
     <string name="title_activity_main">EveryUse</string>
     <string name="title_activity_create">Create a use</string>
     <string name="title_activity_search">Search use case</string>
+    <string name="empty_text">&lt;empty&gt;</string>
 
     <!-- menus -->
     <string name="menu_create">Create Use</string>
@@ -54,8 +55,9 @@
     <string name="hint_username">Your username</string>
     <string name="hint_password">Your password</string>
     <string name="hint_password_again">Confirm your password</string>
-    <string name="iv_profile_photo_description">Profile Photo</string>
-    <string name="iv_usecase_photo_description">UseCase Image</string>
+    <string name="iv_desc_profile_photo">Profile Photo</string>
+    <string name="iv_desc_usecase_photo">UseCase Image</string>
+    <string name="iv_desc_usecase_thumbnail">UseCase Thumbnail</string>
 
     <!-- messages -->
     <string name="msg_logout_prompt">Logout from the app?</string>

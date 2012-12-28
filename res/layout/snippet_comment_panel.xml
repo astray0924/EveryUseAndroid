@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/comment_panel"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="64dp"
+    android:gravity="center_vertical"
     android:orientation="horizontal" >
 
     <TextView
@@ -16,21 +17,28 @@
         android:textSize="20sp" />
 
     <ToggleButton
-        android:id="@+id/tgl_wow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/tgl_metoo"
+        android:layout_width="36dp"
+        android:layout_height="32dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:textOff=""
-        android:textOn="" />
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/metoo_button_selector"
+        android:textOff="0"
+        android:textOn="0"
+        android:textSize="16sp" />
 
     <ToggleButton
-        android:id="@+id/tgl_metoo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/tgl_wow"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/tgl_wow"
-        android:textOff=""
-        android:textOn="" />
+        android:layout_marginRight="12dp"
+        android:layout_toLeftOf="@id/tgl_metoo"
+        android:background="@drawable/wow_button_selector"
+        android:textOff="0"
+        android:textOn="0"
+        android:textSize="16sp" />
 
 </RelativeLayout>

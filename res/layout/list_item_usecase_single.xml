@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
+    android:layout_height="70dp"
     android:orientation="horizontal" >
 
     <ImageView
@@ -11,18 +11,21 @@
         android:layout_alignParentLeft="true"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:layout_marginRight="4dp" />
+        android:layout_marginRight="4dp"
+        android:contentDescription="@string/iv_desc_usecase_thumbnail" />
 
     <TextView
         android:id="@+id/tv_item"
         style="@style/TextViewStyle.Wrap.ListItemMainText"
-        android:layout_toRightOf="@id/iv_photo" />
+        android:layout_toRightOf="@id/iv_photo"
+        android:text="@string/empty_text" />
 
     <TextView
         android:id="@+id/tv_purpose"
         style="@style/TextViewStyle.Wrap.ListItemMainText"
         android:layout_alignLeft="@id/tv_item"
-        android:layout_below="@id/tv_item" />
+        android:layout_below="@id/tv_item"
+        android:text="@string/empty_text" />
 
     <TextView
         android:id="@+id/tv_meta_info"
@@ -30,11 +33,12 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tv_item"
         android:layout_below="@+id/tv_purpose"
+        android:text="@string/empty_text"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?android:attr/textColorTertiary" />
 
     <LinearLayout
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
