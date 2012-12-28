@@ -61,7 +61,7 @@ public class UseCaseGroup implements Comparable<UseCaseGroup> {
 		JSONArray json_children = json_group.getJSONArray("children");
 		for (int i = 0; i < json_children.length(); i++) {
 			JSONObject child = json_children.getJSONObject(i);
-			UseCase use_case = UseCase.parseSingleFromJSON(child);
+			UseCase use_case = UseCase.parseFromJSON(child);
 			children.add(use_case);
 			
 			if (i == 0) {

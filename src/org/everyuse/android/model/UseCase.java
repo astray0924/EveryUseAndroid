@@ -31,20 +31,22 @@ public class UseCase implements Parcelable {
 	public int wows_count;
 	public int metoos_count;
 
-	private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+	private static Gson gson = new GsonBuilder().setDateFormat(
+			"yyyy-MM-dd'T'HH:mm:ss").create();
 	private static DateFormat year_month_day_format = DateFormat
 			.getDateInstance(DateFormat.MEDIUM);
-	
+
 	private static DateFormat today_format = new SimpleDateFormat("hh:mm aaa");
-	private static DateFormat other_day_format = new SimpleDateFormat("yyyy-MM-dd");
+	private static DateFormat other_day_format = new SimpleDateFormat(
+			"yyyy-MM-dd");
 
 	public String getPurposeString() {
 		if (purpose_type == null || purpose == null) {
 			return "";
-		} else {			
+		} else {
 			return purpose + " " + purpose_type;
 		}
-		
+
 	}
 
 	public String getMetaInfoString() {
@@ -106,19 +108,18 @@ public class UseCase implements Parcelable {
 		return (int) (id - c.id);
 	}
 
-	public static UseCase parseSingleFromJSON(JSONObject json)
-			throws JSONException {
+	public static UseCase parseFromJSON(JSONObject json) throws JSONException {
 
 		return gson.fromJson(json.toString(), UseCase.class);
 	}
 
-	public static List<UseCase> parseFromJSON(JSONArray json)
+	public static ArrayList<UseCase> parseMultipleFromJSON(JSONArray json)
 			throws JSONException {
-		List<UseCase> use_case_list = new ArrayList<UseCase>();
+		ArrayList<UseCase> use_case_list = new ArrayList<UseCase>();
 
 		for (int i = 0; i < json.length(); i++) {
 			JSONObject item = json.getJSONObject(i);
-			UseCase use_case = parseSingleFromJSON(item);
+			UseCase use_case = parseFromJSON(item);
 
 			use_case_list.add(use_case);
 		}

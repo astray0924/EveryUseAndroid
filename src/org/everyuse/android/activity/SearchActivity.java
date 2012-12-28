@@ -7,43 +7,88 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.everyuse.android.R;
+import org.everyuse.android.adapter.SearchAdapter;
+import org.everyuse.android.adapter.SearchAdapter.SearchItem;
+import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.URLHelper;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 
-public class SearchActivity extends SherlockListActivity {
+public class SearchActivity extends SherlockListActivity implements
+		OnClickListener {
 
 	private final String TAG = this.getClass().getSimpleName();
+	public static final String SEARCH_CATEGORY_ITEM = "item";
+	public static final String SEARCH_CATEGORY_PURPOSE = "purpose";
 
 	private AsyncTask<URL, Void, Boolean> load_data_task;
-	URL url;
+	private BaseAdapter mAdapter;
+	private List<SearchItem> mDataList;
+	private Map<String, ArrayList<UseCase>> mDataMap;
+
+	private Button btn;
+	private String q;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 
-		// URL connection 초기화
-		load_data_task = new LoadDataTask();
+		// 버튼 및 핸들러 초기화
+		btn = (Button) findViewById(R.id.btn_create_use);
+		btn.setOnClickListener(this);
+
+		// ListView 관련 컴포넌트 초기화
+		mDataList = new ArrayList<SearchItem>();
+		mDataMap = new HashMap<String, ArrayList<UseCase>>();
+		mAdapter = new SearchAdapter(this, mDataList);
+		setListAdapter(mAdapter);
 
 		// Get the intent, verify the action and get the query
 		handleIntent(getIntent());
+	}
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		Intent intent = new Intent(this, UseCaseDetailActivity.class);
+		
+		SearchItem search_item = (SearchItem) mAdapter.getItem(position);
+		String search_category = search_item.search_category;
+		
+		ArrayList<UseCase> data_list = mDataMap.get(search_category);
+		intent.putParcelableArrayListExtra(
+				UseCaseDetailActivity.EXTRA_DATA_LIST, data_list);
+		
+		UseCase use_case = search_item.use_case;
+		int pos = data_list.indexOf(use_case);
+		intent.putExtra(UseCaseDetailActivity.EXTRA_STRAT_INDEX, pos);
+		startActivity(intent);
 	}
 
 	@Override
@@ -86,8 +131,10 @@ public class SearchActivity extends SherlockListActivity {
 
 	private void handleIntent(Intent intent) {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			String q = intent.getStringExtra(SearchManager.QUERY);
+			q = intent.getStringExtra(SearchManager.QUERY);
 			try {
+				getActionBar().setTitle("Search \"" + q + "\"");
+				
 				search(q);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
@@ -105,12 +152,20 @@ public class SearchActivity extends SherlockListActivity {
 		URL url = new URL(URLHelper.SEARCH_URL + ".json?" + query_string);
 
 		// 실제로 검색 수행
+		load_data_task = new LoadDataTask();
 		load_data_task.execute(url);
 	}
 
 	private class LoadDataTask extends AsyncTask<URL, Void, Boolean> {
 		private HttpURLConnection conn;
-		private String res;
+		private String responseString;
+		private String errMsg;
+		private Activity activity;
+
+		@Override
+		protected void onPreExecute() {
+			activity = SearchActivity.this;
+		}
 
 		@Override
 		protected Boolean doInBackground(URL... params) {
@@ -118,51 +173,110 @@ public class SearchActivity extends SherlockListActivity {
 			if (params.length == 0) {
 				return false;
 			}
-			
+
 			URL url = params[0];
 			try {
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setDoInput(true);
 				conn.setRequestMethod("GET");
 				conn.setRequestProperty("Accept", "application/json");
-				conn.setRequestProperty("Cache-Control","no-cache");
-				
+				conn.setRequestProperty("Cache-Control", "no-cache");
+
 				int code = conn.getResponseCode();
-				
+
 				if (code >= HttpURLConnection.HTTP_BAD_REQUEST) {
 					return false;
-				} else {		// 성공
-					InputStream in = new BufferedInputStream(conn.getInputStream());
+				} else { // 성공
+					InputStream in = new BufferedInputStream(
+							conn.getInputStream());
 					int bytes_read = -1;
 					byte[] buffer = new byte[1024];
-					
+
 					StringBuffer sb = new StringBuffer();
-					
+
 					while ((bytes_read = in.read(buffer)) >= 0) {
 						sb.append(new String(buffer), 0, bytes_read);
 					}
-					
-					res = sb.toString();
-					
+
+					responseString = sb.toString();
+
+					// 데이터 리스트 업데이트하기
+					mDataList.clear();
+					try {
+						JSONObject responseObject = new JSONObject(
+								responseString);
+						ArrayList<UseCase> result_list_by_item = UseCase
+								.parseMultipleFromJSON(responseObject
+										.getJSONArray(SEARCH_CATEGORY_ITEM));
+						ArrayList<UseCase> result_list_by_purpose = UseCase
+								.parseMultipleFromJSON(responseObject
+										.getJSONArray(SEARCH_CATEGORY_PURPOSE));
+						
+						// 아이템 맵 생성 (추후 사용 위함)
+						// 검색 결과를 검색 타입별로 분류해서 맵으로 정리
+						mDataMap.put(SEARCH_CATEGORY_ITEM, result_list_by_item);
+						mDataMap.put(SEARCH_CATEGORY_PURPOSE, result_list_by_purpose);
+
+						// 아이템 검색 결과 추가
+						mDataList.add(SearchItem
+								.createSectionItem(SEARCH_CATEGORY_ITEM));
+						for (UseCase u : result_list_by_item) {
+							mDataList.add(SearchItem.createItem(u, SEARCH_CATEGORY_ITEM));
+						}
+
+						// 목적 검색 결과 추가
+						mDataList.add(SearchItem
+								.createSectionItem(SEARCH_CATEGORY_PURPOSE));
+						for (UseCase u : result_list_by_purpose) {
+							mDataList.add(SearchItem.createItem(u, SEARCH_CATEGORY_PURPOSE));
+						}
+
+						Log.i(TAG, "아이템: " + result_list_by_item.size()
+								+ " 목적: " + result_list_by_purpose.size());
+					} catch (JSONException e) {
+						e.printStackTrace();
+						Log.d(TAG, e.getMessage());
+						errMsg = activity
+								.getString(R.string.msg_data_parse_fail);
+						return false;
+					}
+
 					return true;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				Log.d(TAG, e.getMessage());
+				errMsg = activity.getString(R.string.msg_data_load_fail);
+
 			}
-			
+
 			return false;
 		}
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (result) {
-				Toast.makeText(SearchActivity.this, res, Toast.LENGTH_SHORT).show();				
-			}
-			
-			Log.i(TAG, res);
-		}
 
+			if (result) {
+				// 리스트 어댑터 업데이트
+				mAdapter.notifyDataSetChanged();
+
+				Log.i(TAG, "Update notified!");
+
+				if (mAdapter != null) {
+					if (mAdapter.isEmpty()) {
+						String btn_string = SearchActivity.this
+								.getString(R.string.btn_create_use);
+						btn.setText(btn_string + " " + "\"" + q + "\"");
+						btn.setVisibility(View.VISIBLE);
+					} else {
+						btn.setVisibility(View.GONE);
+					}
+				}
+			} else {
+				Toast.makeText(SearchActivity.this, errMsg, Toast.LENGTH_LONG)
+						.show();
+			}
+		}
 	}
 
 	@Override
@@ -177,6 +291,12 @@ public class SearchActivity extends SherlockListActivity {
 				.getSearchableInfo(getComponentName()));
 
 		return true;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

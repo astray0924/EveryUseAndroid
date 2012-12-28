@@ -17,7 +17,7 @@ import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
 import org.everyuse.android.activity.MainActivity;
 import org.everyuse.android.activity.UseCaseDetailActivity;
-import org.everyuse.android.adapter.UseCaseSingleAdapter;
+import org.everyuse.android.adapter.UseCaseAdapter;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.UserHelper;
 import org.everyuse.android.widget.DynamicListView;
@@ -81,7 +81,7 @@ public class UseCaseListFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 
 		mDataList = new ArrayList<UseCase>();
-		mAdapter = new UseCaseSingleAdapter(getActivity(), mDataList);
+		mAdapter = new UseCaseAdapter(getActivity(), mDataList);
 		setListAdapter(mAdapter);
 
 		Bundle args = getArguments();
@@ -173,12 +173,10 @@ public class UseCaseListFragment extends ListFragment {
 
 	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
 		private HttpClient client;
-		private List<UseCase> fetched_data_list;
 
 		@Override
 		protected void onPreExecute() {
 			client = new DefaultHttpClient();
-			fetched_data_list = new ArrayList<UseCase>();
 		}
 
 		@Override
@@ -213,9 +211,11 @@ public class UseCaseListFragment extends ListFragment {
 
 						for (int i = 0; i < data_list.length(); i++) {
 							JSONObject json = data_list.getJSONObject(i);
-							UseCase u = UseCase.parseSingleFromJSON(json);
+							UseCase u = UseCase.parseFromJSON(json);
 
-							fetched_data_list.add(u);
+							mDataList.add(u);
+							
+							Log.i(TAG, "New Data Added: " + u);
 						}
 
 						success = true;
@@ -235,9 +235,7 @@ public class UseCaseListFragment extends ListFragment {
 		@Override
 		protected void onPostExecute(Boolean success) {
 			if (success) {
-				for (UseCase u : fetched_data_list) {
-					mDataList.add(u);
-				}
+				Log.i(TAG, "Data loaded: " + mDataList.size());
 				
 				mAdapter.notifyDataSetChanged();
 				increasePage();

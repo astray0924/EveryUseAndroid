@@ -32,6 +32,7 @@
     <string name="btn_signup">Sign Up</string>
     <string name="btn_signup_done">Sign Up</string>
     <string name="btn_create">Create</string>
+    <string name="btn_create_use">Create use of</string>
     <string name="btn_from_camera">Camera</string>
     <string name="btn_from_gallery">Gallery</string>
     <string name="btn_similar_item">I have similar use of something</string>

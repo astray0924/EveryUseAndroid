@@ -10,7 +10,14 @@
 
     <TextView
         android:id="@android:id/empty"
-        style="@style/Wrap"
-        android:text="@string/tv_no_result" />
+        style="@style/ListViewEmptyTextStyle" />
+
+    <Button
+        android:id="@+id/btn_create_use"
+        style="@style/MatchWidth"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="@string/empty_text"
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -167,4 +167,12 @@
         <item name="android:background">@drawable/my_menu_selector</item>
     </style>
 
+    <style name="ListViewEmptyTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/tv_no_result</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

@@ -6,7 +6,7 @@ package org.everyuse.android.adapter;
 import java.util.List;
 
 import org.everyuse.android.R;
-import org.everyuse.android.adapter.UseCaseSingleAdapter.UseCaseSingleViewHolder;
+import org.everyuse.android.adapter.UseCaseAdapter.UseCaseViewHolder;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.model.UseCaseGroup;
 import org.everyuse.android.util.ImageDownloader;
@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -72,33 +71,15 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 			convertView = inflater.inflate(R.layout.list_item_usecase_single,
 					null);
 
-			UseCaseSingleViewHolder holder = new UseCaseSingleViewHolder();
-			holder.photo = (ImageView) convertView.findViewById(R.id.iv_photo);
-			holder.item = (TextView) convertView.findViewById(R.id.tv_item);
-			holder.purpose = (TextView) convertView
-					.findViewById(R.id.tv_purpose);
-			holder.meta_info = (TextView) convertView
-					.findViewById(R.id.tv_meta_info);
-			holder.wow_count = (TextView) convertView
-					.findViewById(R.id.tv_wow_count);
-			holder.metoo_count = (TextView) convertView
-					.findViewById(R.id.tv_metoo_count);
-
+			UseCaseViewHolder holder = UseCaseAdapter
+					.attachViewToViewHolder(convertView);
 			convertView.setTag(holder);
 		}
 
-		//
 		UseCase use_case = (UseCase) getChild(groupPosition, childPosition);
 
-		//
-		UseCaseSingleViewHolder holder = (UseCaseSingleViewHolder) convertView
-				.getTag();
-		image_downloader.download(use_case.getPhotoThumbURL(), holder.photo);
-		holder.item.setText(use_case.item);
-		holder.purpose.setText(use_case.getPurposeString());
-		holder.meta_info.setText(use_case.getMetaInfoString());
-		holder.wow_count.setText(String.valueOf(use_case.wows_count));
-		holder.metoo_count.setText(String.valueOf(use_case.metoos_count));
+		UseCaseAdapter.fillDataToViewHolder(convertView, use_case,
+				image_downloader);
 
 		return convertView;
 	}
@@ -169,6 +150,11 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 	@Override
 	public boolean hasStableIds() {
 		return true;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return (this.getGroupCount() == 0);
 	}
 
 	/*

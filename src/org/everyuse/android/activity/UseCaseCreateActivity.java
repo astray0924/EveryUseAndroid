@@ -317,7 +317,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 					JSONObject json = null;
 					try {
 						json = new JSONObject(responseString);
-						created = UseCase.parseSingleFromJSON(json);
+						created = UseCase.parseFromJSON(json);
 					} catch (JSONException e) {
 						e.printStackTrace();
 						return false;
