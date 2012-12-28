@@ -3,7 +3,7 @@ package org.everyuse.android.activity;
 import org.everyuse.android.R;
 import org.everyuse.android.fragment.UseCaseListWithOptionFragment;
 import org.everyuse.android.fragment.UserListFragment;
-import org.everyuse.android.fragment.UserProfileFragment;
+import org.everyuse.android.fragment.UserMenuFragment;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
@@ -18,7 +18,7 @@ import android.util.Log;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
-public class UserProfileDetailActivity extends SherlockFragmentActivity {
+public class UserMenuDetailActivity extends SherlockFragmentActivity {
 	private User user;
 
 	private FragmentManager fragmentManager;
@@ -168,7 +168,7 @@ public class UserProfileDetailActivity extends SherlockFragmentActivity {
 			return UserListFragment.newInstance(URLHelper
 					.getMyFollowerURL(user.id));
 		case MENU_USER:
-			return UserProfileFragment.newInstance(user);
+			return UserMenuFragment.newInstance(user);
 
 		}
 

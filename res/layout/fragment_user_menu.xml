@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include layout="@layout/snippet_profile_panel" />
+
+    <TextView
+        android:id="@+id/menu_shared"
+        style="@style/MyMenuListItemStyle"
+        android:drawableLeft="@drawable/ic_shared"
+        android:text="@string/menu_shared" />
+
+    <TextView
+        android:id="@+id/menu_commented"
+        style="@style/MyMenuListItemStyle"
+        android:drawableLeft="@drawable/ic_commented"
+        android:text="@string/menu_commented" />
+
+    <TextView
+        android:id="@+id/menu_scraped"
+        style="@style/MyMenuListItemStyle"
+        android:drawableLeft="@drawable/ic_scrapped"
+        android:text="@string/menu_scraped" />
+
+    <TextView
+        android:id="@+id/menu_following"
+        style="@style/MyMenuListItemStyle"
+        android:drawableLeft="@drawable/ic_following"
+        android:text="@string/menu_following"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/menu_follower"
+        style="@style/MyMenuListItemStyle"
+        android:drawableLeft="@drawable/ic_follower"
+        android:text="@string/menu_follower"
+        android:visibility="gone" />
+
+</LinearLayout>

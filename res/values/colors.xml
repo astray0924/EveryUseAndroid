@@ -5,6 +5,7 @@
     <color name="ThemeOrange">#e8685e</color>
     <color name="ThemePink">#ec1765</color>
     <color name="pressed_everyuse">#CCe8675e</color>
+    <color name="semitransparent_blue">#7733B5E5</color>
 
     <!-- Normal colors -->
     <color name="grey">#9599a0</color>

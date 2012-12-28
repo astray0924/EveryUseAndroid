@@ -137,7 +137,7 @@
         <item name="android:background">@color/grey</item>
         <item name="android:textColor">@color/white</item>
     </style>
- 
+
     <!-- Boilerplates -->
     <style name="Match">
         <item name="android:layout_width">match_parent</item>
@@ -155,6 +155,16 @@
 
     <style name="MatchWidth" parent="Match">
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Others -->
+    <style name="MyMenuListItemStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:drawableRight">@drawable/ic_navigation_next_item</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:background">@drawable/my_menu_selector</item>
     </style>
 
 </resources>
