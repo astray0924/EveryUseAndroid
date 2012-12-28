@@ -11,7 +11,7 @@
         style="@style/PictureStyle.Thumb"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:contentDescription="@string/iv_profile_photo_description"
+        android:contentDescription="@string/iv_desc_profile_photo"
         android:src="@drawable/ic_social_person" />
 
     <TextView
@@ -23,11 +23,13 @@
 
     <ToggleButton
         android:id="@+id/tgl_follow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="52dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:textOff="Follow"
-        android:textOn="UnFollow" />
+        android:layout_marginRight="16dp"
+        android:background="@drawable/follow_button_selector"
+        android:textOff=""
+        android:textOn="" />
 
 </RelativeLayout>
