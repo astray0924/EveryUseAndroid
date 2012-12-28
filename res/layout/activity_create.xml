@@ -78,7 +78,7 @@
                 android:id="@+id/btn_photo_select"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/ic_content_new_dark" />
+                android:background="@drawable/ic_content_new" />
         </LinearLayout>
 
         <ImageView
