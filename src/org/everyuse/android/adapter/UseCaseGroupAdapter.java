@@ -79,6 +79,10 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 					.findViewById(R.id.tv_purpose);
 			holder.meta_info = (TextView) convertView
 					.findViewById(R.id.tv_meta_info);
+			holder.wow_count = (TextView) convertView
+					.findViewById(R.id.tv_wow_count);
+			holder.metoo_count = (TextView) convertView
+					.findViewById(R.id.tv_metoo_count);
 
 			convertView.setTag(holder);
 		}
@@ -93,6 +97,8 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 		holder.item.setText(use_case.item);
 		holder.purpose.setText(use_case.getPurposeString());
 		holder.meta_info.setText(use_case.getMetaInfoString());
+		holder.wow_count.setText(String.valueOf(use_case.wows_count));
+		holder.metoo_count.setText(String.valueOf(use_case.metoos_count));
 
 		return convertView;
 	}
