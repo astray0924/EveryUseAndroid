@@ -39,6 +39,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 public class SearchActivity extends SherlockListActivity implements
 		OnClickListener {
@@ -59,6 +60,7 @@ public class SearchActivity extends SherlockListActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// 버튼 및 핸들러 초기화
 		btn = (Button) findViewById(R.id.btn_create_use);
@@ -74,17 +76,36 @@ public class SearchActivity extends SherlockListActivity implements
 		handleIntent(getIntent());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.actionbarsherlock.app.SherlockActivity#onOptionsItemSelected(com.
+	 * actionbarsherlock.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+		}
+
+		return true;
+	}
+
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(this, UseCaseDetailActivity.class);
-		
+
 		SearchItem search_item = (SearchItem) mAdapter.getItem(position);
 		String search_category = search_item.search_category;
-		
+
 		ArrayList<UseCase> data_list = mDataMap.get(search_category);
 		intent.putParcelableArrayListExtra(
 				UseCaseDetailActivity.EXTRA_DATA_LIST, data_list);
-		
+
 		UseCase use_case = search_item.use_case;
 		int pos = data_list.indexOf(use_case);
 		intent.putExtra(UseCaseDetailActivity.EXTRA_STRAT_INDEX, pos);
@@ -134,7 +155,7 @@ public class SearchActivity extends SherlockListActivity implements
 			q = intent.getStringExtra(SearchManager.QUERY);
 			try {
 				getActionBar().setTitle("Search \"" + q + "\"");
-				
+
 				search(q);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
@@ -211,24 +232,27 @@ public class SearchActivity extends SherlockListActivity implements
 						ArrayList<UseCase> result_list_by_purpose = UseCase
 								.parseMultipleFromJSON(responseObject
 										.getJSONArray(SEARCH_CATEGORY_PURPOSE));
-						
+
 						// 아이템 맵 생성 (추후 사용 위함)
 						// 검색 결과를 검색 타입별로 분류해서 맵으로 정리
 						mDataMap.put(SEARCH_CATEGORY_ITEM, result_list_by_item);
-						mDataMap.put(SEARCH_CATEGORY_PURPOSE, result_list_by_purpose);
+						mDataMap.put(SEARCH_CATEGORY_PURPOSE,
+								result_list_by_purpose);
 
 						// 아이템 검색 결과 추가
 						mDataList.add(SearchItem
 								.createSectionItem(SEARCH_CATEGORY_ITEM));
 						for (UseCase u : result_list_by_item) {
-							mDataList.add(SearchItem.createItem(u, SEARCH_CATEGORY_ITEM));
+							mDataList.add(SearchItem.createItem(u,
+									SEARCH_CATEGORY_ITEM));
 						}
 
 						// 목적 검색 결과 추가
 						mDataList.add(SearchItem
 								.createSectionItem(SEARCH_CATEGORY_PURPOSE));
 						for (UseCase u : result_list_by_purpose) {
-							mDataList.add(SearchItem.createItem(u, SEARCH_CATEGORY_PURPOSE));
+							mDataList.add(SearchItem.createItem(u,
+									SEARCH_CATEGORY_PURPOSE));
 						}
 
 						Log.i(TAG, "아이템: " + result_list_by_item.size()
