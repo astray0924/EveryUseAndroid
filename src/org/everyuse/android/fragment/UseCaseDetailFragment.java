@@ -138,14 +138,11 @@ public class UseCaseDetailFragment extends Fragment {
 		ImageView usecase_photo = (ImageView) page
 				.findViewById(R.id.iv_usecase_photo);
 		TextView item = (TextView) page.findViewById(R.id.tv_item);
-		TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);
-		TextView purpose_type = (TextView) page
-				.findViewById(R.id.tv_purpose_type);
+		TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);;
 
 		image_downloader.download(data.getPhotoLargeURL(), usecase_photo);
 		item.setText(data.item);
-		purpose.setText(data.purpose);
-		purpose_type.setText(data.purpose_type);
+		purpose.setText(data.getPurposeString());
 	}
 
 	private void updateCommentButtonState(Comments comments) {

@@ -39,11 +39,12 @@ public class UseCase implements Parcelable {
 	private static DateFormat other_day_format = new SimpleDateFormat("yyyy-MM-dd");
 
 	public String getPurposeString() {
-		if (purpose_type == null) {
-			purpose_type = "";
+		if (purpose_type == null || purpose == null) {
+			return "";
+		} else {			
+			return purpose + " " + purpose_type;
 		}
-
-		return purpose_type + " " + purpose;
+		
 	}
 
 	public String getMetaInfoString() {

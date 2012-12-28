@@ -41,8 +41,6 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 			holder.item = (TextView) convertView.findViewById(R.id.tv_item);
 			holder.purpose = (TextView) convertView
 					.findViewById(R.id.tv_purpose);
-			holder.purpose_type = (TextView) convertView
-					.findViewById(R.id.tv_purpose_type);
 			holder.meta_info = (TextView) convertView
 					.findViewById(R.id.tv_meta_info);
 			holder.wow_count = (TextView) convertView
@@ -59,11 +57,10 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 				.getTag();
 		image_downloader.download(use_case.getPhotoThumbURL(), holder.photo);
 		holder.item.setText(use_case.item);
-		holder.purpose.setText(use_case.purpose);
-		holder.purpose_type.setText(use_case.purpose_type);
+		holder.purpose.setText(use_case.getPurposeString());
 		holder.meta_info.setText(use_case.getMetaInfoString());
 		holder.wow_count.setText(String.valueOf(use_case.wows_count));
-		holder.metoo_count.setText(String.valueOf(use_case.metoos_count));		
+		holder.metoo_count.setText(String.valueOf(use_case.metoos_count));
 
 		return convertView;
 	}
@@ -88,7 +85,6 @@ public class UseCaseSingleAdapter extends BaseAdapter {
 		public ImageView photo;
 		public TextView item;
 		public TextView purpose;
-		public TextView purpose_type;
 		public TextView meta_info;
 		public TextView wow_count;
 		public TextView metoo_count;

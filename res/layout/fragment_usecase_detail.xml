@@ -19,9 +19,7 @@
 
             <ImageView
                 android:id="@+id/iv_usecase_photo"
-                style="@style/PictureStyle.Large"
-                android:contentDescription="@string/iv_usecase_photo_description"
-                android:src="@drawable/image_loading" />
+                style="@style/PictureStyle.Large" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -36,20 +34,11 @@
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
-                    android:id="@+id/tv_purpose_type"
+                    android:id="@+id/tv_purpose"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/tv_item"
-                    android:layout_marginRight="4sp"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/tv_purpose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_item"
-                    android:layout_toRightOf="@id/tv_purpose_type"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <ToggleButton
@@ -74,13 +63,13 @@
                 android:id="@+id/btn_similar_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="I have similar use of something" />
+                android:text="@string/btn_similar_item" />
 
             <Button
                 android:id="@+id/btn_similar_purpose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="I have similar use of something" />
+                android:text="@string/btn_similar_purpose" />
         </LinearLayout>
     </LinearLayout>
 

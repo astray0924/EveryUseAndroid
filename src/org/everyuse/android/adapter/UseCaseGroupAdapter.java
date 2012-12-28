@@ -77,8 +77,6 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 			holder.item = (TextView) convertView.findViewById(R.id.tv_item);
 			holder.purpose = (TextView) convertView
 					.findViewById(R.id.tv_purpose);
-			holder.purpose_type = (TextView) convertView
-					.findViewById(R.id.tv_purpose_type);
 			holder.meta_info = (TextView) convertView
 					.findViewById(R.id.tv_meta_info);
 
@@ -93,8 +91,7 @@ public class UseCaseGroupAdapter extends BaseExpandableListAdapter {
 				.getTag();
 		image_downloader.download(use_case.getPhotoThumbURL(), holder.photo);
 		holder.item.setText(use_case.item);
-		holder.purpose.setText(use_case.purpose);
-		holder.purpose_type.setText(use_case.purpose_type);
+		holder.purpose.setText(use_case.getPurposeString());
 		holder.meta_info.setText(use_case.getMetaInfoString());
 
 		return convertView;
