@@ -297,6 +297,8 @@ public class SearchActivity extends SherlockListActivity implements
 						return false;
 					}
 
+					// 네트워크 연결 해제
+					conn.disconnect();
 					return true;
 				}
 			} catch (IOException e) {
