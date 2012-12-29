@@ -23,8 +23,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -55,6 +58,7 @@ public class SearchActivity extends SherlockListActivity implements
 
 	private Button btn;
 	private String q;
+	private ProgressDialog dialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,22 @@ public class SearchActivity extends SherlockListActivity implements
 		mDataMap = new HashMap<String, ArrayList<UseCase>>();
 		mAdapter = new SearchAdapter(this, mDataList);
 		setListAdapter(mAdapter);
+
+		// 대기 다이얼러그 생성
+		dialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
+		dialog.setTitle(getString(R.string.msg_wait));
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.setOnCancelListener(new OnCancelListener() {
+
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				if (load_data_task != null) {
+					load_data_task.cancel(true);
+				}
+
+			}
+
+		});
 
 		// Get the intent, verify the action and get the query
 		handleIntent(getIntent());
@@ -186,6 +206,8 @@ public class SearchActivity extends SherlockListActivity implements
 		@Override
 		protected void onPreExecute() {
 			activity = SearchActivity.this;
+
+			dialog.show();
 		}
 
 		@Override
@@ -232,31 +254,41 @@ public class SearchActivity extends SherlockListActivity implements
 						ArrayList<UseCase> result_list_by_purpose = UseCase
 								.parseMultipleFromJSON(responseObject
 										.getJSONArray(SEARCH_CATEGORY_PURPOSE));
+						int count = responseObject.getInt("result_count");
 
-						// 아이템 맵 생성 (추후 사용 위함)
-						// 검색 결과를 검색 타입별로 분류해서 맵으로 정리
-						mDataMap.put(SEARCH_CATEGORY_ITEM, result_list_by_item);
-						mDataMap.put(SEARCH_CATEGORY_PURPOSE,
-								result_list_by_purpose);
+						mDataMap.clear();
+						mDataList.clear();
 
-						// 아이템 검색 결과 추가
-						mDataList.add(SearchItem
-								.createSectionItem(SEARCH_CATEGORY_ITEM));
-						for (UseCase u : result_list_by_item) {
-							mDataList.add(SearchItem.createItem(u,
-									SEARCH_CATEGORY_ITEM));
+						if (count != 0) {
+							// 아이템 맵 생성 (추후 사용 위함)
+							// 검색 결과를 검색 타입별로 분류해서 맵으로 정리
+							mDataMap.put(SEARCH_CATEGORY_ITEM,
+									result_list_by_item);
+							mDataMap.put(SEARCH_CATEGORY_PURPOSE,
+									result_list_by_purpose);
+
+							// 어댑터에서 사용할 아이템 리스트 채우기
+							mDataList.add(SearchItem
+									.createSectionItem(SEARCH_CATEGORY_ITEM));
+
+							for (UseCase u : mDataMap.get(SEARCH_CATEGORY_ITEM)) {
+								mDataList.add(SearchItem.createItem(u,
+										SEARCH_CATEGORY_ITEM));
+							}
+
+							mDataList
+									.add(SearchItem
+											.createSectionItem(SEARCH_CATEGORY_PURPOSE));
+
+							for (UseCase u : mDataMap
+									.get(SEARCH_CATEGORY_PURPOSE)) {
+								mDataList.add(SearchItem.createItem(u,
+										SEARCH_CATEGORY_ITEM));
+							}
+
 						}
 
-						// 목적 검색 결과 추가
-						mDataList.add(SearchItem
-								.createSectionItem(SEARCH_CATEGORY_PURPOSE));
-						for (UseCase u : result_list_by_purpose) {
-							mDataList.add(SearchItem.createItem(u,
-									SEARCH_CATEGORY_PURPOSE));
-						}
-
-						Log.i(TAG, "아이템: " + result_list_by_item.size()
-								+ " 목적: " + result_list_by_purpose.size());
+						Log.i(TAG, "결과 반환 개수: " + count);
 					} catch (JSONException e) {
 						e.printStackTrace();
 						Log.d(TAG, e.getMessage());
@@ -300,6 +332,8 @@ public class SearchActivity extends SherlockListActivity implements
 				Toast.makeText(SearchActivity.this, errMsg, Toast.LENGTH_LONG)
 						.show();
 			}
+
+			dialog.dismiss();
 		}
 	}
 
