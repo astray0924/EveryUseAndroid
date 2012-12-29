@@ -355,7 +355,9 @@ public class SearchActivity extends SherlockListActivity implements
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
+		Intent intent = new Intent(this, UseCaseCreateActivity.class);
+		intent.putExtra(UseCaseCreateActivity.EXTRA_ITEM, q);
+		startActivity(intent);
 
 	}
 
