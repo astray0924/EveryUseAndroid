@@ -88,9 +88,9 @@
 
         <Button
             android:id="@+id/btn_submit"
+            style="@style/ButtonStyle.Grey"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/submit_button_selector"
             android:text="@string/btn_create" />
     </LinearLayout>
 
