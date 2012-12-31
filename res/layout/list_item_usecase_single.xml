@@ -34,7 +34,7 @@
         android:layout_alignLeft="@id/tv_item"
         android:layout_below="@+id/tv_purpose"
         android:text="@string/empty_text"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="12sp"
         android:textColor="?android:attr/textColorTertiary" />
 
     <LinearLayout
@@ -44,7 +44,8 @@
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:weightSum="1" >
+        android:weightSum="1" 
+        android:background="@drawable/comment_dotted_border">
 
         <TextView
             android:id="@+id/tv_wow_count"
