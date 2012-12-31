@@ -235,15 +235,13 @@ public class UseCaseListFragment extends ListFragment {
 		@Override
 		protected void onPostExecute(Boolean success) {
 			if (success) {
-				Log.i(TAG, "Data loaded: " + mDataList.size());
-				
-				mAdapter.notifyDataSetChanged();
 				increasePage();
 			} else {
 				Toast.makeText(getActivity(), R.string.msg_data_load_fail,
 						Toast.LENGTH_SHORT).show();
 			}
-
+			
+			mAdapter.notifyDataSetChanged();
 			load_data_task = null;
 		}
 	}
