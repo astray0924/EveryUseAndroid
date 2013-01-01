@@ -58,21 +58,11 @@ public class UseCaseListFragment extends SherlockListFragment {
 	public static final String EXTRA_REFRESH_ON_START = "refresh_start";
 	private String data_url;
 	private String data_url_raw;
-	private boolean refresh_on_start = false;
 
 	public static UseCaseListFragment newInstance(String data_url) {
 		UseCaseListFragment f = new UseCaseListFragment();
 		Bundle b = new Bundle();
 		b.putString(EXTRA_DATA_URL, data_url);
-		f.setArguments(b);
-		return f;
-	}
-
-	public static UseCaseListFragment newInstance(String data_url,
-			boolean refresh_on_start) {
-		UseCaseListFragment f = newInstance(data_url);
-		Bundle b = f.getArguments();
-		b.putBoolean(EXTRA_REFRESH_ON_START, refresh_on_start);
 		f.setArguments(b);
 		return f;
 	}
@@ -88,7 +78,6 @@ public class UseCaseListFragment extends SherlockListFragment {
 		Bundle args = getArguments();
 		if (args != null) {
 			data_url_raw = args.getString(EXTRA_DATA_URL);
-			refresh_on_start = args.getBoolean(EXTRA_REFRESH_ON_START);
 		}
 
 	}
@@ -101,10 +90,6 @@ public class UseCaseListFragment extends SherlockListFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-
-		if (refresh_on_start) {
-			refresh();
-		}
 	}
 
 	/*
