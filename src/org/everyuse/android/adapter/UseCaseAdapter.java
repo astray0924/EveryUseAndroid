@@ -91,14 +91,14 @@ public class UseCaseAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		return ((UseCase) getItem(position)).id;
+		return position;
 	}
 
 	@Override
 	public boolean isEmpty() {
 		Log.i(TAG, "Empty: " + (getCount() == 0));
 
-		return (getCount() == 0);
+		return getCount() == 0;
 	}
 
 	public static class UseCaseViewHolder {
