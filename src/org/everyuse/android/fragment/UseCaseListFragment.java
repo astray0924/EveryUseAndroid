@@ -24,11 +24,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +53,8 @@ public class UseCaseListFragment extends SherlockListFragment {
 
 	public static final String EXTRA_DATA_LIST = "data_list";
 	public static final String EXTRA_DATA_URL = "data_url_raw";
-	public static final String EXTRA_REFRESH_ON_START = "refresh_start";
+
+	private HttpClient client;
 	private String data_url;
 	private String data_url_raw;
 
@@ -79,6 +78,8 @@ public class UseCaseListFragment extends SherlockListFragment {
 		if (args != null) {
 			data_url_raw = args.getString(EXTRA_DATA_URL);
 		}
+
+		client = new DefaultHttpClient();
 
 	}
 
@@ -157,11 +158,9 @@ public class UseCaseListFragment extends SherlockListFragment {
 	}
 
 	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
-		private HttpClient client;
-
 		@Override
 		protected void onPreExecute() {
-			client = new DefaultHttpClient();
+			UseCaseListFragment.this.getSherlockActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
 		}
 
 		@Override
@@ -226,6 +225,8 @@ public class UseCaseListFragment extends SherlockListFragment {
 
 			mAdapter.notifyDataSetChanged();
 			load_data_task = null;
+			
+			UseCaseListFragment.this.getSherlockActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		}
 	}
 

@@ -34,16 +34,6 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 
 		return f;
 	}
-	
-	public static UseCaseListWithOptionFragment newInstance(String data_url,
-			int option_array_id, boolean refresh_on_start) {
-		UseCaseListWithOptionFragment f = newInstance(data_url, option_array_id);
-
-		Bundle b = f.getArguments();
-		b.putBoolean(EXTRA_REFRESH_ON_START, refresh_on_start);
-		f.setArguments(b);
-		return f;
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

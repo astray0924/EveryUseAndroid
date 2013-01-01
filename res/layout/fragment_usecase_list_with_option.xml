@@ -13,6 +13,7 @@
 
     <TextView
         android:id="@android:id/empty"
-        style="@style/ListViewEmptyTextStyle" />
+        style="@style/ListViewEmptyTextStyle"
+        android:visibility="invisible" />
 
 </LinearLayout>
