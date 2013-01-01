@@ -15,11 +15,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
-import org.everyuse.android.activity.MainActivity;
 import org.everyuse.android.activity.UseCaseDetailActivity;
 import org.everyuse.android.adapter.UseCaseAdapter;
 import org.everyuse.android.model.UseCase;
-import org.everyuse.android.util.UserHelper;
 import org.everyuse.android.widget.DynamicListView;
 import org.everyuse.android.widget.DynamicListView.OnListLoadListener;
 import org.json.JSONArray;
@@ -29,7 +27,6 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +35,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class UseCaseListFragment extends ListFragment {
+import com.actionbarsherlock.app.SherlockListFragment;
+
+public class UseCaseListFragment extends SherlockListFragment {
 	// Strings for logging
 	private final String TAG = this.getClass().getSimpleName();
 	
