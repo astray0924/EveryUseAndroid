@@ -81,7 +81,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public boolean onSearchRequested() {
-		// TODO Auto-generated method stub
 		return super.onSearchRequested();
 	}
 
@@ -253,11 +252,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 			fragment_list.add(
 					FEED,
 					UseCaseListFragment.newInstance(
-							URLHelper.getMyFeedsURL(user_id), true));
+							URLHelper.getMyFeedsURL(user_id), false));
 
 			// add Recent Fragment
 			fragment_list.add(RECENT, UseCaseListFragment.newInstance(
-					URLHelper.USE_CASES_RECENT_URL, true));
+					URLHelper.USE_CASES_RECENT_URL, false));
 
 			// add Category Fragment
 			fragment_list.add(CATEOGORY, UseCaseGroupListFragment.newInstance(
