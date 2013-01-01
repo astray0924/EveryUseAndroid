@@ -58,9 +58,8 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-
 		initOptionSpinner();
+		super.onActivityCreated(savedInstanceState);
 	}
 
 	private void initOptionSpinner() {
@@ -92,6 +91,7 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
 		return inflater.inflate(R.layout.fragment_usecase_list_with_option,
 				null);
 	}

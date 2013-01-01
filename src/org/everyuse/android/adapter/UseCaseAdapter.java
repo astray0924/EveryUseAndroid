@@ -96,8 +96,6 @@ public class UseCaseAdapter extends BaseAdapter {
 
 	@Override
 	public boolean isEmpty() {
-		Log.i(TAG, "Empty: " + (getCount() == 0));
-
 		return getCount() == 0;
 	}
 

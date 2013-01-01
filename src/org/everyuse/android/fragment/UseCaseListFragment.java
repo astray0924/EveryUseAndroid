@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,7 +41,7 @@ import com.actionbarsherlock.app.SherlockListFragment;
 public class UseCaseListFragment extends SherlockListFragment {
 	// Strings for logging
 	private final String TAG = this.getClass().getSimpleName();
-	
+
 	protected ArrayList<UseCase> mDataList;
 	protected BaseAdapter mAdapter;
 	protected DynamicListView mListView;
@@ -66,8 +67,9 @@ public class UseCaseListFragment extends SherlockListFragment {
 		f.setArguments(b);
 		return f;
 	}
-	
-	public static UseCaseListFragment newInstance(String data_url, boolean refresh_on_start) {
+
+	public static UseCaseListFragment newInstance(String data_url,
+			boolean refresh_on_start) {
 		UseCaseListFragment f = newInstance(data_url);
 		Bundle b = f.getArguments();
 		b.putBoolean(EXTRA_REFRESH_ON_START, refresh_on_start);
@@ -115,6 +117,9 @@ public class UseCaseListFragment extends SherlockListFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		initialize();
+
+		load_data_task = new LoadDataTask();
+		load_data_task.execute(data_url);
 	}
 
 	/*
@@ -129,15 +134,13 @@ public class UseCaseListFragment extends SherlockListFragment {
 	}
 
 	private void initialize() {
-
+		data_url = buildDataURLWithQuery(data_url_raw);
 		mListView = (DynamicListView) getListView();
 		mListView.setOnListLoadListener(new OnListLoadListener() {
 
 			@Override
 			public void onLoad() {
 				if (load_data_task == null) {
-					data_url = buildDataURLWithQuery(data_url_raw);
-
 					if (data_url == null || data_url.equals("")) {
 						throw new IllegalStateException(
 								getString(R.string.msg_missing_data_url));
@@ -164,8 +167,6 @@ public class UseCaseListFragment extends SherlockListFragment {
 				.valueOf(getCurrentPage())));
 		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
 		String query_string = URLEncodedUtils.format(params, "UTF-8");
-
-		Log.d("data_url", data_url_raw + ".json" + "?" + query_string);
 
 		return data_url_raw + ".json" + "?" + query_string;
 	}
@@ -213,8 +214,6 @@ public class UseCaseListFragment extends SherlockListFragment {
 							UseCase u = UseCase.parseFromJSON(json);
 
 							mDataList.add(u);
-							
-							Log.i(TAG, "New Data Added: " + u);
 						}
 
 						success = true;
@@ -239,7 +238,7 @@ public class UseCaseListFragment extends SherlockListFragment {
 				Toast.makeText(getActivity(), R.string.msg_data_load_fail,
 						Toast.LENGTH_SHORT).show();
 			}
-			
+
 			mAdapter.notifyDataSetChanged();
 			load_data_task = null;
 		}

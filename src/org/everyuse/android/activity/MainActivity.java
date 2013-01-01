@@ -31,6 +31,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 
 public class MainActivity extends SherlockFragmentActivity implements
 		ActionBar.TabListener {
@@ -87,6 +88,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// This has to be called before setContentView and you must use the 
+		// class in android.support.v4.view and NOT android.view
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		
 		setContentView(R.layout.activity_main);
 		// Create the adapter that will return a fragment for each of the
 		// primary sections
@@ -128,6 +134,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 					.setTabListener(this));
 		}
 
+		
 	}
 
 	@Override
