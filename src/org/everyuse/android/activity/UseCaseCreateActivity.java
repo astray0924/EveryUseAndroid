@@ -70,8 +70,9 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	private ImageView iv_photo;
 
 	// photo
+	private File temp_photo_file;
 	private String temp_photo_path;
-	private File photo_file;
+	private File upload_photo_file;
 	private static final String STATE_PHOTO_PATH = "photo_path";
 	private static final int PICK_FROM_CAMERA = 0;
 	private static final int PICK_FROM_ALBUM = 1;
@@ -214,16 +215,16 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 		// 임시로 사용할 파일의 경로를 생성
 		try {
-			File temp_file = createTemporaryImageFile();
+			temp_photo_file = createTemporaryImageFile();
 
-			if (temp_file == null) {
+			if (temp_photo_file == null) {
 				Toast.makeText(this,
 						getString(R.string.msg_fail_create_temp_file),
 						Toast.LENGTH_SHORT).show();
 				return;
 			}
 
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp_file));
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp_photo_file));
 			startActivityForResult(intent, PICK_FROM_CAMERA);
 		} catch (IOException e) {
 			Log.d(TAG, e.getMessage());
@@ -271,6 +272,16 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		super.onStop();
 
 		Log.i(TAG, "onStop()");
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		if (temp_photo_file != null) {
+			temp_photo_file.delete();
+		}
+		
 	}
 
 	@Override
@@ -334,20 +345,18 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				options.inSampleSize = 3;
 				Bitmap resized = BitmapFactory.decodeStream(is, null, options);
 
-				new SaveBitmapToSD().execute(resized);
+				new SaveResizedBitmapToSD().execute(resized);
 				break;
 			}
 
 			case PICK_FROM_CAMERA: {
-				Log.d(TAG, temp_photo_path);
-
 				// // Resize and rotate the original bitmap
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 3;
 				Bitmap bitmap = ImageHelper.rotateBitmap(
 						BitmapFactory.decodeFile(temp_photo_path, options), 90);
 
-				new SaveBitmapToSD().execute(bitmap);
+				new SaveResizedBitmapToSD().execute(bitmap);
 				break;
 			}
 			}
@@ -384,7 +393,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 					.getSelectedItem().toString().toLowerCase();
 
 			// 선택된 사진
-			input_photo_file = photo_file;
+			input_photo_file = upload_photo_file;
 
 		}
 
@@ -481,7 +490,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 	}
 
-	private class SaveBitmapToSD extends AsyncTask<Bitmap, Void, Void> {
+	private class SaveResizedBitmapToSD extends AsyncTask<Bitmap, Void, Void> {
 		private ProgressDialog indicator;
 		private File bitmap_file;
 		private Bitmap bitmap;
@@ -500,16 +509,11 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 			if (bitmap != null) {
 				try {
-					bitmap_file = File.createTempFile("upload_", ".jpg",
+					bitmap_file = File.createTempFile("EveryUse_", ".jpg",
 							getExternalCacheDir());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				try {
 					FileOutputStream out = new FileOutputStream(bitmap_file);
 					bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-				} catch (FileNotFoundException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -523,7 +527,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 			// 업로드할 파일 set
 			if (bitmap_file != null) {
-				photo_file = bitmap_file;
+				upload_photo_file = bitmap_file;
 
 				// set preview
 				iv_photo.setImageBitmap(bitmap);
