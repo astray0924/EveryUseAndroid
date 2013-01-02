@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -23,7 +25,7 @@ import org.everyuse.android.R;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.ErrorHelper;
-import org.everyuse.android.util.MediaHelper;
+import org.everyuse.android.util.ImageHelper;
 import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
 import org.json.JSONException;
@@ -33,6 +35,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,6 +43,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -53,10 +57,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 public class UseCaseCreateActivity extends SherlockActivity {
+	private final String TAG = getClass().getSimpleName();
+
 	private EditText et_item;
 	private EditText et_purpose;
 	private Spinner sp_purpose_type;
@@ -65,9 +70,9 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	private ImageView iv_photo;
 
 	// photo
-	private String camera_photo_uri_temp;
-	private Uri camera_photo_uri;
+	private String temp_photo_path;
 	private File photo_file;
+	private static final String STATE_PHOTO_PATH = "photo_path";
 	private static final int PICK_FROM_CAMERA = 0;
 	private static final int PICK_FROM_ALBUM = 1;
 
@@ -141,7 +146,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 		// 장소 Spinner 초기화
 		sp_place = (Spinner) findViewById(R.id.sp_place);
-		int place_array_id = R.array.place_student;		// TODO 장소 어레이는 일단 학생용으로...
+		int place_array_id = R.array.place_student; // TODO 장소 어레이는 일단 학생용으로...
 
 		if (place_array_id != 0) {
 			ArrayAdapter<CharSequence> place_adapter = ArrayAdapter
@@ -154,10 +159,6 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 		// 사진 ImageView 초기화
 		iv_photo = (ImageView) findViewById(R.id.iv_photo);
-
-		// 여기서 기본 스타일로 지정된 디폴트 이미지를 지움
-		iv_photo.setImageDrawable(null);
-		iv_photo.setBackgroundResource(android.R.color.background_dark);
 
 		btn_photo_select = (ImageButton) findViewById(R.id.btn_photo_select);
 		btn_photo_select.setOnClickListener(new OnClickListener() {
@@ -212,10 +213,95 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 		// 임시로 사용할 파일의 경로를 생성
-		camera_photo_uri = MediaHelper.getOutputMediaFileUri(MediaHelper.MEDIA_TYPE_IMAGE);
-		camera_photo_uri_temp = camera_photo_uri.toString();
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, camera_photo_uri);
-		startActivityForResult(intent, PICK_FROM_CAMERA);
+		try {
+			File temp_file = createTemporaryImageFile();
+
+			if (temp_file == null) {
+				Toast.makeText(this,
+						getString(R.string.msg_fail_create_temp_file),
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
+
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp_file));
+			startActivityForResult(intent, PICK_FROM_CAMERA);
+		} catch (IOException e) {
+			Log.d(TAG, e.getMessage());
+			Toast.makeText(this, getString(R.string.msg_fail_create_temp_file),
+					Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+
+		Log.i(TAG, "onConfigurationChanged()");
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		outState.putString(STATE_PHOTO_PATH, temp_photo_path);
+
+		Log.i(TAG, "onSaveInstanceState()");
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+
+		if (savedInstanceState != null) {
+			temp_photo_path = savedInstanceState.getString(STATE_PHOTO_PATH);
+		}
+
+		Log.i(TAG, "onRestoreInstanceState()");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		Log.i(TAG, "onPause()");
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		Log.i(TAG, "onStop()");
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		Log.i(TAG, "onResume()");
+	}
+
+	private File createTemporaryImageFile() throws IOException {
+		// Create an image file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+				.format(new Date());
+		String imageFileName = "EveryUse" + timeStamp + "_";
+		File image = File.createTempFile(imageFileName, ".jpg", getAlbumDir());
+		temp_photo_path = image.getAbsolutePath();
+
+		if (temp_photo_path == null) {
+			Toast.makeText(this, getString(R.string.msg_fail_create_temp_file),
+					Toast.LENGTH_SHORT).show();
+			return null;
+		}
+
+		return image;
+	}
+
+	private File getAlbumDir() {
+		return new File(
+				Environment
+						.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+				"EveryUse");
 	}
 
 	/**
@@ -227,6 +313,45 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		intent.setType("image/*");
 		startActivityForResult(Intent.createChooser(intent, "Select Picture"),
 				PICK_FROM_ALBUM);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case PICK_FROM_ALBUM: {
+				Uri photo_uri = data.getData();
+				InputStream is = null;
+
+				try {
+					is = getContentResolver().openInputStream(photo_uri);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+
+				// Resize and rotate the original bitmap
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inSampleSize = 3;
+				Bitmap resized = BitmapFactory.decodeStream(is, null, options);
+
+				new SaveBitmapToSD().execute(resized);
+				break;
+			}
+
+			case PICK_FROM_CAMERA: {
+				Log.d(TAG, temp_photo_path);
+
+				// // Resize and rotate the original bitmap
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inSampleSize = 3;
+				Bitmap bitmap = ImageHelper.rotateBitmap(
+						BitmapFactory.decodeFile(temp_photo_path, options), 90);
+
+				new SaveBitmapToSD().execute(bitmap);
+				break;
+			}
+			}
+		}
 	}
 
 	private class SubmitTask extends AsyncTask<Void, Void, Boolean> {
@@ -253,7 +378,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			input_purpose_type = (purpose_type_selected == null) ? ""
 					: purpose_type_selected.toString().toLowerCase();
 
-			// place가 선택되지 않았다면, 그냥 빈 String으로 입력
+			// place가 선택되지 않았다면, 그냥 빈 String 으로 입력
 			Object place_selected = sp_place.getSelectedItem();
 			input_place = (place_selected == null) ? "" : sp_place
 					.getSelectedItem().toString().toLowerCase();
@@ -354,72 +479,6 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			}
 		}
 
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == RESULT_OK) {
-			switch (requestCode) {
-			case PICK_FROM_ALBUM: {
-				Uri photo_uri = data.getData();
-				InputStream is = null;
-
-				try {
-					is = getContentResolver().openInputStream(photo_uri);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-
-				// Resize and rotate the original bitmap
-				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inSampleSize = 3;
-				Bitmap resized = BitmapFactory.decodeStream(is, null, options);
-
-				new SaveBitmapToSD().execute(resized);
-				break;
-			}
-
-			case PICK_FROM_CAMERA: {
-				String photo_path = getPath(Uri.parse(camera_photo_uri_temp));
-
-				// Resize and rotate the original bitmap
-				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inSampleSize = 3;
-				Bitmap bitmap = rotateBitmap(
-						BitmapFactory.decodeFile(photo_path, options), 90);
-
-				new SaveBitmapToSD().execute(bitmap);
-				break;
-			}
-			}
-		}
-	}
-
-	private Bitmap rotateBitmap(Bitmap original, int degree) {
-		Matrix mat = new Matrix();
-		mat.postRotate(degree);
-		Bitmap rotated = Bitmap.createBitmap(original, 0, 0,
-				original.getWidth(), original.getHeight(), mat, true);
-
-		return rotated;
-	}
-
-	private String getPath(Uri uri) {
-		String selectedImagePath;
-		// 1:MEDIA GALLERY --- query from MediaStore.Images.Media.DATA
-		String[] projection = { MediaStore.Images.Media.DATA };
-		Cursor cursor = getContentResolver().query(uri, projection, null, null,
-				null);
-		if (cursor != null) {
-			int column_index = cursor
-					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-			cursor.moveToFirst();
-			selectedImagePath = cursor.getString(column_index);
-		} else {
-			selectedImagePath = uri.getPath();
-		}
-
-		return selectedImagePath;
 	}
 
 	private class SaveBitmapToSD extends AsyncTask<Bitmap, Void, Void> {

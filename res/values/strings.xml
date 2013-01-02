@@ -82,6 +82,7 @@
     <string name="msg_wrong_user_id">user_id must be bigger than 0!</string>
     <string name="msg_user_session_invalid">User session is invalid!</string>
     <string name="msg_intent_parameter_not_set">Required intent parameter is not set!</string>
+    <string name="msg_fail_create_temp_file">Failed to create temp file</string>
 
     <!-- preferences -->
     <string name="pref_title_user_group">User Group</string>
