@@ -10,32 +10,36 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ErrorHelper {
-	public static String getMostProminentError(String response, String[] fields) throws JSONException {
-		return getMostProminentError(new JSONObject(response), fields);
+	public static String getMostProminentError(String response)
+			throws JSONException {
+		return getMostProminentError(new JSONObject(response));
 	}
 
-	public static String getMostProminentError(JSONObject response, String[] fields) throws JSONException {
+	public static String getMostProminentError(JSONObject response)
+			throws JSONException {
 		Map<String, List<String>> error_map = parseErrorResponse(response);
-		String prominent_error = null;
+		String error = "";
 
-		for (int i = 0; i < fields.length; i++) {
-			String field = fields[i];
+		for (String field : error_map.keySet()) {
+			List<String> error_msg_list = error_map.get(field);
 
-			if (error_map.containsKey(field)) {
-				prominent_error = field + " " + error_map.get(field).get(0);
+			for (String err_msg : error_msg_list) {
+				error = field + " " + err_msg;
 				break;
 			}
 		}
 
-		return prominent_error;
+		return error;
 	}
 
-	public static Map<String, List<String>> parseErrorResponse(String response) throws JSONException {
+	public static Map<String, List<String>> parseErrorResponse(String response)
+			throws JSONException {
 		JSONObject json = new JSONObject(response);
 		return parseErrorResponse(json);
 	}
 
-	public static Map<String, List<String>> parseErrorResponse(JSONObject response) throws JSONException {
+	public static Map<String, List<String>> parseErrorResponse(
+			JSONObject response) throws JSONException {
 		Map<String, List<String>> errors = new HashMap<String, List<String>>();
 		JSONArray error_names = response.names();
 

@@ -66,6 +66,7 @@
     <string name="msg_wait">Please wait</string>
     <string name="msg_no_result">No result</string>
     <string name="msg_no_response">No response from the server</string>
+    <string name="msg_fail_interpret_response">Failed to interpret server response (Check whether the server is down).</string>
     <string name="msg_register_prompt">Register new account?</string>
     <string name="msg_register_success">New account successfully created!</string>
     <string name="msg_register_fail">Failed to register new account!</string>

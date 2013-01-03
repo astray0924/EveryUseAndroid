@@ -140,11 +140,8 @@ public class RegisterActivity extends SherlockActivity {
 						String res_string = EntityUtils.toString(res_entity);
 
 						if (code >= 300) { // error occurred
-							String[] fields = { "username", "email",
-									"password", "password_confirmation",
-									"user_group" };
-							msg_error = ErrorHelper.getMostProminentError(
-									res_string, fields);
+							msg_error = ErrorHelper
+									.getMostProminentError(res_string);
 
 							return false;
 						} else {

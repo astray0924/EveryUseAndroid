@@ -224,7 +224,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				return;
 			}
 
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp_photo_file));
+			intent.putExtra(MediaStore.EXTRA_OUTPUT,
+					Uri.fromFile(temp_photo_file));
 			startActivityForResult(intent, PICK_FROM_CAMERA);
 		} catch (IOException e) {
 			Log.d(TAG, e.getMessage());
@@ -273,15 +274,15 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 		Log.i(TAG, "onStop()");
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
+
 		if (temp_photo_file != null) {
 			temp_photo_file.delete();
 		}
-		
+
 	}
 
 	@Override
@@ -438,10 +439,9 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				int statusCode = response.getStatusLine().getStatusCode();
 
 				if (statusCode >= 300) { // error occurred
-					String[] fields = { "item", "purpose", "photo" };
 					try {
-						msg_error = ErrorHelper.getMostProminentError(
-								responseString, fields);
+						msg_error = ErrorHelper
+								.getMostProminentError(responseString);
 					} catch (JSONException e) {
 						Log.d("PostActivity", responseString);
 					}
