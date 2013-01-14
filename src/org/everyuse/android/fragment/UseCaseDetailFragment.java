@@ -1,7 +1,6 @@
 package org.everyuse.android.fragment;
 
 import org.everyuse.android.R;
-import org.everyuse.android.activity.UseCaseCreateActivity;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.CommentsHelper;
 import org.everyuse.android.util.CommentsHelper.Comments;
@@ -13,14 +12,12 @@ import org.everyuse.android.util.RelationshipHelper.Relationship;
 import org.everyuse.android.util.UserHelper;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -251,43 +248,6 @@ public class UseCaseDetailFragment extends Fragment {
 				} else {
 					commentsHelper.deleteScrap();
 				}
-			}
-
-		});
-
-		Button btn_similar_item = (Button) page
-				.findViewById(R.id.btn_similar_item);
-		btn_similar_item.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				TextView tv_item = (TextView) page.findViewById(R.id.tv_item);
-				String pre_item = tv_item.getText().toString();
-
-				Intent intent = new Intent(getActivity(),
-						UseCaseCreateActivity.class);
-				intent.putExtra(UseCaseCreateActivity.EXTRA_ITEM, pre_item);
-				startActivity(intent);
-			}
-
-		});
-
-		Button btn_similar_purpose = (Button) page
-				.findViewById(R.id.btn_similar_purpose);
-		btn_similar_purpose.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				TextView tv_purpose = (TextView) page
-						.findViewById(R.id.tv_purpose);
-				String pre_purpose = tv_purpose.getText().toString();
-
-				Intent intent = new Intent(getActivity(),
-						UseCaseCreateActivity.class);
-				intent.putExtra(UseCaseCreateActivity.EXTRA_PURPOSE,
-						pre_purpose);
-				startActivity(intent);
-
 			}
 
 		});

@@ -45,8 +45,8 @@
                     android:id="@+id/tgl_scrap"
                     android:layout_width="32dp"
                     android:layout_height="48dp"
-                    android:layout_marginRight="16dp"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="16dp"
                     android:background="@drawable/scrap_button_selector"
                     android:textOff=""
                     android:textOn="" />
@@ -54,25 +54,6 @@
         </LinearLayout>
 
         <include layout="@layout/snippet_comment_panel" />
-
-        <LinearLayout
-            android:id="@+id/similar_panel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <Button
-                android:id="@+id/btn_similar_item"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/btn_similar_item" />
-
-            <Button
-                android:id="@+id/btn_similar_purpose"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/btn_similar_purpose" />
-        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>
