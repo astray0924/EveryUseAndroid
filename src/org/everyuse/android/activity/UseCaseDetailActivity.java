@@ -6,17 +6,24 @@ import org.everyuse.android.R;
 import org.everyuse.android.fragment.UseCaseDetailFragment;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.ImageDownloader;
+import org.everyuse.android.util.UserHelper;
 
+import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 public class UseCaseDetailActivity extends SherlockFragmentActivity implements
@@ -30,6 +37,34 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 
 	private static ViewPager pager;
 	private static ItemsPagerAdapter pager_adapter;
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.detail, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.actionbarsherlock.app.SherlockActivity#onOptionsItemSelected(com.
+	 * actionbarsherlock.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			break;
+		case R.id.menu_edit:
+			break;
+		}
+
+		return true;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -47,25 +82,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 
 		// initialize
 		initialize();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.actionbarsherlock.app.SherlockActivity#onOptionsItemSelected(com.
-	 * actionbarsherlock.view.MenuItem)
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			Intent intent = new Intent(this, MainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-		}
-
-		return true;
 	}
 
 	private void initialize() {
@@ -108,7 +124,8 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 		@Override
 		public Fragment getItem(int position) {
 			UseCase data = data_list.get(position);
-			UseCaseDetailFragment fragment = UseCaseDetailFragment.newInstance(data);
+			UseCaseDetailFragment fragment = UseCaseDetailFragment
+					.newInstance(data);
 			return fragment;
 		}
 
@@ -121,7 +138,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public void onFollowUpdate(int page) {
-//		Toast.makeText(this, "test", 200).show();	
+		// Toast.makeText(this, "test", 200).show();
 
 	}
 
