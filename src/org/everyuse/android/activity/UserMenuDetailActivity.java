@@ -33,7 +33,7 @@ public class UserMenuDetailActivity extends SherlockFragmentActivity {
 	public static final int MENU_FOLLOWING = 3;
 	public static final int MENU_FOLLOWER = 4;
 	public static final int MENU_USER = 5;
-	
+
 	private int selected_main_page;
 
 	@Override
@@ -151,16 +151,13 @@ public class UserMenuDetailActivity extends SherlockFragmentActivity {
 
 		case MENU_SHARED:
 			return UseCaseListWithOptionFragment.newInstance(
-					URLHelper.getMySharedURL(user.id), R.array.use_case_time,
-					true);
+					URLHelper.getMySharedURL(user.id), R.array.use_case_time);
 		case MENU_COMMENTED:
-			return UseCaseListWithOptionFragment
-					.newInstance(URLHelper.getMyCommentedURL(user.id),
-							R.array.comment, true);
+			return UseCaseListWithOptionFragment.newInstance(
+					URLHelper.getMyCommentedURL(user.id), R.array.comment);
 		case MENU_SCRAPED:
 			return UseCaseListWithOptionFragment.newInstance(
-					URLHelper.getMyScrapedURL(user.id), R.array.use_case_time,
-					true);
+					URLHelper.getMyScrapedURL(user.id), R.array.use_case_time);
 		case MENU_FOLLOWING:
 			return UserListFragment.newInstance(URLHelper
 					.getMyFollowingURL(user.id));

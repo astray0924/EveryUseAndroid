@@ -34,16 +34,6 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 
 		return f;
 	}
-	
-	public static UseCaseListWithOptionFragment newInstance(String data_url,
-			int option_array_id, boolean refresh_on_start) {
-		UseCaseListWithOptionFragment f = newInstance(data_url, option_array_id);
-
-		Bundle b = f.getArguments();
-		b.putBoolean(EXTRA_REFRESH_ON_START, refresh_on_start);
-		f.setArguments(b);
-		return f;
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,9 +48,8 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-
 		initOptionSpinner();
+		super.onActivityCreated(savedInstanceState);
 	}
 
 	private void initOptionSpinner() {
@@ -92,6 +81,7 @@ public class UseCaseListWithOptionFragment extends UseCaseListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
 		return inflater.inflate(R.layout.fragment_usecase_list_with_option,
 				null);
 	}

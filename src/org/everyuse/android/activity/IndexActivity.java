@@ -43,51 +43,53 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 public class IndexActivity extends SherlockFragmentActivity {
 	// Strings for logging
 	private final String TAG = this.getClass().getSimpleName();
-	
+
 	private EditText et_email;
 	private EditText et_password;
 	private String str_email;
 	private String str_password;
-	
+
+	private HttpClient client;
+
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
+
 		Log.i(TAG, "onPause");
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		
+
 		Log.i(TAG, "onStop");
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
+
 		Log.i(TAG, "onDestroy");
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		Log.i(TAG, "onResume");
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
+
 		Log.i(TAG, "onStart");
 	}
 
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		
+
 		Log.i(TAG, "onRestart");
 	}
 
@@ -95,10 +97,12 @@ public class IndexActivity extends SherlockFragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_index);
-		
+
 		Log.i(TAG, "onCreate");
 
 		initUI();
+
+		client = new DefaultHttpClient();
 
 		// TODO: 아이디와 패스워드를 저장하고, 시작 할때마다 로그인하는 방식으로 하자
 		if (isAuthenticated()) {
@@ -193,10 +197,9 @@ public class IndexActivity extends SherlockFragmentActivity {
 
 		@Override
 		protected Boolean doInBackground(Void... args) {
-			HttpClient client = new DefaultHttpClient();
-
 			if (str_email.equals("") || str_password.equals("")) {
-				return null;
+				error = getString(R.string.msg_complete_form);
+				return false;
 			}
 
 			// Make Parameters
@@ -206,6 +209,7 @@ public class IndexActivity extends SherlockFragmentActivity {
 			params.add(new BasicNameValuePair("user_session[password]",
 					str_password));
 
+			String res_string = "";
 			try {
 				HttpPost post = new HttpPost(URLHelper.USER_SESSIONS_URL
 						+ ".json");
@@ -218,56 +222,43 @@ public class IndexActivity extends SherlockFragmentActivity {
 
 				if (res_entity != null) {
 					int code = response.getStatusLine().getStatusCode();
-					try {
-						String res_string = EntityUtils.toString(res_entity);
+					res_string = EntityUtils.toString(res_entity);
 
-						if (code >= 300) { // error
-							String[] fields = { "email", "password" };
-							error = ErrorHelper.getMostProminentError(
-									res_string, fields);
+					if (code >= 300) { // error
+						error = ErrorHelper.getMostProminentError(res_string);
 
-							return false;
-						} else {
-							JSONObject json = new JSONObject(res_string)
-									.getJSONObject("record");
-							User user = User.parseFromJSON(json);
+						return false;
+					} else {
+						JSONObject json = new JSONObject(res_string)
+								.getJSONObject("record");
+						User user = User.parseFromJSON(json);
 
-							// store into shared preferences
-							UserHelper.storeUser(getApplicationContext(), user);
+						// store into shared preferences
+						UserHelper.storeUser(getApplicationContext(), user);
 
-							return true;
-						}
-					} catch (ParseException e1) {
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					} catch (JSONException e) {
-						e.printStackTrace();
+						return true;
 					}
+
 				}
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
-				e.printStackTrace();
+				error = getString(R.string.msg_no_response);
+			} catch (JSONException e) {
+				Log.d(TAG, e.getMessage());
+
+				error = getString(R.string.msg_fail_interpret_response);
 			}
 
-			return null;
+			return false;
 		}
 
 		@Override
 		protected void onPostExecute(Boolean result) {
 			indicator.dismiss();
 
-			if (result == null) { // input form incomplete
-				Toast.makeText(getApplicationContext(),
-						getString(R.string.msg_complete_form),
-						Toast.LENGTH_SHORT).show();
-			} else if (result == false) { // login failed
+			if (!result) { // login failed
 				Toast.makeText(getApplicationContext(), error,
 						Toast.LENGTH_SHORT).show();
-			} else if (result == true) { // login success
+			} else { // login success
 				Toast.makeText(getApplicationContext(),
 						getString(R.string.msg_login_success),
 						Toast.LENGTH_SHORT).show();

@@ -15,11 +15,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
-import org.everyuse.android.activity.MainActivity;
 import org.everyuse.android.activity.UseCaseDetailActivity;
 import org.everyuse.android.adapter.UseCaseAdapter;
 import org.everyuse.android.model.UseCase;
-import org.everyuse.android.util.UserHelper;
 import org.everyuse.android.widget.DynamicListView;
 import org.everyuse.android.widget.DynamicListView.OnListLoadListener;
 import org.json.JSONArray;
@@ -29,8 +27,6 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,10 +34,12 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class UseCaseListFragment extends ListFragment {
+import com.actionbarsherlock.app.SherlockListFragment;
+
+public class UseCaseListFragment extends SherlockListFragment {
 	// Strings for logging
 	private final String TAG = this.getClass().getSimpleName();
-	
+
 	protected ArrayList<UseCase> mDataList;
 	protected BaseAdapter mAdapter;
 	protected DynamicListView mListView;
@@ -55,23 +53,15 @@ public class UseCaseListFragment extends ListFragment {
 
 	public static final String EXTRA_DATA_LIST = "data_list";
 	public static final String EXTRA_DATA_URL = "data_url_raw";
-	public static final String EXTRA_REFRESH_ON_START = "refresh_start";
+
+	private HttpClient client;
 	private String data_url;
 	private String data_url_raw;
-	private boolean refresh_on_start = false;
 
 	public static UseCaseListFragment newInstance(String data_url) {
 		UseCaseListFragment f = new UseCaseListFragment();
 		Bundle b = new Bundle();
 		b.putString(EXTRA_DATA_URL, data_url);
-		f.setArguments(b);
-		return f;
-	}
-	
-	public static UseCaseListFragment newInstance(String data_url, boolean refresh_on_start) {
-		UseCaseListFragment f = newInstance(data_url);
-		Bundle b = f.getArguments();
-		b.putBoolean(EXTRA_REFRESH_ON_START, refresh_on_start);
 		f.setArguments(b);
 		return f;
 	}
@@ -87,8 +77,9 @@ public class UseCaseListFragment extends ListFragment {
 		Bundle args = getArguments();
 		if (args != null) {
 			data_url_raw = args.getString(EXTRA_DATA_URL);
-			refresh_on_start = args.getBoolean(EXTRA_REFRESH_ON_START);
 		}
+
+		client = new DefaultHttpClient();
 
 	}
 
@@ -100,10 +91,6 @@ public class UseCaseListFragment extends ListFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-
-		if (refresh_on_start) {
-			refresh();
-		}
 	}
 
 	/*
@@ -116,6 +103,9 @@ public class UseCaseListFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		initialize();
+
+		load_data_task = new LoadDataTask();
+		load_data_task.execute(data_url);
 	}
 
 	/*
@@ -130,15 +120,13 @@ public class UseCaseListFragment extends ListFragment {
 	}
 
 	private void initialize() {
-
+		data_url = buildDataURLWithQuery(data_url_raw);
 		mListView = (DynamicListView) getListView();
 		mListView.setOnListLoadListener(new OnListLoadListener() {
 
 			@Override
 			public void onLoad() {
 				if (load_data_task == null) {
-					data_url = buildDataURLWithQuery(data_url_raw);
-
 					if (data_url == null || data_url.equals("")) {
 						throw new IllegalStateException(
 								getString(R.string.msg_missing_data_url));
@@ -166,17 +154,13 @@ public class UseCaseListFragment extends ListFragment {
 		params.add(new BasicNameValuePair("limit", String.valueOf(PER_PAGE)));
 		String query_string = URLEncodedUtils.format(params, "UTF-8");
 
-		Log.d("data_url", data_url_raw + ".json" + "?" + query_string);
-
 		return data_url_raw + ".json" + "?" + query_string;
 	}
 
 	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
-		private HttpClient client;
-
 		@Override
 		protected void onPreExecute() {
-			client = new DefaultHttpClient();
+			UseCaseListFragment.this.getSherlockActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
 		}
 
 		@Override
@@ -214,8 +198,6 @@ public class UseCaseListFragment extends ListFragment {
 							UseCase u = UseCase.parseFromJSON(json);
 
 							mDataList.add(u);
-							
-							Log.i(TAG, "New Data Added: " + u);
 						}
 
 						success = true;
@@ -235,16 +217,16 @@ public class UseCaseListFragment extends ListFragment {
 		@Override
 		protected void onPostExecute(Boolean success) {
 			if (success) {
-				Log.i(TAG, "Data loaded: " + mDataList.size());
-				
-				mAdapter.notifyDataSetChanged();
 				increasePage();
 			} else {
 				Toast.makeText(getActivity(), R.string.msg_data_load_fail,
 						Toast.LENGTH_SHORT).show();
 			}
 
+			mAdapter.notifyDataSetChanged();
 			load_data_task = null;
+			
+			UseCaseListFragment.this.getSherlockActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		}
 	}
 

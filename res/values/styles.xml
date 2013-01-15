@@ -74,7 +74,7 @@
         <item name="android:layout_margin">4dp</item>
         <item name="android:gravity">center</item>
         <item name="android:scaleType">fitCenter</item>
-        <item name="android:src">@drawable/image_loading</item>
+        <item name="android:background">@android:color/black</item>
     </style>
 
     <style name="PictureStyle.Thumb">
@@ -90,8 +90,8 @@
     </style>
 
     <style name="PictureStyle.Preview">
-        <item name="android:layout_width">250dp</item>
-        <item name="android:layout_height">250dp</item>
+        <item name="android:layout_width">280dp</item>
+        <item name="android:layout_height">280dp</item>
         <item name="android:contentDescription">preview image</item>
     </style>
 
@@ -177,7 +177,7 @@
 
     <style name="RegisterFormEditTextStyle">
         <item name="android:textColorHint">@color/white</item>
-        <item name="android:textSize">13sp</item>        
+        <item name="android:textSize">13sp</item>
         <item name="android:layout_width">250dp</item>
         <item name="android:layout_height">48dp</item>
         <item name="android:layout_marginBottom">10dp</item>

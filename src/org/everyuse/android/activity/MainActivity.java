@@ -31,6 +31,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 
 public class MainActivity extends SherlockFragmentActivity implements
 		ActionBar.TabListener {
@@ -80,13 +81,17 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public boolean onSearchRequested() {
-		// TODO Auto-generated method stub
 		return super.onSearchRequested();
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// This has to be called before setContentView and you must use the
+		// class in android.support.v4.view and NOT android.view
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
 		setContentView(R.layout.activity_main);
 		// Create the adapter that will return a fragment for each of the
 		// primary sections
@@ -136,9 +141,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 		// Associate searchable configuration with the SearchView
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-		
+		SearchView searchView = (SearchView) menu.findItem(R.id.menu_search)
+				.getActionView();
+		searchView.setSearchableInfo(searchManager
+				.getSearchableInfo(getComponentName()));
+
 		return true;
 	}
 
@@ -243,14 +250,12 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 			// add Feed Fragment
 			int user_id = UserHelper.getCurrentUserId(MainActivity.this);
-			fragment_list.add(
-					FEED,
-					UseCaseListFragment.newInstance(
-							URLHelper.getMyFeedsURL(user_id), true));
+			fragment_list.add(FEED, UseCaseListFragment.newInstance(URLHelper
+					.getMyFeedsURL(user_id)));
 
 			// add Recent Fragment
-			fragment_list.add(RECENT, UseCaseListFragment.newInstance(
-					URLHelper.USE_CASES_RECENT_URL, true));
+			fragment_list.add(RECENT, UseCaseListFragment
+					.newInstance(URLHelper.USE_CASES_RECENT_URL));
 
 			// add Category Fragment
 			fragment_list.add(CATEOGORY, UseCaseGroupListFragment.newInstance(

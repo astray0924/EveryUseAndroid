@@ -7,6 +7,7 @@ import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.ImageDownloader;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class UseCaseAdapter extends BaseAdapter {
+	private final String TAG = getClass().getSimpleName();
+
 	private LayoutInflater inflater;
 	private List<UseCase> data_list;
 	private ImageDownloader image_downloader;
@@ -47,9 +50,9 @@ public class UseCaseAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	public static void fillDataToViewHolder(View convertView, UseCase use_case, ImageDownloader image_downloader) {
-		UseCaseViewHolder holder = (UseCaseViewHolder) convertView
-				.getTag();
+	public static void fillDataToViewHolder(View convertView, UseCase use_case,
+			ImageDownloader image_downloader) {
+		UseCaseViewHolder holder = (UseCaseViewHolder) convertView.getTag();
 		image_downloader.download(use_case.getPhotoThumbURL(), holder.photo);
 		holder.item.setText(use_case.item);
 		holder.purpose.setText(use_case.getPurposeString());
@@ -58,8 +61,7 @@ public class UseCaseAdapter extends BaseAdapter {
 		holder.metoo_count.setText(String.valueOf(use_case.metoos_count));
 	}
 
-	public static UseCaseViewHolder attachViewToViewHolder(
-			View convertView) {
+	public static UseCaseViewHolder attachViewToViewHolder(View convertView) {
 		UseCaseViewHolder holder = new UseCaseViewHolder();
 		holder.photo = (ImageView) convertView.findViewById(R.id.iv_photo);
 		holder.item = (TextView) convertView.findViewById(R.id.tv_item);
@@ -77,21 +79,24 @@ public class UseCaseAdapter extends BaseAdapter {
 		return data_list;
 	}
 
+	@Override
 	public int getCount() {
 		return data_list.size();
 	}
 
+	@Override
 	public Object getItem(int position) {
 		return data_list.get(position);
 	}
 
+	@Override
 	public long getItemId(int position) {
-		return ((UseCase) getItem(position)).id;
+		return position;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return (getCount() == 0);
+		return getCount() == 0;
 	}
 
 	public static class UseCaseViewHolder {

@@ -207,12 +207,10 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 
 	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
 		private HttpClient client;
-		private List<UseCaseGroup> fetched_data_list;
 
 		@Override
 		protected void onPreExecute() {
 			client = new DefaultHttpClient();
-			fetched_data_list = new ArrayList<UseCaseGroup>();
 		}
 
 		@Override
@@ -252,7 +250,7 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 							UseCaseGroup group = UseCaseGroup
 									.parseSingleFromJSON(json);
 
-							fetched_data_list.add(group);
+							mDataList.add(group);
 						}
 
 						success = true;
@@ -272,16 +270,13 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 		@Override
 		protected void onPostExecute(Boolean success) {
 			if (success) {
-				for (UseCaseGroup group : fetched_data_list) {
-					mDataList.add(group);
-				}
-				mAdapter.notifyDataSetChanged();
 				increasePage();
 			} else {
 				Toast.makeText(getActivity(), R.string.msg_data_load_fail,
 						Toast.LENGTH_SHORT).show();
 			}
 
+			mAdapter.notifyDataSetChanged();
 			load_data_task = null;
 		}
 	}
