@@ -3,7 +3,7 @@
     android:id="@+id/profile_panel"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:background="@color/ThemeOrange"
+    android:background="@drawable/background_color_themeorange"
     android:orientation="horizontal" >
 
     <ImageView

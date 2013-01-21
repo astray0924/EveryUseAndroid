@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/MatchWidth"
     android:layout_height="48dp"
-    android:background="@color/ThemeOrange"
+    android:background="@drawable/background_color_themeorange"
     android:gravity="center_vertical" >
 
     <TextView
