@@ -27,18 +27,12 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:id="@+id/tv_item"
+                    android:id="@+id/tv_usecase_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/tv_purpose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@id/tv_item"
+                    android:layout_centerVertical="true"
+                    android:text="@string/empty_text"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <ToggleButton

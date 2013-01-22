@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Locale;
 
 import org.everyuse.android.util.URLHelper;
 import org.json.JSONArray;
@@ -44,7 +44,13 @@ public class UseCase implements Parcelable {
 		if (purpose_type == null || purpose == null) {
 			return "";
 		} else {
-			return purpose + " " + purpose_type;
+			if (Locale.getDefault().equals(Locale.KOREA)
+					|| Locale.getDefault().equals(Locale.KOREAN)) {
+				return purpose + purpose_type;
+			} else {
+				return purpose_type + purpose;
+			}
+
 		}
 
 	}
@@ -101,7 +107,8 @@ public class UseCase implements Parcelable {
 	}
 
 	public String toString() {
-		return "Item: " + item + ", Purpose: " + purpose;
+		return item + getPurposeString();
+
 	}
 
 	public int compareTo(UseCase c) {

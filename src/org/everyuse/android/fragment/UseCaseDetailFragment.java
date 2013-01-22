@@ -135,13 +135,10 @@ public class UseCaseDetailFragment extends SherlockFragment {
 		// Content panel
 		ImageView usecase_photo = (ImageView) page
 				.findViewById(R.id.iv_usecase_photo);
-		TextView item = (TextView) page.findViewById(R.id.tv_item);
-		TextView purpose = (TextView) page.findViewById(R.id.tv_purpose);
-		;
+		TextView usecase_text = (TextView) page.findViewById(R.id.tv_usecase_text);
 
 		image_downloader.download(data.getPhotoLargeURL(), usecase_photo);
-		item.setText(data.item);
-		purpose.setText(data.getPurposeString());
+		usecase_text.setText(data.toString());
 	}
 
 	private void updateCommentButtonState(Comments comments) {
