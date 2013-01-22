@@ -6,5 +6,11 @@
         android:icon="@drawable/ic_content_edit"
         android:showAsAction="always"
         android:title="@string/menu_edit"/>
+    
+    <item
+        android:id="@+id/menu_discard"
+        android:icon="@drawable/ic_content_discard"
+        android:showAsAction="always"
+        android:title="@string/menu_discard"/>
 
 </menu>
