@@ -61,9 +61,38 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 			break;
 		case R.id.menu_edit:
 			break;
+		case R.id.menu_discard:
+			showDiscardDialog();
+			break;
 		}
 
 		return true;
+	}
+
+	private void showDiscardDialog() {
+		AlertDialog.Builder discard_bld = new AlertDialog.Builder(this);
+		discard_bld.setMessage(getString(R.string.msg_discard))
+			.setCancelable(true)
+			.setPositiveButton(getString(R.string.msg_yes), new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					// TODO Auto-generated method stub
+					
+				}
+			})
+			.setNegativeButton(getString(R.string.msg_no), new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		
+		AlertDialog alert = discard_bld.create();
+		alert.setTitle("Delete?");
+		alert.show();
 	}
 
 	/*
