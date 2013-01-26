@@ -17,6 +17,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -34,6 +36,7 @@ import org.everyuse.android.util.UserHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -70,8 +73,9 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	private Spinner sp_place;
 	private ImageView iv_photo;
 	private ImageButton btn_photo_select;
-	
+
 	private ImageDownloader image_downloader = new ImageDownloader();
+	private UseCase old_use_case = null;
 
 	// photo
 	private File temp_photo_file;
@@ -129,7 +133,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			// edit 모드
 			Parcelable parcel = intent.getParcelableExtra(EXTRA_USE_CASE);
 			if (parcel != null && parcel instanceof UseCase) { // MODE_EDIT
-				fillWithUseCase((UseCase) parcel);
+				old_use_case = (UseCase) parcel;
+				fillWithUseCase(old_use_case);
 				mode = MODE_EDIT;
 			} else { // MODE_CREATE
 				mode = MODE_CREATE;
@@ -152,9 +157,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				R.array.purpose_type);
 
 		// 장소 선택
-		setStringArraySpinner(sp_place, use_case.place,
-				R.array.place_student);
-		
+		setStringArraySpinner(sp_place, use_case.place, R.array.place_student);
+
 		// 기존 사진 표시
 		image_downloader.download(use_case.getPhotoLargeURL(), iv_photo);
 	}
@@ -408,6 +412,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		private ProgressDialog indicator;
 		private String msg_error;
 		private UseCase new_use_case;
+		private Activity activity;
 
 		// input
 		private String input_item;
@@ -422,6 +427,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 					ProgressDialog.STYLE_SPINNER);
 			indicator.setMessage("Please wait...");
 			indicator.show();
+			
+			activity = UseCaseCreateActivity.this;
 
 			// 입력된 'item'
 			input_item = et_item.getText().toString();
@@ -445,10 +452,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 		@Override
 		protected Boolean doInBackground(Void... args) {
-			String url = URLHelper.USE_CASES_URL + ".json";
-
-			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(url);
+			String url = URLHelper.USE_CASES_URL;
 
 			MultipartEntity entity = new MultipartEntity(
 					HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -463,8 +467,14 @@ public class UseCaseCreateActivity extends SherlockActivity {
 						input_purpose_type, Charset.forName("UTF-8")));
 				entity.addPart("use_case[place]", new StringBody(input_place,
 						Charset.forName("UTF-8")));
-				entity.addPart("use_case[photo]", new FileBody(
-						input_photo_file, "image/png"));
+
+				// MODE_CREATE이거나, MODE_EDIT이면서 새로 업로드할 사진 파일이 존재할떄만
+				if (mode == MODE_CREATE
+						|| (mode == MODE_EDIT && input_photo_file != null)) {
+					entity.addPart("use_case[photo]", new FileBody(
+							input_photo_file, "image/png"));
+				}
+
 				entity.addPart("user_credentials", new StringBody(
 						user.single_access_token, Charset.forName("UTF-8")));
 			} catch (UnsupportedEncodingException e) {
@@ -475,35 +485,55 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				return false;
 			}
 
-			httpPost.setEntity(entity);
+			HttpClient httpClient = new DefaultHttpClient();
+
+			HttpUriRequest httpRequest = null;
+			if (mode.equals(MODE_EDIT) && old_use_case != null) {
+				httpRequest = new HttpPut(url + "/" + old_use_case.id + ".json");
+				((HttpPut) httpRequest).setEntity(entity);
+			} else {
+				httpRequest = new HttpPost(url + ".json");
+				((HttpPost) httpRequest).setEntity(entity);
+			}
 
 			try {
-				HttpResponse response = httpClient.execute(httpPost);
-				HttpEntity resEntity = response.getEntity();
-				String responseString = EntityUtils.toString(resEntity);
+				HttpResponse response = httpClient.execute(httpRequest);
 				int statusCode = response.getStatusLine().getStatusCode();
-
-				if (statusCode >= 300) { // error occurred
-					try {
-						msg_error = ErrorHelper
-								.getMostProminentError(responseString);
-					} catch (JSONException e) {
-						Log.d("PostActivity", responseString);
-					}
-
-					return false;
-				} else {
-					JSONObject json = null;
-					try {
-						json = new JSONObject(responseString);
-						new_use_case = UseCase.parseFromJSON(json);
-					} catch (JSONException e) {
-						e.printStackTrace();
+		
+				if (mode.equals(MODE_CREATE)) {					
+					HttpEntity resEntity = response.getEntity();
+					String responseString = EntityUtils.toString(resEntity);
+					
+					if (statusCode >= 300) { 			// error occurred
+						try {
+							msg_error = ErrorHelper
+									.getMostProminentError(responseString);
+						} catch (JSONException e) {
+							Log.d("PostActivity", responseString);
+						}
+						
 						return false;
+					} else {
+						JSONObject json = null;
+						try {
+							json = new JSONObject(responseString);
+							new_use_case = UseCase.parseFromJSON(json);
+						} catch (JSONException e) {
+							e.printStackTrace();
+							return false;
+						}
+						
+						return true;
 					}
-
-					return true;
-				}
+				} else if (mode.equals(MODE_EDIT)) {
+					if (statusCode >= 300) { 
+						return false;
+					} else {
+						return true;						
+					}
+				} 
+				
+				return false;
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -518,13 +548,31 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			indicator.dismiss();
 
 			if (success) {
-				Toast.makeText(UseCaseCreateActivity.this,
-						R.string.msg_create_success, Toast.LENGTH_SHORT).show();
+				if (isMode(MODE_CREATE)) {					
+					Toast.makeText(UseCaseCreateActivity.this,
+							R.string.msg_create_success, Toast.LENGTH_SHORT).show();
+					
+					Intent intent = new Intent(UseCaseCreateActivity.this,
+							UseCaseDetailActivity.class);
+					intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, new_use_case);
+					startActivity(intent);
+				} else if (isMode(MODE_EDIT)) {
+					Toast.makeText(UseCaseCreateActivity.this,
+							R.string.msg_create_success, Toast.LENGTH_SHORT).show();
+					
+					// TODO 업데이트된 UseCase를 보여주도록 구현해야함.
+					Intent intent = new Intent(activity, MainActivity.class);
+					intent.putExtra(MainActivity.EXTRA_REFRESH_LISTS, true);
+					startActivity(intent);
+					
+					activity.finish();
+					
+					return;
+				} else {
+					throw new IllegalStateException("Undefined mode detected");
+				}
 
-				Intent intent = new Intent(UseCaseCreateActivity.this,
-						UseCaseDetailActivity.class);
-				intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, new_use_case);
-				startActivity(intent);
+				
 
 				finish();
 			} else {
@@ -533,6 +581,10 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			}
 		}
 
+	}
+	
+	private boolean isMode(String mode_compare) {
+		return mode.equals(mode_compare);
 	}
 
 	private class SaveResizedBitmapToSD extends AsyncTask<Bitmap, Void, Void> {

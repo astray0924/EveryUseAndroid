@@ -109,7 +109,7 @@ public class UseCase implements Parcelable {
 	}
 
 	public String toString() {
-		return item + getPurposeString();
+		return item + " " + getPurposeString();
 
 	}
 
