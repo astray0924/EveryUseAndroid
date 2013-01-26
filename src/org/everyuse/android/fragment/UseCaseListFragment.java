@@ -82,6 +82,7 @@ public class UseCaseListFragment extends SherlockListFragment {
 		client = new DefaultHttpClient();
 
 	}
+	
 
 	/*
 	 * (non-Javadoc)
@@ -252,7 +253,7 @@ public class UseCaseListFragment extends SherlockListFragment {
 		startActivity(intent);
 	}
 
-	protected void refresh() {
+	public void refresh() {
 		resetPage();
 		mDataList.clear();
 		mAdapter.notifyDataSetChanged();

@@ -400,7 +400,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 		@Override
 		protected Boolean doInBackground(Void... args) {
-			String url = URLHelper.USE_CASES_RECENT_URL + ".json";
+			String url = URLHelper.USE_CASES_URL + ".json";
 
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpPost httpPost = new HttpPost(url);

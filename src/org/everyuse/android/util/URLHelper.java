@@ -7,9 +7,9 @@ import android.content.res.Resources;
 public class URLHelper {
 	public static String BASE_URL = "http://wikiuse.kaist.ac.kr";
 	public static String USERS_URL = BASE_URL + "/users";
-	public static String USE_CASES_RECENT_URL = BASE_URL + "/use_cases";
-	public static String USE_CASES_TOP_URL = USE_CASES_RECENT_URL + "/top";
-	public static String USE_CASE_GROUPS_URL = USE_CASES_RECENT_URL + "/groups";
+	public static String USE_CASES_URL = BASE_URL + "/use_cases";
+	public static String USE_CASES_TOP_URL = USE_CASES_URL + "/top";
+	public static String USE_CASE_GROUPS_URL = USE_CASES_URL + "/groups";
 	public static String LOGIN_URL = BASE_URL + "/login";
 	public static String USER_SESSIONS_URL = BASE_URL + "/user_sessions";
 	public static String PHOTOS_URL = BASE_URL + "/photos";

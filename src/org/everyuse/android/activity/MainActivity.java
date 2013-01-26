@@ -54,6 +54,27 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private static String SELECTED_TAB_KEY = "SELECTED_TAB_KEY";
 	private int selected_tab = 0;
 
+	public static final String EXTRA_REFRESH_LISTS = "refresh_lists";
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
+		Boolean refresh_list = intent.getBooleanExtra(EXTRA_REFRESH_LISTS,
+				false);
+		if (refresh_list) {
+			for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+				Fragment fragment = mSectionsPagerAdapter.getItem(i);
+
+				if (fragment != null
+						&& (fragment instanceof UseCaseListFragment || fragment instanceof UseCaseGroupListFragment)) {
+					UseCaseListFragment use_case_frag = (UseCaseListFragment) fragment;
+					use_case_frag.refresh();
+				}
+			}
+		}
+	}
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -254,8 +275,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 					.getMyFeedsURL(user_id)));
 
 			// add Recent Fragment
-			fragment_list.add(RECENT, UseCaseListFragment
-					.newInstance(URLHelper.USE_CASES_RECENT_URL));
+			fragment_list.add(RECENT,
+					UseCaseListFragment.newInstance(URLHelper.USE_CASES_URL));
 
 			// add Category Fragment
 			fragment_list.add(CATEOGORY, UseCaseGroupListFragment.newInstance(

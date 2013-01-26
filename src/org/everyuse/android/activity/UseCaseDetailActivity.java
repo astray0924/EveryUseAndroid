@@ -1,24 +1,29 @@
 package org.everyuse.android.activity;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.everyuse.android.R;
 import org.everyuse.android.fragment.UseCaseDetailFragment;
 import org.everyuse.android.model.UseCase;
-import org.everyuse.android.util.ImageDownloader;
-import org.everyuse.android.util.UserHelper;
+import org.everyuse.android.util.URLHelper;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.SearchManager;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.widget.SearchView;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -31,12 +36,16 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 	public static String EXTRA_DATA = "DATA";
 	public static String EXTRA_DATA_LIST = "DATA_LIST";
 	public static String EXTRA_STRAT_INDEX = "START_INDEX";
+	private final String TAG = this.getClass().getSimpleName();
 
 	private ArrayList<UseCase> data_list;
 	private int start_index;
 
 	private static ViewPager pager;
 	private static ItemsPagerAdapter pager_adapter;
+
+	private AsyncTask<URL, Void, Boolean> delete_task;
+	private ProgressDialog dialog;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -71,28 +80,110 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 
 	private void showDiscardDialog() {
 		AlertDialog.Builder discard_bld = new AlertDialog.Builder(this);
-		discard_bld.setMessage(getString(R.string.msg_discard))
-			.setCancelable(true)
-			.setPositiveButton(getString(R.string.msg_yes), new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					// TODO Auto-generated method stub
-					
-				}
-			})
-			.setNegativeButton(getString(R.string.msg_no), new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-		
+		discard_bld
+				.setMessage(getString(R.string.msg_discard))
+				.setCancelable(true)
+				.setPositiveButton(getString(R.string.msg_yes),
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+								UseCase use_case = data_list.get(pager
+										.getCurrentItem());
+								
+								try {
+									URL url = getDeleteURL(use_case);
+
+									// 아이템 삭제
+									delete_task = new DeleteTask();
+									delete_task.execute(url);
+								} catch (MalformedURLException e) {
+									Log.e(TAG, e.getMessage());
+								}
+
+							}
+						})
+				.setNegativeButton(getString(R.string.msg_no),
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+
 		AlertDialog alert = discard_bld.create();
 		alert.setTitle("Delete?");
 		alert.show();
+	}
+
+	private URL getDeleteURL(UseCase use_case) throws MalformedURLException {
+		return new URL(URLHelper.USE_CASES_URL + "/" + use_case.id);
+	}
+
+	private class DeleteTask extends AsyncTask<URL, Void, Boolean> {
+		private HttpURLConnection conn;
+		private String responseString;
+		private String errMsg;
+		private Activity activity;
+
+		@Override
+		protected void onPreExecute() {
+			activity = UseCaseDetailActivity.this;
+
+			dialog.show();
+		}
+
+		@Override
+		protected Boolean doInBackground(URL... params) {
+			if (params.length == 0) {
+				return false;
+			}
+
+			URL url = params[0];
+
+			try {
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setDoInput(true);
+				conn.setRequestMethod("DELETE");
+
+				int code = conn.getResponseCode();
+
+				if (code >= HttpURLConnection.HTTP_BAD_REQUEST) {
+					return false;
+				} else {
+					return true;
+				}
+			} catch (IOException e) {
+				Log.e(TAG, e.getMessage());
+			} finally {
+				conn.disconnect();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			dialog.dismiss();
+
+			if (result) {
+				Toast.makeText(activity,
+						activity.getString(R.string.msg_delete_success),
+						Toast.LENGTH_LONG).show();
+				
+				// MainActivity에 리스트 초기화 하도록 지시
+				Intent intent = new Intent(activity, MainActivity.class);
+				intent.putExtra(MainActivity.EXTRA_REFRESH_LISTS, true);
+				startActivity(intent);
+				
+				activity.finish();
+			} else {
+				Toast.makeText(activity,
+						activity.getString(R.string.msg_delete_fail),
+						Toast.LENGTH_LONG).show();
+			}
+
+		}
 	}
 
 	/*
@@ -123,7 +214,21 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 		pager.setAdapter(pager_adapter);
 		pager.setCurrentItem(start_index);
 
-		// Comment helper 부착
+		// 대기 다이얼러그 생성
+		dialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
+		dialog.setTitle(getString(R.string.msg_wait));
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.setOnCancelListener(new OnCancelListener() {
+
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				if (delete_task != null) {
+					delete_task.cancel(true);
+				}
+
+			}
+
+		});
 
 	}
 

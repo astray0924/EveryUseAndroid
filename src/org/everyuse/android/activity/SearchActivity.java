@@ -218,6 +218,7 @@ public class SearchActivity extends SherlockListActivity implements
 			}
 
 			URL url = params[0];
+			
 			try {
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setDoInput(true);
