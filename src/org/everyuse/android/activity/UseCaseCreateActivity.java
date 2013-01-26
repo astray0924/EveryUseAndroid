@@ -566,14 +566,11 @@ public class UseCaseCreateActivity extends SherlockActivity {
 					startActivity(intent);
 					
 					activity.finish();
-					
 					return;
 				} else {
 					throw new IllegalStateException("Undefined mode detected");
 				}
-
 				
-
 				finish();
 			} else {
 				Toast.makeText(UseCaseCreateActivity.this, msg_error,

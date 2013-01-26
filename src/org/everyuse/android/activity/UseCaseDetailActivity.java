@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import org.everyuse.android.R;
 import org.everyuse.android.fragment.UseCaseDetailFragment;
 import org.everyuse.android.model.UseCase;
+import org.everyuse.android.model.User;
 import org.everyuse.android.util.URLHelper;
+import org.everyuse.android.util.UserHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,6 +25,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -47,11 +50,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 	private AsyncTask<URL, Void, Boolean> delete_task;
 	private ProgressDialog dialog;
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.detail, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
+	private boolean is_author;
 
 	/*
 	 * (non-Javadoc)
@@ -214,12 +213,49 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 		initialize();
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (is_author) {
+			getSupportMenuInflater().inflate(R.menu.detail, menu);
+		} 
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
 	private void initialize() {
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
 		// Set up the view pager
 		pager = (ViewPager) findViewById(R.id.pager);
+		pager.setOnPageChangeListener(new OnPageChangeListener() {
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onPageSelected(int position) {
+				UseCase current_use_case = getCurrentUseCase();
+
+				is_author = UserHelper.isCurrentUser(
+						UseCaseDetailActivity.this, current_use_case.writer_id);
+
+				// ViewPager내의 페이지가 바뀔때마다 액션바의 메뉴를 다시 그리게 함
+				// 현재 사용자가 보고있는 사례의 저자일 경우에만 편집 기능을 활성화하기 위함
+				invalidateOptionsMenu();
+			}
+
+		});
+
 		pager_adapter = new ItemsPagerAdapter(getSupportFragmentManager());
 		pager.setAdapter(pager_adapter);
 		pager.setCurrentItem(start_index);
