@@ -36,14 +36,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -87,8 +86,14 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	// EXTRAs
 	public static final String EXTRA_ITEM = "item";
 	public static final String EXTRA_PURPOSE = "purpose";
+	public static final String EXTRA_USE_CASE = "use_case";
 	private String pre_item;
 	private String pre_purpose;
+	
+	// modes
+	private static final String MODE_CREATE = "mode_create";
+	private static final String MODE_EDIT = "mode_edit";
+	private String mode = MODE_CREATE;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +107,13 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 		// handle intent
 		handleIntent(getIntent());
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		
+		handleIntent(intent);
 	}
 
 	@Override
@@ -129,7 +141,20 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			if (pre_purpose != null) {
 				et_purpose.setText(pre_purpose);
 			}
+			
+			// edit 모드
+			Parcelable parcel = intent.getParcelableExtra(EXTRA_USE_CASE);
+			if (parcel != null && parcel instanceof UseCase) {	// MODE_EDIT
+				fillWithUseCase((UseCase) parcel);
+				mode = MODE_EDIT;
+			} else {											// MODE_CREATE
+				mode = MODE_CREATE;
+			}
 		}
+	}
+	
+	private void fillWithUseCase(UseCase use_case) {
+		// 입력 폼을 UseCase 인스턴스 정보로 채운다.
 	}
 
 	private void initUI() {
