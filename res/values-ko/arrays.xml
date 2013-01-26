@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="purpose">
+    <string-array name="purpose_type">
         <item>위해</item>
         <item>로써</item>
     </string-array>

@@ -62,13 +62,19 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = null;
+
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			Intent intent = new Intent(this, MainActivity.class);
+			intent = new Intent(this, MainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			break;
 		case R.id.menu_edit:
+			intent = new Intent(this, UseCaseCreateActivity.class);
+			UseCase use_case = getCurrentUseCase();
+			intent.putExtra(UseCaseCreateActivity.EXTRA_USE_CASE, use_case);
+			startActivity(intent);
 			break;
 		case R.id.menu_discard:
 			showDiscardDialog();
@@ -76,6 +82,10 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 		}
 
 		return true;
+	}
+
+	private UseCase getCurrentUseCase() {
+		return data_list.get(pager.getCurrentItem());
 	}
 
 	private void showDiscardDialog() {
@@ -90,7 +100,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 							public void onClick(DialogInterface dialog, int id) {
 								UseCase use_case = data_list.get(pager
 										.getCurrentItem());
-								
+
 								try {
 									URL url = getDeleteURL(use_case);
 
@@ -170,12 +180,12 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 				Toast.makeText(activity,
 						activity.getString(R.string.msg_delete_success),
 						Toast.LENGTH_LONG).show();
-				
+
 				// MainActivity에 리스트 초기화 하도록 지시
 				Intent intent = new Intent(activity, MainActivity.class);
 				intent.putExtra(MainActivity.EXTRA_REFRESH_LISTS, true);
 				startActivity(intent);
-				
+
 				activity.finish();
 			} else {
 				Toast.makeText(activity,

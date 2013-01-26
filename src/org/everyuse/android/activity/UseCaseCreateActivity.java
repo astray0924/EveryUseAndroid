@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -25,6 +27,7 @@ import org.everyuse.android.R;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.ErrorHelper;
+import org.everyuse.android.util.ImageDownloader;
 import org.everyuse.android.util.ImageHelper;
 import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
@@ -65,8 +68,10 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	private EditText et_purpose;
 	private Spinner sp_purpose_type;
 	private Spinner sp_place;
-	private ImageButton btn_photo_select;
 	private ImageView iv_photo;
+	private ImageButton btn_photo_select;
+	
+	private ImageDownloader image_downloader = new ImageDownloader();
 
 	// photo
 	private File temp_photo_file;
@@ -76,20 +81,10 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	private static final int PICK_FROM_CAMERA = 0;
 	private static final int PICK_FROM_ALBUM = 1;
 
-	// input
-	private String input_item;
-	private String input_purpose;
-	private String input_purpose_type;
-	private String input_place;
-	private File input_photo_file;
-
 	// EXTRAs
-	public static final String EXTRA_ITEM = "item";
-	public static final String EXTRA_PURPOSE = "purpose";
-	public static final String EXTRA_USE_CASE = "use_case";
-	private String pre_item;
-	private String pre_purpose;
-	
+	public static final String EXTRA_USE_CASE = "extra_use_case";
+	public static final String EXTRA_ITEM = "extra_item";
+
 	// modes
 	private static final String MODE_CREATE = "mode_create";
 	private static final String MODE_EDIT = "mode_edit";
@@ -112,7 +107,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		
+
 		handleIntent(intent);
 	}
 
@@ -131,30 +126,50 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 	private void handleIntent(Intent intent) {
 		if (intent != null) {
-			pre_item = intent.getStringExtra(EXTRA_ITEM);
-			pre_purpose = intent.getStringExtra(EXTRA_PURPOSE);
-
-			if (pre_item != null) {
-				et_item.setText(pre_item);
-			}
-
-			if (pre_purpose != null) {
-				et_purpose.setText(pre_purpose);
-			}
-			
 			// edit 모드
 			Parcelable parcel = intent.getParcelableExtra(EXTRA_USE_CASE);
-			if (parcel != null && parcel instanceof UseCase) {	// MODE_EDIT
+			if (parcel != null && parcel instanceof UseCase) { // MODE_EDIT
 				fillWithUseCase((UseCase) parcel);
 				mode = MODE_EDIT;
-			} else {											// MODE_CREATE
+			} else { // MODE_CREATE
 				mode = MODE_CREATE;
+			}
+
+			// EXTRA_ITEM
+			String item_text = intent.getStringExtra(EXTRA_ITEM);
+			if (item_text != null) {
+				et_item.setText(item_text);
 			}
 		}
 	}
-	
+
 	private void fillWithUseCase(UseCase use_case) {
-		// 입력 폼을 UseCase 인스턴스 정보로 채운다.
+		et_item.setText(use_case.item);
+		et_purpose.setText(use_case.purpose);
+
+		// 위해, 로써 선택
+		setStringArraySpinner(sp_purpose_type, use_case.purpose_type,
+				R.array.purpose_type);
+
+		// 장소 선택
+		setStringArraySpinner(sp_place, use_case.place,
+				R.array.place_student);
+		
+		// 기존 사진 표시
+		image_downloader.download(use_case.getPhotoLargeURL(), iv_photo);
+	}
+
+	private void setStringArraySpinner(Spinner spinner, String textToSelect,
+			int stringArrayId) {
+		List<String> stringArray = Arrays.asList(getResources().getStringArray(
+				stringArrayId));
+		int index = stringArray.indexOf(textToSelect);
+
+		if (index != -1) {
+			spinner.setSelection(index);
+		} else {
+			spinner.setSelection(0);
+		}
 	}
 
 	private void initUI() {
@@ -164,7 +179,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		// purpose type Spinner 초기화
 		sp_purpose_type = (Spinner) findViewById(R.id.sp_purpose_type);
 		ArrayAdapter<CharSequence> purpose_type_adapter = ArrayAdapter
-				.createFromResource(this, R.array.purpose,
+				.createFromResource(this, R.array.purpose_type,
 						android.R.layout.simple_spinner_item);
 		purpose_type_adapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -392,8 +407,14 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	private class SubmitTask extends AsyncTask<Void, Void, Boolean> {
 		private ProgressDialog indicator;
 		private String msg_error;
+		private UseCase new_use_case;
 
-		private UseCase created;
+		// input
+		private String input_item;
+		private String input_purpose;
+		private String input_purpose_type;
+		private String input_place;
+		private File input_photo_file;
 
 		@Override
 		protected void onPreExecute() {
@@ -420,7 +441,6 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 			// 선택된 사진
 			input_photo_file = upload_photo_file;
-
 		}
 
 		@Override
@@ -476,7 +496,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 					JSONObject json = null;
 					try {
 						json = new JSONObject(responseString);
-						created = UseCase.parseFromJSON(json);
+						new_use_case = UseCase.parseFromJSON(json);
 					} catch (JSONException e) {
 						e.printStackTrace();
 						return false;
@@ -503,7 +523,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 				Intent intent = new Intent(UseCaseCreateActivity.this,
 						UseCaseDetailActivity.class);
-				intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, created);
+				intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, new_use_case);
 				startActivity(intent);
 
 				finish();
