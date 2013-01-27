@@ -84,7 +84,12 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 	}
 
 	private UseCase getCurrentUseCase() {
-		return data_list.get(pager.getCurrentItem());
+		try {
+			return data_list.get(pager.getCurrentItem());
+		} catch (IndexOutOfBoundsException e) {
+			Log.e(TAG, e.getMessage());
+			return null;
+		}
 	}
 
 	private void showDiscardDialog() {
@@ -223,8 +228,17 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 	}
 
 	private boolean isAuthor() {
-		return UserHelper.isCurrentUser(UseCaseDetailActivity.this,
-				getCurrentUseCase().writer_id);
+		UseCase use_case = getCurrentUseCase();
+
+		if (use_case != null) {
+			return UserHelper.isCurrentUser(UseCaseDetailActivity.this,
+					getCurrentUseCase().writer_id);
+		} else {
+			Log.d(TAG, "Current UseCase is null");
+
+			return false;
+		}
+
 	}
 
 	@Override
