@@ -215,11 +215,25 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (is_author) {
+		if (isAuthor()) {
 			getSupportMenuInflater().inflate(R.menu.detail, menu);
-		} 
+		}
 
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	private boolean isAuthor() {
+		return UserHelper.isCurrentUser(UseCaseDetailActivity.this,
+				getCurrentUseCase().writer_id);
+	}
+
+	@Override
+	protected void onResumeFragments() {
+		super.onResumeFragments();
+
+		// ViewPager내의 페이지가 바뀔때마다 액션바의 메뉴를 다시 그리게 함
+		// 현재 사용자가 보고있는 사례의 저자일 경우에만 편집 기능을 활성화하기 위함
+		invalidateOptionsMenu();
 	}
 
 	private void initialize() {
@@ -244,11 +258,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 
 			@Override
 			public void onPageSelected(int position) {
-				UseCase current_use_case = getCurrentUseCase();
-
-				is_author = UserHelper.isCurrentUser(
-						UseCaseDetailActivity.this, current_use_case.writer_id);
-
 				// ViewPager내의 페이지가 바뀔때마다 액션바의 메뉴를 다시 그리게 함
 				// 현재 사용자가 보고있는 사례의 저자일 경우에만 편집 기능을 활성화하기 위함
 				invalidateOptionsMenu();
