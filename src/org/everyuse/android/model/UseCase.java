@@ -49,9 +49,9 @@ public class UseCase implements Parcelable {
 			if (isKorean()) {
 				return purpose + purpose_type;
 			} else if (lang.equals("")) {
-				return purpose + purpose_type;
+				return purpose + " " + purpose_type;
 			} else {
-				return purpose_type + purpose;
+				return purpose_type + " " + purpose;
 			}
 
 		}
