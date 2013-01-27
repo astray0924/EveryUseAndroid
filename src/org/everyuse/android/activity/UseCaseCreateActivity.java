@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -427,7 +428,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 					ProgressDialog.STYLE_SPINNER);
 			indicator.setMessage("Please wait...");
 			indicator.show();
-			
+
 			activity = UseCaseCreateActivity.this;
 
 			// 입력된 'item'
@@ -467,6 +468,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 						input_purpose_type, Charset.forName("UTF-8")));
 				entity.addPart("use_case[place]", new StringBody(input_place,
 						Charset.forName("UTF-8")));
+				entity.addPart("use_case[lang]", new StringBody(Locale.getDefault()
+						.toString(), Charset.forName("UTF-8")));
 
 				// MODE_CREATE이거나, MODE_EDIT이면서 새로 업로드할 사진 파일이 존재할떄만
 				if (mode == MODE_CREATE
@@ -499,19 +502,19 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			try {
 				HttpResponse response = httpClient.execute(httpRequest);
 				int statusCode = response.getStatusLine().getStatusCode();
-		
-				if (mode.equals(MODE_CREATE)) {					
+
+				if (mode.equals(MODE_CREATE)) {
 					HttpEntity resEntity = response.getEntity();
 					String responseString = EntityUtils.toString(resEntity);
-					
-					if (statusCode >= 300) { 			// error occurred
+
+					if (statusCode >= 300) { // error occurred
 						try {
 							msg_error = ErrorHelper
 									.getMostProminentError(responseString);
 						} catch (JSONException e) {
 							Log.d("PostActivity", responseString);
 						}
-						
+
 						return false;
 					} else {
 						JSONObject json = null;
@@ -522,17 +525,17 @@ public class UseCaseCreateActivity extends SherlockActivity {
 							e.printStackTrace();
 							return false;
 						}
-						
+
 						return true;
 					}
 				} else if (mode.equals(MODE_EDIT)) {
-					if (statusCode >= 300) { 
+					if (statusCode >= 300) {
 						return false;
 					} else {
-						return true;						
+						return true;
 					}
-				} 
-				
+				}
+
 				return false;
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
@@ -548,29 +551,32 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			indicator.dismiss();
 
 			if (success) {
-				if (isMode(MODE_CREATE)) {					
+				if (isMode(MODE_CREATE)) {
 					Toast.makeText(UseCaseCreateActivity.this,
-							R.string.msg_create_success, Toast.LENGTH_SHORT).show();
-					
+							R.string.msg_create_success, Toast.LENGTH_SHORT)
+							.show();
+
 					Intent intent = new Intent(UseCaseCreateActivity.this,
 							UseCaseDetailActivity.class);
-					intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, new_use_case);
+					intent.putExtra(UseCaseDetailActivity.EXTRA_DATA,
+							new_use_case);
 					startActivity(intent);
 				} else if (isMode(MODE_EDIT)) {
 					Toast.makeText(UseCaseCreateActivity.this,
-							R.string.msg_create_success, Toast.LENGTH_SHORT).show();
-					
+							R.string.msg_create_success, Toast.LENGTH_SHORT)
+							.show();
+
 					// TODO 업데이트된 UseCase를 보여주도록 구현해야함.
 					Intent intent = new Intent(activity, MainActivity.class);
 					intent.putExtra(MainActivity.EXTRA_REFRESH_LISTS, true);
 					startActivity(intent);
-					
+
 					activity.finish();
 					return;
 				} else {
 					throw new IllegalStateException("Undefined mode detected");
 				}
-				
+
 				finish();
 			} else {
 				Toast.makeText(UseCaseCreateActivity.this, msg_error,
@@ -579,7 +585,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		}
 
 	}
-	
+
 	private boolean isMode(String mode_compare) {
 		return mode.equals(mode_compare);
 	}
