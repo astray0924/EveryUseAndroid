@@ -46,9 +46,9 @@ public class UseCase implements Parcelable {
 		if (purpose_type == null || purpose == null) {
 			return "";
 		} else {
-			if (isKorean()) {
+			if (isKoreanLocale()) {
 				return purpose + purpose_type;
-			} else if (lang.equals("")) {
+			} else if (isEmptyLocale()) {
 				return purpose + " " + purpose_type;
 			} else {
 				return purpose_type + " " + purpose;
@@ -58,8 +58,12 @@ public class UseCase implements Parcelable {
 
 	}
 
-	private boolean isKorean() {
-		return lang.equals(Locale.KOREA) || lang.equals(Locale.KOREAN);
+	private boolean isKoreanLocale() {
+		return lang.toString().equals(Locale.KOREA) || lang.toString().equals(Locale.KOREAN);
+	}
+	
+	private boolean isEmptyLocale() {
+		return lang.toString().equals("");
 	}
 
 	public String getMetaInfoString() {
