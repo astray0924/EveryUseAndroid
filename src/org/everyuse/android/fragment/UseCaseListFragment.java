@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +83,6 @@ public class UseCaseListFragment extends SherlockListFragment {
 		client = new DefaultHttpClient();
 
 	}
-	
 
 	/*
 	 * (non-Javadoc)
@@ -105,7 +105,21 @@ public class UseCaseListFragment extends SherlockListFragment {
 
 		initialize();
 
+		loadData();
+	}
+
+	private void loadData() {
 		load_data_task = new LoadDataTask();
+		
+		data_url = buildDataURLWithQuery(data_url_raw);
+
+		if (data_url == null || data_url.equals("")) {
+			throw new IllegalStateException(
+					getString(R.string.msg_missing_data_url));
+		}
+
+		Log.d(TAG, data_url);
+
 		load_data_task.execute(data_url);
 	}
 
@@ -121,20 +135,15 @@ public class UseCaseListFragment extends SherlockListFragment {
 	}
 
 	private void initialize() {
-		data_url = buildDataURLWithQuery(data_url_raw);
 		mListView = (DynamicListView) getListView();
 		mListView.setOnListLoadListener(new OnListLoadListener() {
 
 			@Override
 			public void onLoad() {
 				if (load_data_task == null) {
-					if (data_url == null || data_url.equals("")) {
-						throw new IllegalStateException(
-								getString(R.string.msg_missing_data_url));
-					}
 
-					load_data_task = new LoadDataTask();
-					load_data_task.execute(data_url);
+					loadData();
+
 				}
 
 			}
@@ -161,7 +170,8 @@ public class UseCaseListFragment extends SherlockListFragment {
 	private class LoadDataTask extends AsyncTask<String, Void, Boolean> {
 		@Override
 		protected void onPreExecute() {
-			UseCaseListFragment.this.getSherlockActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
+			UseCaseListFragment.this.getSherlockActivity()
+					.setProgressBarIndeterminateVisibility(Boolean.TRUE);
 		}
 
 		@Override
@@ -173,7 +183,7 @@ public class UseCaseListFragment extends SherlockListFragment {
 						getString(R.string.msg_missing_data_url));
 			}
 
-			HttpGet method = new HttpGet(args[0]);
+			HttpGet method = new HttpGet(data_url);
 			Boolean success = false;
 
 			try {
@@ -219,6 +229,8 @@ public class UseCaseListFragment extends SherlockListFragment {
 		protected void onPostExecute(Boolean success) {
 			if (success) {
 				increasePage();
+
+				Log.d(TAG, "page: " + page);
 			} else {
 				Toast.makeText(getActivity(), R.string.msg_data_load_fail,
 						Toast.LENGTH_SHORT).show();
@@ -226,8 +238,9 @@ public class UseCaseListFragment extends SherlockListFragment {
 
 			mAdapter.notifyDataSetChanged();
 			load_data_task = null;
-			
-			UseCaseListFragment.this.getSherlockActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
+
+			UseCaseListFragment.this.getSherlockActivity()
+					.setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		}
 	}
 
