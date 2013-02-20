@@ -77,6 +77,10 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 	private ImageDownloader image_downloader = new ImageDownloader();
 	private UseCase old_use_case = null;
+	
+	private int ref_all_id = 0;
+	private int ref_item_id = 0;
+	private int ref_purpose_id = 0;
 
 	// photo
 	private File temp_photo_file;
@@ -89,13 +93,16 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	// EXTRAs
 	public static final String EXTRA_USE_CASE = "extra_use_case";
 	public static final String EXTRA_ITEM = "extra_item";
-	public static final String EXTRA_REF_ALL = "extra_ref_all";
-	public static final String EXTRA_REF_ITEM = "extra_ref_item";
-	public static final String EXTRA_REF_PURPOSE = "extra_ref_purpose";
+	public static final String EXTRA_REF_ALL_ID = "extra_ref_all";
+	public static final String EXTRA_REF_ITEM_ID = "extra_ref_item";
+	public static final String EXTRA_REF_PURPOSE_ID = "extra_ref_purpose";
+	
 	// modes
 	private static final String MODE_CREATE = "mode_create";
 	private static final String MODE_EDIT = "mode_edit";
 	private String mode = MODE_CREATE;
+	
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +155,11 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			if (item_text != null) {
 				et_item.setText(item_text);
 			}
+			
+			// EXTRA_REF
+			int ref_all_id = intent.getIntExtra(EXTRA_REF_ALL_ID, 0);
+			int ref_item_id = intent.getIntExtra(EXTRA_REF_ITEM_ID, 0);
+			int ref_purpose_id = intent.getIntExtra(EXTRA_REF_PURPOSE_ID, 0);
 		}
 	}
 
@@ -472,10 +484,15 @@ public class UseCaseCreateActivity extends SherlockActivity {
 						Charset.forName("UTF-8")));
 				entity.addPart("use_case[lang]", new StringBody(Locale.getDefault()
 						.toString(), Charset.forName("UTF-8")));
+				entity.addPart("use_case[ref_all_id]", new StringBody(Integer.toString(ref_all_id),
+						Charset.forName("UTF-8")));
+				entity.addPart("use_case[ref_item_id]", new StringBody(Integer.toString(ref_item_id),
+						Charset.forName("UTF-8")));
+				entity.addPart("use_case[ref_purpose_id]", new StringBody(Integer.toString(ref_purpose_id),
+						Charset.forName("UTF-8")));
 
 				// MODE_CREATE이거나, MODE_EDIT이면서 새로 업로드할 사진 파일이 존재할떄만
-				if (mode == MODE_CREATE
-						|| (mode == MODE_EDIT && input_photo_file != null)) {
+				if (hasNewPhotoToUpload()) {
 					entity.addPart("use_case[photo]", new FileBody(
 							input_photo_file, "image/png"));
 				}
@@ -546,6 +563,11 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			}
 
 			return false;
+		}
+
+		private boolean hasNewPhotoToUpload() {
+			return mode == MODE_CREATE
+					|| (mode == MODE_EDIT && input_photo_file != null);
 		}
 
 		@Override

@@ -87,7 +87,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		super.onResume();
 
 		selected_tab = getSelectedTabPosition();
-		getActionBar().setSelectedNavigationItem(selected_tab);
+		getSupportActionBar().setSelectedNavigationItem(selected_tab);
 	}
 
 	private void saveSelectedTabPosition(int selected_tab) {

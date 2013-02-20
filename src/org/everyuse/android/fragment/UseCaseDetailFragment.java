@@ -267,7 +267,7 @@ public class UseCaseDetailFragment extends SherlockFragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(activity, UseCaseCreateActivity.class);
-				intent.putExtra(UseCaseCreateActivity.EXTRA_REF_ITEM, use_case.id);
+				intent.putExtra(UseCaseCreateActivity.EXTRA_REF_ITEM_ID, use_case.id);
 				startActivity(intent);
 				
 			}
@@ -280,7 +280,7 @@ public class UseCaseDetailFragment extends SherlockFragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(activity, UseCaseCreateActivity.class);
-				intent.putExtra(UseCaseCreateActivity.EXTRA_REF_PURPOSE, use_case.id);
+				intent.putExtra(UseCaseCreateActivity.EXTRA_REF_PURPOSE_ID, use_case.id);
 				startActivity(intent);
 				
 			}
