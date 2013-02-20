@@ -89,7 +89,9 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	// EXTRAs
 	public static final String EXTRA_USE_CASE = "extra_use_case";
 	public static final String EXTRA_ITEM = "extra_item";
-
+	public static final String EXTRA_REF_ALL = "extra_ref_all";
+	public static final String EXTRA_REF_ITEM = "extra_ref_item";
+	public static final String EXTRA_REF_PURPOSE = "extra_ref_purpose";
 	// modes
 	private static final String MODE_CREATE = "mode_create";
 	private static final String MODE_EDIT = "mode_edit";

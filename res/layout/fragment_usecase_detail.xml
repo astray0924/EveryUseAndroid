@@ -48,6 +48,25 @@
         </LinearLayout>
 
         <include layout="@layout/snippet_comment_panel" />
+
+        <LinearLayout
+            android:id="@+id/similar_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btn_similar_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_similar_item" />
+
+            <Button
+                android:id="@+id/btn_similar_purpose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_similar_purpose" />
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

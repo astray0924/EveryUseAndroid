@@ -1,6 +1,7 @@
 package org.everyuse.android.fragment;
 
 import org.everyuse.android.R;
+import org.everyuse.android.activity.UseCaseCreateActivity;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.CommentsHelper;
 import org.everyuse.android.util.CommentsHelper.Comments;
@@ -12,11 +13,13 @@ import org.everyuse.android.util.RelationshipHelper.Relationship;
 import org.everyuse.android.util.UserHelper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -28,6 +31,7 @@ public class UseCaseDetailFragment extends SherlockFragment {
 	private final String TAG = this.getClass().getSimpleName();
 
 	private static String DATA = "DATA";
+	private UseCase use_case = null;
 	private static ImageDownloader image_downloader;
 	private CommentsHelper commentsHelper;
 	private RelationshipHelper relationshipHelper;
@@ -39,6 +43,8 @@ public class UseCaseDetailFragment extends SherlockFragment {
 	private ToggleButton tgl_scrap;
 
 	private OnFollowUpdateListener followCallback;
+	
+	private Activity activity = null;
 
 	public interface OnFollowUpdateListener {
 		public void onFollowUpdate(int page);
@@ -52,6 +58,9 @@ public class UseCaseDetailFragment extends SherlockFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+		
+		// 로컬 변수에 할당
+		this.activity = activity;
 
 		try {
 			followCallback = (OnFollowUpdateListener) activity;
@@ -86,8 +95,8 @@ public class UseCaseDetailFragment extends SherlockFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		UseCase data = (UseCase) getArguments().getParcelable(DATA);
-		long use_case_id = data.id;
+		use_case = (UseCase) getArguments().getParcelable(DATA);
+		long use_case_id = use_case.id;
 
 		// 코멘트 헬퍼 초기화
 		// use_case_id는 시작 아이템의 것으로 함
@@ -248,6 +257,34 @@ public class UseCaseDetailFragment extends SherlockFragment {
 				}
 			}
 
+		});
+		
+		// similar 버튼 초기화
+		final Activity activity = UseCaseDetailFragment.this.getActivity();
+		Button btn_similar_item = (Button) page.findViewById(R.id.btn_similar_item);
+		btn_similar_item.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(activity, UseCaseCreateActivity.class);
+				intent.putExtra(UseCaseCreateActivity.EXTRA_REF_ITEM, use_case.id);
+				startActivity(intent);
+				
+			}
+			
+		});
+		
+		Button btn_similar_purpose = (Button) page.findViewById(R.id.btn_similar_purpose);
+		btn_similar_purpose.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(activity, UseCaseCreateActivity.class);
+				intent.putExtra(UseCaseCreateActivity.EXTRA_REF_PURPOSE, use_case.id);
+				startActivity(intent);
+				
+			}
+			
 		});
 
 		// 만약 글쓴이가 현재 사용자와 같다면 코멘트 및 팔로우 기능 해제
