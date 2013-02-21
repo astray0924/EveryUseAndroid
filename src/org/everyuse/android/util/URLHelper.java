@@ -5,7 +5,7 @@ import org.everyuse.android.R;
 import android.content.res.Resources;
 
 public class URLHelper {
-	public static String BASE_URL = "http://wikiuse.kaist.ac.kr";
+	public static String BASE_URL = "http://everyuse.org";
 	public static String USERS_URL = BASE_URL + "/users";
 	public static String USE_CASES_URL = BASE_URL + "/use_cases";
 	public static String USE_CASES_TOP_URL = USE_CASES_URL + "/top";
