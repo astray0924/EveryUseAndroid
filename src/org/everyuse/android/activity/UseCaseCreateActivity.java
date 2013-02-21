@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -83,9 +83,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	private long ref_purpose_id = 0L;
 
 	// photo
-	private File temp_photo_file;
-	private String temp_photo_path;
-	private File upload_photo_file;
+	private File raw_photo_file;
+	private File processed_photo_file;
 	private static final String STATE_PHOTO_PATH = "photo_path";
 	private static final int PICK_FROM_CAMERA = 0;
 	private static final int PICK_FROM_ALBUM = 1;
@@ -262,96 +261,19 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 		// 임시로 사용할 파일의 경로를 생성
 		try {
-			temp_photo_file = createTemporaryImageFile();
+			raw_photo_file = File.createTempFile("EveryUse_", ".jpg", getCacheDir());
 
-			if (temp_photo_file == null) {
+			if (raw_photo_file == null) {
 				Toast.makeText(this, getString(R.string.msg_fail_create_temp_file), Toast.LENGTH_SHORT).show();
 				return;
 			}
 
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp_photo_file));
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(raw_photo_file));
 			startActivityForResult(intent, PICK_FROM_CAMERA);
 		} catch (IOException e) {
 			Log.d(TAG, e.getMessage());
 			Toast.makeText(this, getString(R.string.msg_fail_create_temp_file), Toast.LENGTH_SHORT).show();
 		}
-	}
-
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-
-		Log.i(TAG, "onConfigurationChanged()");
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-
-		outState.putString(STATE_PHOTO_PATH, temp_photo_path);
-
-		Log.i(TAG, "onSaveInstanceState()");
-	}
-
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-
-		if (savedInstanceState != null) {
-			temp_photo_path = savedInstanceState.getString(STATE_PHOTO_PATH);
-		}
-
-		Log.i(TAG, "onRestoreInstanceState()");
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		Log.i(TAG, "onPause()");
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-
-		Log.i(TAG, "onStop()");
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-
-		if (temp_photo_file != null) {
-			temp_photo_file.delete();
-		}
-
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		Log.i(TAG, "onResume()");
-	}
-
-	private File createTemporaryImageFile() throws IOException {
-		// Create an image file name
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String imageFileName = "EveryUse" + timeStamp + "_";
-		File image = File.createTempFile(imageFileName, ".jpg", getAlbumDir());
-		temp_photo_path = image.getAbsolutePath();
-
-		if (temp_photo_path == null) {
-			Toast.makeText(this, getString(R.string.msg_fail_create_temp_file), Toast.LENGTH_SHORT).show();
-			return null;
-		}
-
-		return image;
-	}
-
-	private File getAlbumDir() {
-		return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "EveryUse");
 	}
 
 	/**
@@ -391,13 +313,85 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				// // Resize and rotate the original bitmap
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 3;
-				Bitmap bitmap = ImageHelper.rotateBitmap(BitmapFactory.decodeFile(temp_photo_path, options), 90);
+				Bitmap bitmap = ImageHelper.rotateBitmap(
+						BitmapFactory.decodeFile(raw_photo_file.getAbsolutePath(), options), 90);
 
 				new SaveResizedBitmapToSD().execute(bitmap);
 				break;
 			}
 			}
 		}
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+
+		Log.i(TAG, "onConfigurationChanged()");
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		if (raw_photo_file != null) {
+			outState.putString(STATE_PHOTO_PATH, raw_photo_file.getAbsolutePath());			
+		}
+
+		Log.i(TAG, "onSaveInstanceState()");
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+
+		if (savedInstanceState != null) {
+			raw_photo_file = getFileStreamPath(savedInstanceState.getString(STATE_PHOTO_PATH));
+		}
+
+		Log.i(TAG, "onRestoreInstanceState()");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		Log.i(TAG, "onPause()");
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		Log.i(TAG, "onStop()");
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		if (raw_photo_file != null) {
+			raw_photo_file.delete();
+		}
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		Log.i(TAG, "onResume()");
+	}
+
+	private String getUploadImageFileName() {
+		String timestamp = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date());
+		String username = UserHelper.getCurrentUser(this).username;
+
+		return timestamp + "_" + username;
+	}
+
+	private File getAlbumDir() {
+		return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "EveryUse");
 	}
 
 	private class SubmitTask extends AsyncTask<Void, Void, Boolean> {
@@ -436,7 +430,16 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			input_place = (place_selected == null) ? "" : sp_place.getSelectedItem().toString().toLowerCase();
 
 			// 선택된 사진
-			input_photo_file = upload_photo_file;
+			String file_name = getUploadImageFileName();
+			boolean rename_success = processed_photo_file.renameTo(new File(getCacheDir(), file_name));
+
+			if (rename_success) {
+				input_photo_file = processed_photo_file;
+			} else {
+				input_photo_file = null;
+				Toast.makeText(UseCaseCreateActivity.this, "Unable to get the photo", Toast.LENGTH_LONG).show();
+			}
+
 		}
 
 		@Override
@@ -448,14 +451,14 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			try {
 				User user = UserHelper.getCurrentUser(getApplicationContext());
 
-				entity.addPart("use_case[item]", 				new StringBody(input_item, charset));
-				entity.addPart("use_case[purpose]", 			new StringBody(input_purpose, charset));
-				entity.addPart("use_case[purpose_type]", 		new StringBody(input_purpose_type, charset));
-				entity.addPart("use_case[place]", 				new StringBody(input_place, charset));
-				entity.addPart("use_case[lang]", 				new StringBody(Locale.getDefault().toString(), charset));
-				entity.addPart("use_case[ref_all_id]", 			new StringBody(Long.toString(ref_all_id), charset));
-				entity.addPart("use_case[ref_item_id]", 		new StringBody(Long.toString(ref_item_id), charset));
-				entity.addPart("use_case[ref_purpose_id]", 		new StringBody(Long.toString(ref_purpose_id), charset));
+				entity.addPart("use_case[item]", new StringBody(input_item, charset));
+				entity.addPart("use_case[purpose]", new StringBody(input_purpose, charset));
+				entity.addPart("use_case[purpose_type]", new StringBody(input_purpose_type, charset));
+				entity.addPart("use_case[place]", new StringBody(input_place, charset));
+				entity.addPart("use_case[lang]", new StringBody(Locale.getDefault().toString(), charset));
+				entity.addPart("use_case[ref_all_id]", new StringBody(Long.toString(ref_all_id), charset));
+				entity.addPart("use_case[ref_item_id]", new StringBody(Long.toString(ref_item_id), charset));
+				entity.addPart("use_case[ref_purpose_id]", new StringBody(Long.toString(ref_purpose_id), charset));
 
 				// MODE_CREATE이거나, MODE_EDIT이면서 새로 업로드할 사진 파일이 존재할떄만
 				if (hasNewPhotoToUpload()) {
@@ -571,7 +574,6 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 	private class SaveResizedBitmapToSD extends AsyncTask<Bitmap, Void, Void> {
 		private ProgressDialog indicator;
-		private File bitmap_file;
 		private Bitmap bitmap;
 
 		@Override
@@ -579,6 +581,12 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			indicator = new ProgressDialog(UseCaseCreateActivity.this, ProgressDialog.STYLE_SPINNER);
 			indicator.setMessage("Processing...");
 			indicator.show();
+
+			try {
+				processed_photo_file = File.createTempFile("EVERYUSE_PROCESSED_", ".jpg");
+			} catch (IOException e) {
+				Toast.makeText(UseCaseCreateActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+			}
 		}
 
 		@Override
@@ -587,8 +595,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 			if (bitmap != null) {
 				try {
-					bitmap_file = File.createTempFile("EveryUse_", ".jpg", getExternalCacheDir());
-					FileOutputStream out = new FileOutputStream(bitmap_file);
+					FileOutputStream out = new FileOutputStream(processed_photo_file);
 					bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -603,9 +610,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			indicator.dismiss();
 
 			// 업로드할 파일 set
-			if (bitmap_file != null) {
-				upload_photo_file = bitmap_file;
-
+			if (processed_photo_file != null) {
 				// set preview
 				iv_photo.setImageBitmap(bitmap);
 			} else {
