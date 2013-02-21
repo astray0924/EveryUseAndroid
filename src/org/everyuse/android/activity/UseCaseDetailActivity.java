@@ -71,12 +71,16 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 			break;
 		case R.id.menu_edit:
 			intent = new Intent(this, UseCaseCreateActivity.class);
-			UseCase use_case = getCurrentUseCase();
-			intent.putExtra(UseCaseCreateActivity.EXTRA_USE_CASE, use_case);
+			intent.putExtra(UseCaseCreateActivity.EXTRA_USE_CASE, getCurrentUseCase());
 			startActivity(intent);
 			break;
-		case R.id.menu_discard:
-			showDiscardDialog();
+		case R.id.menu_discard:		
+			showDiscardDialog(getCurrentUseCase());
+			break;
+		case R.id.menu_new:
+			intent = new Intent(this, UseCaseCreateActivity.class);
+			intent.putExtra(UseCaseCreateActivity.EXTRA_REF_ALL_ID, getCurrentUseCase().id);
+			startActivity(intent);
 			break;
 		}
 
@@ -92,7 +96,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 		}
 	}
 
-	private void showDiscardDialog() {
+	private void showDiscardDialog(final UseCase use_case) {
 		AlertDialog.Builder discard_bld = new AlertDialog.Builder(this);
 		discard_bld
 				.setMessage(getString(R.string.msg_discard))
@@ -102,9 +106,6 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 
 							@Override
 							public void onClick(DialogInterface dialog, int id) {
-								UseCase use_case = data_list.get(pager
-										.getCurrentItem());
-
 								try {
 									URL url = getDeleteURL(use_case);
 
