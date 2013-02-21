@@ -42,6 +42,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -52,7 +53,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -329,6 +329,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	}
 
 	private class SubmitTask extends AsyncTask<Void, Void, Boolean> {
+		HttpClient httpClient;
+
 		private ProgressDialog indicator;
 		private String msg_error;
 		private UseCase new_use_case;
@@ -345,8 +347,21 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		protected void onPreExecute() {
 			indicator = new ProgressDialog(UseCaseCreateActivity.this, ProgressDialog.STYLE_SPINNER);
 			indicator.setMessage("Please wait...");
+			indicator.setCanceledOnTouchOutside(false);
+			indicator.setCancelable(true);
+			indicator.setOnCancelListener(new OnCancelListener() {
+
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					cancel(true);
+
+					Toast.makeText(UseCaseCreateActivity.this, "Upload canceled", Toast.LENGTH_SHORT).show();
+				}
+
+			});
 			indicator.show();
 
+			httpClient = new DefaultHttpClient();
 			activity = UseCaseCreateActivity.this;
 
 			// 입력된 'item'
@@ -411,8 +426,6 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				e.printStackTrace();
 				return false;
 			}
-
-			HttpClient httpClient = new DefaultHttpClient();
 
 			HttpUriRequest httpRequest = null;
 			if (mode.equals(MODE_EDIT) && old_use_case != null) {
@@ -524,7 +537,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				Toast.makeText(this, getString(R.string.msg_fail_create_temp_file), Toast.LENGTH_SHORT).show();
 				return;
 			}
-			
+
 			Log.d(TAG, "raw_photo_file: " + raw_photo_file);
 
 			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(raw_photo_file));
@@ -555,9 +568,9 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				options.inSampleSize = 3;
 				Bitmap bitmap = ImageHelper.rotateBitmap(
 						BitmapFactory.decodeFile(raw_photo_file.getAbsolutePath(), options), 90);
-				
+
 				Log.d(TAG, "raw_photo_file (at onActivityResult) : " + raw_photo_file);
-				
+
 				new SaveResizedBitmapToSD().execute(bitmap);
 				break;
 			}
