@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -314,7 +316,9 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	}
 
 	private String getUploadImageFileName() {
-		String timestamp = String.valueOf(DateFormat.format("yyyy-MM-dd", new Date()));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA);
+		sdf.setTimeZone(TimeZone.getTimeZone("Korea/Seoul"));
+		String timestamp = sdf.format(new Date());
 		String username = UserHelper.getCurrentUser(this).username;
 
 		return timestamp + "_" + username;
@@ -514,12 +518,14 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 		// 임시로 사용할 파일의 경로를 생성
 		try {
-			raw_photo_file = File.createTempFile("EveryUse_", ".jpg", getCacheDir());
+			raw_photo_file = File.createTempFile("EveryUse", ".jpg", getExternalCacheDir());
 
 			if (raw_photo_file == null) {
 				Toast.makeText(this, getString(R.string.msg_fail_create_temp_file), Toast.LENGTH_SHORT).show();
 				return;
 			}
+			
+			Log.d(TAG, "raw_photo_file: " + raw_photo_file);
 
 			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(raw_photo_file));
 			startActivityForResult(intent, PICK_FROM_CAMERA);
@@ -543,6 +549,18 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
+			case PICK_FROM_CAMERA: {
+				// Resize and rotate the original bitmap
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inSampleSize = 3;
+				Bitmap bitmap = ImageHelper.rotateBitmap(
+						BitmapFactory.decodeFile(raw_photo_file.getAbsolutePath(), options), 90);
+				
+				Log.d(TAG, "raw_photo_file (at onActivityResult) : " + raw_photo_file);
+				
+				new SaveResizedBitmapToSD().execute(bitmap);
+				break;
+			}
 			case PICK_FROM_ALBUM: {
 				Uri photo_uri = data.getData();
 				InputStream is = null;
@@ -559,17 +577,6 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				Bitmap resized = BitmapFactory.decodeStream(is, null, options);
 
 				new SaveResizedBitmapToSD().execute(resized);
-				break;
-			}
-
-			case PICK_FROM_CAMERA: {
-				// // Resize and rotate the original bitmap
-				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inSampleSize = 3;
-				Bitmap bitmap = ImageHelper.rotateBitmap(
-						BitmapFactory.decodeFile(raw_photo_file.getAbsolutePath(), options), 90);
-
-				new SaveResizedBitmapToSD().execute(bitmap);
 				break;
 			}
 			}
