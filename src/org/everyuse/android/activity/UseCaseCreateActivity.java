@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +50,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -253,6 +253,259 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		});
 	}
 
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+
+		Log.i(TAG, "onConfigurationChanged()");
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		if (raw_photo_file != null) {
+			outState.putString(STATE_PHOTO_PATH, raw_photo_file.getAbsolutePath());
+		}
+
+		Log.i(TAG, "onSaveInstanceState()");
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+
+		if (savedInstanceState != null) {
+			raw_photo_file = getFileStreamPath(savedInstanceState.getString(STATE_PHOTO_PATH));
+		}
+
+		Log.i(TAG, "onRestoreInstanceState()");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		Log.i(TAG, "onPause()");
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		Log.i(TAG, "onStop()");
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		if (raw_photo_file != null) {
+			raw_photo_file.delete();
+		}
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		Log.i(TAG, "onResume()");
+	}
+
+	private String getUploadImageFileName() {
+		String timestamp = String.valueOf(DateFormat.format("yyyy-MM-dd", new Date()));
+		String username = UserHelper.getCurrentUser(this).username;
+
+		return timestamp + "_" + username;
+	}
+
+	private File getAlbumDir() {
+		return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "EveryUse");
+	}
+
+	private class SubmitTask extends AsyncTask<Void, Void, Boolean> {
+		private ProgressDialog indicator;
+		private String msg_error;
+		private UseCase new_use_case;
+		private Activity activity;
+
+		// input
+		private String input_item;
+		private String input_purpose;
+		private String input_purpose_type;
+		private String input_place;
+		private File upload_photo_file;
+
+		@Override
+		protected void onPreExecute() {
+			indicator = new ProgressDialog(UseCaseCreateActivity.this, ProgressDialog.STYLE_SPINNER);
+			indicator.setMessage("Please wait...");
+			indicator.show();
+
+			activity = UseCaseCreateActivity.this;
+
+			// 입력된 'item'
+			input_item = et_item.getText().toString();
+
+			// 입력된 'purpose'
+			input_purpose = et_purpose.getText().toString();
+
+			// purpose type이 선택되지 않았다면, 그냥 빈 String으로 입력
+			Object purpose_type_selected = sp_purpose_type.getSelectedItem();
+			input_purpose_type = (purpose_type_selected == null) ? "" : purpose_type_selected.toString().toLowerCase();
+
+			// place가 선택되지 않았다면, 그냥 빈 String 으로 입력
+			Object place_selected = sp_place.getSelectedItem();
+			input_place = (place_selected == null) ? "" : sp_place.getSelectedItem().toString().toLowerCase();
+
+			// 선택된 사진
+			String file_name = getUploadImageFileName();
+			boolean rename_success = processed_photo_file.renameTo(new File(getCacheDir(), file_name));
+
+			if (rename_success) {
+				upload_photo_file = new File(getCacheDir(), file_name);
+
+				Log.d(TAG, upload_photo_file.getAbsolutePath());
+				Log.d(TAG, String.valueOf(upload_photo_file.isFile()));
+			} else {
+				upload_photo_file = null;
+				Toast.makeText(UseCaseCreateActivity.this, "Unable to get the photo", Toast.LENGTH_LONG).show();
+				return;
+			}
+
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... args) {
+			String url = URLHelper.USE_CASES_URL;
+			MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+			Charset charset = Charset.forName("UTF-8");
+
+			try {
+				User user = UserHelper.getCurrentUser(getApplicationContext());
+
+				entity.addPart("use_case[item]", new StringBody(input_item, charset));
+				entity.addPart("use_case[purpose]", new StringBody(input_purpose, charset));
+				entity.addPart("use_case[purpose_type]", new StringBody(input_purpose_type, charset));
+				entity.addPart("use_case[place]", new StringBody(input_place, charset));
+				entity.addPart("use_case[lang]", new StringBody(Locale.getDefault().toString(), charset));
+				entity.addPart("use_case[ref_all_id]", new StringBody(Long.toString(ref_all_id), charset));
+				entity.addPart("use_case[ref_item_id]", new StringBody(Long.toString(ref_item_id), charset));
+				entity.addPart("use_case[ref_purpose_id]", new StringBody(Long.toString(ref_purpose_id), charset));
+
+				// MODE_CREATE이거나, MODE_EDIT이면서 새로 업로드할 사진 파일이 존재할떄만
+				if (hasNewPhotoToUpload()) {
+					entity.addPart("use_case[photo]", new FileBody(upload_photo_file, "image/png"));
+				}
+
+				entity.addPart("user_credentials", new StringBody(user.single_access_token, Charset.forName("UTF-8")));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				return false;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+
+			HttpClient httpClient = new DefaultHttpClient();
+
+			HttpUriRequest httpRequest = null;
+			if (mode.equals(MODE_EDIT) && old_use_case != null) {
+				httpRequest = new HttpPut(url + "/" + old_use_case.id + ".json");
+				((HttpPut) httpRequest).setEntity(entity);
+			} else {
+				httpRequest = new HttpPost(url + ".json");
+				((HttpPost) httpRequest).setEntity(entity);
+			}
+
+			try {
+				HttpResponse response = httpClient.execute(httpRequest);
+				int statusCode = response.getStatusLine().getStatusCode();
+
+				if (mode.equals(MODE_CREATE)) {
+					HttpEntity resEntity = response.getEntity();
+					String responseString = EntityUtils.toString(resEntity);
+
+					if (statusCode >= 300) { // error occurred
+						try {
+							msg_error = ErrorHelper.getMostProminentError(responseString);
+						} catch (JSONException e) {
+							Log.d("PostActivity", responseString);
+						}
+
+						return false;
+					} else {
+						JSONObject json = null;
+						try {
+							json = new JSONObject(responseString);
+							new_use_case = UseCase.parseFromJSON(json);
+						} catch (JSONException e) {
+							e.printStackTrace();
+							return false;
+						}
+
+						return true;
+					}
+				} else if (mode.equals(MODE_EDIT)) {
+					if (statusCode >= 300) {
+						return false;
+					} else {
+						return true;
+					}
+				}
+
+				return false;
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			return false;
+		}
+
+		private boolean hasNewPhotoToUpload() {
+			return mode == MODE_CREATE || (mode == MODE_EDIT && upload_photo_file != null);
+		}
+
+		@Override
+		protected void onPostExecute(Boolean success) {
+			indicator.dismiss();
+
+			if (success) {
+				if (isMode(MODE_CREATE)) {
+					Toast.makeText(UseCaseCreateActivity.this, R.string.msg_create_success, Toast.LENGTH_SHORT).show();
+
+					Intent intent = new Intent(UseCaseCreateActivity.this, UseCaseDetailActivity.class);
+					intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, new_use_case);
+					startActivity(intent);
+				} else if (isMode(MODE_EDIT)) {
+					Toast.makeText(UseCaseCreateActivity.this, R.string.msg_create_success, Toast.LENGTH_SHORT).show();
+
+					// TODO 업데이트된 UseCase를 보여주도록 구현해야함.
+					Intent intent = new Intent(activity, MainActivity.class);
+					intent.putExtra(MainActivity.EXTRA_REFRESH_LISTS, true);
+					startActivity(intent);
+
+					activity.finish();
+					return;
+				} else {
+					throw new IllegalStateException("Undefined mode detected");
+				}
+
+				finish();
+			} else {
+				Toast.makeText(UseCaseCreateActivity.this, msg_error, Toast.LENGTH_SHORT).show();
+			}
+		}
+
+	}
+
+	private boolean isMode(String mode_compare) {
+		return mode.equals(mode_compare);
+	}
+
 	/**
 	 * 카메라에서 이미지 가져오기
 	 */
@@ -323,255 +576,6 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		}
 	}
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-
-		Log.i(TAG, "onConfigurationChanged()");
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-
-		if (raw_photo_file != null) {
-			outState.putString(STATE_PHOTO_PATH, raw_photo_file.getAbsolutePath());			
-		}
-
-		Log.i(TAG, "onSaveInstanceState()");
-	}
-
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-
-		if (savedInstanceState != null) {
-			raw_photo_file = getFileStreamPath(savedInstanceState.getString(STATE_PHOTO_PATH));
-		}
-
-		Log.i(TAG, "onRestoreInstanceState()");
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		Log.i(TAG, "onPause()");
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-
-		Log.i(TAG, "onStop()");
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-
-		if (raw_photo_file != null) {
-			raw_photo_file.delete();
-		}
-
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		Log.i(TAG, "onResume()");
-	}
-
-	private String getUploadImageFileName() {
-		String timestamp = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date());
-		String username = UserHelper.getCurrentUser(this).username;
-
-		return timestamp + "_" + username;
-	}
-
-	private File getAlbumDir() {
-		return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "EveryUse");
-	}
-
-	private class SubmitTask extends AsyncTask<Void, Void, Boolean> {
-		private ProgressDialog indicator;
-		private String msg_error;
-		private UseCase new_use_case;
-		private Activity activity;
-
-		// input
-		private String input_item;
-		private String input_purpose;
-		private String input_purpose_type;
-		private String input_place;
-		private File input_photo_file;
-
-		@Override
-		protected void onPreExecute() {
-			indicator = new ProgressDialog(UseCaseCreateActivity.this, ProgressDialog.STYLE_SPINNER);
-			indicator.setMessage("Please wait...");
-			indicator.show();
-
-			activity = UseCaseCreateActivity.this;
-
-			// 입력된 'item'
-			input_item = et_item.getText().toString();
-
-			// 입력된 'purpose'
-			input_purpose = et_purpose.getText().toString();
-
-			// purpose type이 선택되지 않았다면, 그냥 빈 String으로 입력
-			Object purpose_type_selected = sp_purpose_type.getSelectedItem();
-			input_purpose_type = (purpose_type_selected == null) ? "" : purpose_type_selected.toString().toLowerCase();
-
-			// place가 선택되지 않았다면, 그냥 빈 String 으로 입력
-			Object place_selected = sp_place.getSelectedItem();
-			input_place = (place_selected == null) ? "" : sp_place.getSelectedItem().toString().toLowerCase();
-
-			// 선택된 사진
-			String file_name = getUploadImageFileName();
-			boolean rename_success = processed_photo_file.renameTo(new File(getCacheDir(), file_name));
-
-			if (rename_success) {
-				input_photo_file = processed_photo_file;
-			} else {
-				input_photo_file = null;
-				Toast.makeText(UseCaseCreateActivity.this, "Unable to get the photo", Toast.LENGTH_LONG).show();
-			}
-
-		}
-
-		@Override
-		protected Boolean doInBackground(Void... args) {
-			String url = URLHelper.USE_CASES_URL;
-			MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-			Charset charset = Charset.forName("UTF-8");
-
-			try {
-				User user = UserHelper.getCurrentUser(getApplicationContext());
-
-				entity.addPart("use_case[item]", new StringBody(input_item, charset));
-				entity.addPart("use_case[purpose]", new StringBody(input_purpose, charset));
-				entity.addPart("use_case[purpose_type]", new StringBody(input_purpose_type, charset));
-				entity.addPart("use_case[place]", new StringBody(input_place, charset));
-				entity.addPart("use_case[lang]", new StringBody(Locale.getDefault().toString(), charset));
-				entity.addPart("use_case[ref_all_id]", new StringBody(Long.toString(ref_all_id), charset));
-				entity.addPart("use_case[ref_item_id]", new StringBody(Long.toString(ref_item_id), charset));
-				entity.addPart("use_case[ref_purpose_id]", new StringBody(Long.toString(ref_purpose_id), charset));
-
-				// MODE_CREATE이거나, MODE_EDIT이면서 새로 업로드할 사진 파일이 존재할떄만
-				if (hasNewPhotoToUpload()) {
-					entity.addPart("use_case[photo]", new FileBody(input_photo_file, "image/png"));
-				}
-
-				entity.addPart("user_credentials", new StringBody(user.single_access_token, Charset.forName("UTF-8")));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				return false;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-
-			HttpClient httpClient = new DefaultHttpClient();
-
-			HttpUriRequest httpRequest = null;
-			if (mode.equals(MODE_EDIT) && old_use_case != null) {
-				httpRequest = new HttpPut(url + "/" + old_use_case.id + ".json");
-				((HttpPut) httpRequest).setEntity(entity);
-			} else {
-				httpRequest = new HttpPost(url + ".json");
-				((HttpPost) httpRequest).setEntity(entity);
-			}
-
-			try {
-				HttpResponse response = httpClient.execute(httpRequest);
-				int statusCode = response.getStatusLine().getStatusCode();
-
-				if (mode.equals(MODE_CREATE)) {
-					HttpEntity resEntity = response.getEntity();
-					String responseString = EntityUtils.toString(resEntity);
-
-					if (statusCode >= 300) { // error occurred
-						try {
-							msg_error = ErrorHelper.getMostProminentError(responseString);
-						} catch (JSONException e) {
-							Log.d("PostActivity", responseString);
-						}
-
-						return false;
-					} else {
-						JSONObject json = null;
-						try {
-							json = new JSONObject(responseString);
-							new_use_case = UseCase.parseFromJSON(json);
-						} catch (JSONException e) {
-							e.printStackTrace();
-							return false;
-						}
-
-						return true;
-					}
-				} else if (mode.equals(MODE_EDIT)) {
-					if (statusCode >= 300) {
-						return false;
-					} else {
-						return true;
-					}
-				}
-
-				return false;
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			return false;
-		}
-
-		private boolean hasNewPhotoToUpload() {
-			return mode == MODE_CREATE || (mode == MODE_EDIT && input_photo_file != null);
-		}
-
-		@Override
-		protected void onPostExecute(Boolean success) {
-			indicator.dismiss();
-
-			if (success) {
-				if (isMode(MODE_CREATE)) {
-					Toast.makeText(UseCaseCreateActivity.this, R.string.msg_create_success, Toast.LENGTH_SHORT).show();
-
-					Intent intent = new Intent(UseCaseCreateActivity.this, UseCaseDetailActivity.class);
-					intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, new_use_case);
-					startActivity(intent);
-				} else if (isMode(MODE_EDIT)) {
-					Toast.makeText(UseCaseCreateActivity.this, R.string.msg_create_success, Toast.LENGTH_SHORT).show();
-
-					// TODO 업데이트된 UseCase를 보여주도록 구현해야함.
-					Intent intent = new Intent(activity, MainActivity.class);
-					intent.putExtra(MainActivity.EXTRA_REFRESH_LISTS, true);
-					startActivity(intent);
-
-					activity.finish();
-					return;
-				} else {
-					throw new IllegalStateException("Undefined mode detected");
-				}
-
-				finish();
-			} else {
-				Toast.makeText(UseCaseCreateActivity.this, msg_error, Toast.LENGTH_SHORT).show();
-			}
-		}
-
-	}
-
-	private boolean isMode(String mode_compare) {
-		return mode.equals(mode_compare);
-	}
-
 	private class SaveResizedBitmapToSD extends AsyncTask<Bitmap, Void, Void> {
 		private ProgressDialog indicator;
 		private Bitmap bitmap;
@@ -586,6 +590,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				processed_photo_file = File.createTempFile("EVERYUSE_PROCESSED_", ".jpg");
 			} catch (IOException e) {
 				Toast.makeText(UseCaseCreateActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+				return;
 			}
 		}
 
