@@ -321,7 +321,7 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		String timestamp = sdf.format(new Date());
 		String username = UserHelper.getCurrentUser(this).username;
 
-		return timestamp + "_" + username;
+		return timestamp + "_" + username + ".jpg";
 	}
 
 	private File getAlbumDir() {
