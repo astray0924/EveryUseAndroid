@@ -71,15 +71,17 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 			break;
 		case R.id.menu_edit:
 			intent = new Intent(this, UseCaseCreateActivity.class);
-			intent.putExtra(UseCaseCreateActivity.EXTRA_USE_CASE, getCurrentUseCase());
+			intent.putExtra(UseCaseCreateActivity.EXTRA_USE_CASE,
+					getCurrentUseCase());
 			startActivity(intent);
 			break;
-		case R.id.menu_discard:		
+		case R.id.menu_discard:
 			showDiscardDialog(getCurrentUseCase());
 			break;
 		case R.id.menu_new:
 			intent = new Intent(this, UseCaseCreateActivity.class);
-			intent.putExtra(UseCaseCreateActivity.EXTRA_REF_ALL_ID, getCurrentUseCase().id);
+			intent.putExtra(UseCaseCreateActivity.EXTRA_REF_ALL_ID,
+					getCurrentUseCase().id);
 			startActivity(intent);
 			break;
 		}
@@ -189,6 +191,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 				// MainActivity에 리스트 초기화 하도록 지시
 				Intent intent = new Intent(activity, MainActivity.class);
 				intent.putExtra(MainActivity.EXTRA_REFRESH_LISTS, true);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 
 				activity.finish();
