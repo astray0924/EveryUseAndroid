@@ -85,8 +85,10 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	private long ref_purpose_id = 0L;
 
 	// photo
+	private boolean new_photo_selected = false;
 	private File raw_photo_file;
 	private File processed_photo_file;
+	private File upload_photo_file;
 	private static final String STATE_PHOTO_PATH = "photo_path";
 	private static final int PICK_FROM_CAMERA = 0;
 	private static final int PICK_FROM_ALBUM = 1;
@@ -167,7 +169,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		et_purpose.setText(use_case.purpose);
 
 		// 위해, 로써 선택
-		setStringArraySpinner(sp_purpose_type, use_case.purpose_type, R.array.purpose_type);
+		setStringArraySpinner(sp_purpose_type, use_case.purpose_type,
+				R.array.purpose_type);
 
 		// 장소 선택
 		setStringArraySpinner(sp_place, use_case.place, R.array.place_student);
@@ -176,8 +179,10 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		image_downloader.download(use_case.getPhotoLargeURL(), iv_photo);
 	}
 
-	private void setStringArraySpinner(Spinner spinner, String textToSelect, int stringArrayId) {
-		List<String> stringArray = Arrays.asList(getResources().getStringArray(stringArrayId));
+	private void setStringArraySpinner(Spinner spinner, String textToSelect,
+			int stringArrayId) {
+		List<String> stringArray = Arrays.asList(getResources().getStringArray(
+				stringArrayId));
 		int index = stringArray.indexOf(textToSelect);
 
 		if (index != -1) {
@@ -193,9 +198,11 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 		// purpose type Spinner 초기화
 		sp_purpose_type = (Spinner) findViewById(R.id.sp_purpose_type);
-		ArrayAdapter<CharSequence> purpose_type_adapter = ArrayAdapter.createFromResource(this, R.array.purpose_type,
-				android.R.layout.simple_spinner_item);
-		purpose_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<CharSequence> purpose_type_adapter = ArrayAdapter
+				.createFromResource(this, R.array.purpose_type,
+						android.R.layout.simple_spinner_item);
+		purpose_type_adapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp_purpose_type.setAdapter(purpose_type_adapter);
 
 		// 장소 Spinner 초기화
@@ -203,9 +210,11 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		int place_array_id = R.array.place_student; // TODO 장소 어레이는 일단 학생용으로...
 
 		if (place_array_id != 0) {
-			ArrayAdapter<CharSequence> place_adapter = ArrayAdapter.createFromResource(this, place_array_id,
-					android.R.layout.simple_spinner_item);
-			place_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			ArrayAdapter<CharSequence> place_adapter = ArrayAdapter
+					.createFromResource(this, place_array_id,
+							android.R.layout.simple_spinner_item);
+			place_adapter
+					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			sp_place.setAdapter(place_adapter);
 		}
 
@@ -235,9 +244,12 @@ public class UseCaseCreateActivity extends SherlockActivity {
 					}
 				};
 
-				new AlertDialog.Builder(UseCaseCreateActivity.this).setTitle("Select the method")
-						.setPositiveButton(getString(R.string.btn_from_camera), cameraListener)
-						.setNeutralButton(getString(R.string.btn_from_gallery), albumListener)
+				new AlertDialog.Builder(UseCaseCreateActivity.this)
+						.setTitle("Select the method")
+						.setPositiveButton(getString(R.string.btn_from_camera),
+								cameraListener)
+						.setNeutralButton(getString(R.string.btn_from_gallery),
+								albumListener)
 						.setNegativeButton("Cancel", cancelListener).show();
 			}
 
@@ -267,7 +279,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		super.onSaveInstanceState(outState);
 
 		if (raw_photo_file != null) {
-			outState.putString(STATE_PHOTO_PATH, raw_photo_file.getAbsolutePath());
+			outState.putString(STATE_PHOTO_PATH,
+					raw_photo_file.getAbsolutePath());
 		}
 
 		Log.i(TAG, "onSaveInstanceState()");
@@ -278,7 +291,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		super.onRestoreInstanceState(savedInstanceState);
 
 		if (savedInstanceState != null) {
-			raw_photo_file = getFileStreamPath(savedInstanceState.getString(STATE_PHOTO_PATH));
+			raw_photo_file = getFileStreamPath(savedInstanceState
+					.getString(STATE_PHOTO_PATH));
 		}
 
 		Log.i(TAG, "onRestoreInstanceState()");
@@ -306,6 +320,14 @@ public class UseCaseCreateActivity extends SherlockActivity {
 			raw_photo_file.delete();
 		}
 
+		if (processed_photo_file != null) {
+			processed_photo_file.delete();
+		}
+
+		if (upload_photo_file != null) {
+			upload_photo_file.delete();
+		}
+
 	}
 
 	@Override
@@ -316,7 +338,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	}
 
 	private String getUploadImageFileName() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",
+				Locale.KOREA);
 		sdf.setTimeZone(TimeZone.getTimeZone("Korea/Seoul"));
 		String timestamp = sdf.format(new Date());
 		String username = UserHelper.getCurrentUser(this).username;
@@ -325,11 +348,14 @@ public class UseCaseCreateActivity extends SherlockActivity {
 	}
 
 	private File getAlbumDir() {
-		return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "EveryUse");
+		return new File(
+				Environment
+						.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+				"EveryUse");
 	}
 
 	private class SubmitTask extends AsyncTask<Void, Void, Boolean> {
-		HttpClient httpClient;
+		private HttpClient httpClient;
 
 		private ProgressDialog indicator;
 		private String msg_error;
@@ -341,11 +367,11 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		private String input_purpose;
 		private String input_purpose_type;
 		private String input_place;
-		private File upload_photo_file;
 
 		@Override
 		protected void onPreExecute() {
-			indicator = new ProgressDialog(UseCaseCreateActivity.this, ProgressDialog.STYLE_SPINNER);
+			indicator = new ProgressDialog(UseCaseCreateActivity.this,
+					ProgressDialog.STYLE_SPINNER);
 			indicator.setMessage("Please wait...");
 			indicator.setCanceledOnTouchOutside(false);
 			indicator.setCancelable(true);
@@ -355,7 +381,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				public void onCancel(DialogInterface dialog) {
 					cancel(true);
 
-					Toast.makeText(UseCaseCreateActivity.this, "Upload canceled", Toast.LENGTH_SHORT).show();
+					Toast.makeText(UseCaseCreateActivity.this,
+							"Upload canceled", Toast.LENGTH_SHORT).show();
 				}
 
 			});
@@ -372,53 +399,69 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 			// purpose type이 선택되지 않았다면, 그냥 빈 String으로 입력
 			Object purpose_type_selected = sp_purpose_type.getSelectedItem();
-			input_purpose_type = (purpose_type_selected == null) ? "" : purpose_type_selected.toString().toLowerCase();
+			input_purpose_type = (purpose_type_selected == null) ? ""
+					: purpose_type_selected.toString().toLowerCase();
 
 			// place가 선택되지 않았다면, 그냥 빈 String 으로 입력
 			Object place_selected = sp_place.getSelectedItem();
-			input_place = (place_selected == null) ? "" : sp_place.getSelectedItem().toString().toLowerCase();
+			input_place = (place_selected == null) ? "" : sp_place
+					.getSelectedItem().toString().toLowerCase();
 
 			// 선택된 사진
-			String file_name = getUploadImageFileName();
-			boolean rename_success = processed_photo_file.renameTo(new File(getCacheDir(), file_name));
+			if (new_photo_selected) {
+				String file_name = getUploadImageFileName();
+				boolean rename_success = processed_photo_file
+						.renameTo(new File(getCacheDir(), file_name));
 
-			if (rename_success) {
-				upload_photo_file = new File(getCacheDir(), file_name);
-
-				Log.d(TAG, upload_photo_file.getAbsolutePath());
-				Log.d(TAG, String.valueOf(upload_photo_file.isFile()));
-			} else {
-				upload_photo_file = null;
-				Toast.makeText(UseCaseCreateActivity.this, "Unable to get the photo", Toast.LENGTH_LONG).show();
-				return;
+				if (rename_success) {
+					upload_photo_file = new File(getCacheDir(), file_name);
+					
+					new_photo_selected = false;
+				} else {
+					upload_photo_file = null;
+					Toast.makeText(UseCaseCreateActivity.this,
+							"Unable to generate the photo to upload", Toast.LENGTH_LONG)
+							.show();
+					return;
+				}
 			}
-
 		}
 
 		@Override
 		protected Boolean doInBackground(Void... args) {
 			String url = URLHelper.USE_CASES_URL;
-			MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+			MultipartEntity entity = new MultipartEntity(
+					HttpMultipartMode.BROWSER_COMPATIBLE);
 			Charset charset = Charset.forName("UTF-8");
 
 			try {
 				User user = UserHelper.getCurrentUser(getApplicationContext());
 
-				entity.addPart("use_case[item]", new StringBody(input_item, charset));
-				entity.addPart("use_case[purpose]", new StringBody(input_purpose, charset));
-				entity.addPart("use_case[purpose_type]", new StringBody(input_purpose_type, charset));
-				entity.addPart("use_case[place]", new StringBody(input_place, charset));
-				entity.addPart("use_case[lang]", new StringBody(Locale.getDefault().toString(), charset));
-				entity.addPart("use_case[ref_all_id]", new StringBody(Long.toString(ref_all_id), charset));
-				entity.addPart("use_case[ref_item_id]", new StringBody(Long.toString(ref_item_id), charset));
-				entity.addPart("use_case[ref_purpose_id]", new StringBody(Long.toString(ref_purpose_id), charset));
+				entity.addPart("use_case[item]", new StringBody(input_item,
+						charset));
+				entity.addPart("use_case[purpose]", new StringBody(
+						input_purpose, charset));
+				entity.addPart("use_case[purpose_type]", new StringBody(
+						input_purpose_type, charset));
+				entity.addPart("use_case[place]", new StringBody(input_place,
+						charset));
+				entity.addPart("use_case[lang]", new StringBody(Locale
+						.getDefault().toString(), charset));
+				entity.addPart("use_case[ref_all_id]",
+						new StringBody(Long.toString(ref_all_id), charset));
+				entity.addPart("use_case[ref_item_id]",
+						new StringBody(Long.toString(ref_item_id), charset));
+				entity.addPart("use_case[ref_purpose_id]",
+						new StringBody(Long.toString(ref_purpose_id), charset));
 
 				// MODE_CREATE이거나, MODE_EDIT이면서 새로 업로드할 사진 파일이 존재할떄만
 				if (hasNewPhotoToUpload()) {
-					entity.addPart("use_case[photo]", new FileBody(upload_photo_file, "image/png"));
+					entity.addPart("use_case[photo]", new FileBody(
+							upload_photo_file, "image/png"));
 				}
 
-				entity.addPart("user_credentials", new StringBody(user.single_access_token, Charset.forName("UTF-8")));
+				entity.addPart("user_credentials", new StringBody(
+						user.single_access_token, Charset.forName("UTF-8")));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return false;
@@ -446,7 +489,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 					if (statusCode >= 300) { // error occurred
 						try {
-							msg_error = ErrorHelper.getMostProminentError(responseString);
+							msg_error = ErrorHelper
+									.getMostProminentError(responseString);
 						} catch (JSONException e) {
 							Log.d("PostActivity", responseString);
 						}
@@ -483,7 +527,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		}
 
 		private boolean hasNewPhotoToUpload() {
-			return mode == MODE_CREATE || (mode == MODE_EDIT && upload_photo_file != null);
+			return mode == MODE_CREATE
+					|| (mode == MODE_EDIT && upload_photo_file != null);
 		}
 
 		@Override
@@ -492,13 +537,19 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 			if (success) {
 				if (isMode(MODE_CREATE)) {
-					Toast.makeText(UseCaseCreateActivity.this, R.string.msg_create_success, Toast.LENGTH_SHORT).show();
+					Toast.makeText(UseCaseCreateActivity.this,
+							R.string.msg_create_success, Toast.LENGTH_SHORT)
+							.show();
 
-					Intent intent = new Intent(UseCaseCreateActivity.this, UseCaseDetailActivity.class);
-					intent.putExtra(UseCaseDetailActivity.EXTRA_DATA, new_use_case);
+					Intent intent = new Intent(UseCaseCreateActivity.this,
+							UseCaseDetailActivity.class);
+					intent.putExtra(UseCaseDetailActivity.EXTRA_DATA,
+							new_use_case);
 					startActivity(intent);
 				} else if (isMode(MODE_EDIT)) {
-					Toast.makeText(UseCaseCreateActivity.this, R.string.msg_create_success, Toast.LENGTH_SHORT).show();
+					Toast.makeText(UseCaseCreateActivity.this,
+							R.string.msg_create_success, Toast.LENGTH_SHORT)
+							.show();
 
 					// TODO 업데이트된 UseCase를 보여주도록 구현해야함.
 					Intent intent = new Intent(activity, MainActivity.class);
@@ -513,7 +564,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 				finish();
 			} else {
-				Toast.makeText(UseCaseCreateActivity.this, msg_error, Toast.LENGTH_SHORT).show();
+				Toast.makeText(UseCaseCreateActivity.this, msg_error,
+						Toast.LENGTH_SHORT).show();
 			}
 		}
 
@@ -531,20 +583,25 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 		// 임시로 사용할 파일의 경로를 생성
 		try {
-			raw_photo_file = File.createTempFile("EveryUse", ".jpg", getExternalCacheDir());
+			raw_photo_file = File.createTempFile("EveryUse", ".jpg",
+					getExternalCacheDir());
 
 			if (raw_photo_file == null) {
-				Toast.makeText(this, getString(R.string.msg_fail_create_temp_file), Toast.LENGTH_SHORT).show();
+				Toast.makeText(this,
+						getString(R.string.msg_fail_create_temp_file),
+						Toast.LENGTH_SHORT).show();
 				return;
 			}
 
 			Log.d(TAG, "raw_photo_file: " + raw_photo_file);
 
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(raw_photo_file));
+			intent.putExtra(MediaStore.EXTRA_OUTPUT,
+					Uri.fromFile(raw_photo_file));
 			startActivityForResult(intent, PICK_FROM_CAMERA);
 		} catch (IOException e) {
 			Log.d(TAG, e.getMessage());
-			Toast.makeText(this, getString(R.string.msg_fail_create_temp_file), Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getString(R.string.msg_fail_create_temp_file),
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -555,7 +612,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 		// 앨범 호출
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 		intent.setType("image/*");
-		startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_FROM_ALBUM);
+		startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+				PICK_FROM_ALBUM);
 	}
 
 	@Override
@@ -567,11 +625,13 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 3;
 				Bitmap bitmap = ImageHelper.rotateBitmap(
-						BitmapFactory.decodeFile(raw_photo_file.getAbsolutePath(), options), 90);
+						BitmapFactory.decodeFile(
+								raw_photo_file.getAbsolutePath(), options), 90);
 
-				Log.d(TAG, "raw_photo_file (at onActivityResult) : " + raw_photo_file);
+				Log.d(TAG, "raw_photo_file (at onActivityResult) : "
+						+ raw_photo_file);
 
-				new SaveResizedBitmapToSD().execute(bitmap);
+				new SaveBitmapTask().execute(bitmap);
 				break;
 			}
 			case PICK_FROM_ALBUM: {
@@ -589,27 +649,30 @@ public class UseCaseCreateActivity extends SherlockActivity {
 				options.inSampleSize = 3;
 				Bitmap resized = BitmapFactory.decodeStream(is, null, options);
 
-				new SaveResizedBitmapToSD().execute(resized);
+				new SaveBitmapTask().execute(resized);
 				break;
 			}
 			}
 		}
 	}
 
-	private class SaveResizedBitmapToSD extends AsyncTask<Bitmap, Void, Void> {
+	private class SaveBitmapTask extends AsyncTask<Bitmap, Void, Void> {
 		private ProgressDialog indicator;
 		private Bitmap bitmap;
 
 		@Override
 		protected void onPreExecute() {
-			indicator = new ProgressDialog(UseCaseCreateActivity.this, ProgressDialog.STYLE_SPINNER);
+			indicator = new ProgressDialog(UseCaseCreateActivity.this,
+					ProgressDialog.STYLE_SPINNER);
 			indicator.setMessage("Processing...");
 			indicator.show();
 
 			try {
-				processed_photo_file = File.createTempFile("EVERYUSE_PROCESSED_", ".jpg");
+				processed_photo_file = File.createTempFile(
+						"EVERYUSE_PROCESSED_", ".jpg");
 			} catch (IOException e) {
-				Toast.makeText(UseCaseCreateActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+				Toast.makeText(UseCaseCreateActivity.this, e.getMessage(),
+						Toast.LENGTH_LONG).show();
 				return;
 			}
 		}
@@ -620,7 +683,8 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 			if (bitmap != null) {
 				try {
-					FileOutputStream out = new FileOutputStream(processed_photo_file);
+					FileOutputStream out = new FileOutputStream(
+							processed_photo_file);
 					bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -636,10 +700,11 @@ public class UseCaseCreateActivity extends SherlockActivity {
 
 			// 업로드할 파일 set
 			if (processed_photo_file != null) {
-				// set preview
 				iv_photo.setImageBitmap(bitmap);
+				new_photo_selected = true;
 			} else {
-				Toast.makeText(getApplicationContext(), "Cannot process photo", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Cannot process photo",
+						Toast.LENGTH_SHORT).show();
 			}
 		}
 
