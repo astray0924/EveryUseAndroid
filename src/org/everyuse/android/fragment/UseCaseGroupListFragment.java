@@ -15,11 +15,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
-import org.everyuse.android.activity.MainActivity;
 import org.everyuse.android.activity.UseCaseDetailActivity;
 import org.everyuse.android.adapter.UseCaseGroupAdapter;
 import org.everyuse.android.model.UseCaseGroup;
-import org.everyuse.android.util.UserHelper;
+import org.everyuse.android.util.NetworkHelper;
 import org.everyuse.android.widget.DynamicExpandableListView;
 import org.everyuse.android.widget.DynamicExpandableListView.OnListLoadListener;
 import org.everyuse.android.widget.ExpandableListFragment;
@@ -31,7 +30,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +46,7 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 		OnChildClickListener {
 	// Strings for logging
 	private final String TAG = this.getClass().getSimpleName();
-		
+
 	protected ArrayList<UseCaseGroup> mDataList;
 	protected BaseExpandableListAdapter mAdapter;
 	protected DynamicExpandableListView mListView;
@@ -117,15 +115,20 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 	}
 
 	private void fetchData() {
-		data_url = buildDataURLWithQuery(data_url_raw);
+		if (NetworkHelper.IS_NETWORK_CONNECTED) {
+			data_url = buildDataURLWithQuery(data_url_raw);
 
-		if (data_url == null || data_url.equals("")) {
-			throw new IllegalStateException(
-					getString(R.string.msg_missing_data_url));
+			if (data_url == null || data_url.equals("")) {
+				throw new IllegalStateException(
+						getString(R.string.msg_missing_data_url));
+			}
+
+			load_data_task = new LoadDataTask();
+			load_data_task.execute(data_url);
+		} else {
+			Toast.makeText(getActivity(), "No data connection!",
+					Toast.LENGTH_SHORT).show();
 		}
-
-		load_data_task = new LoadDataTask();
-		load_data_task.execute(data_url);
 	}
 
 	private void initOptionSpinner() {
@@ -162,7 +165,8 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 
 			@Override
 			public void onLoad() {
-				if (load_data_task == null) {
+				if (load_data_task == null
+						&& NetworkHelper.IS_NETWORK_CONNECTED) {
 					fetchData();
 				}
 

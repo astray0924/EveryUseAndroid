@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.provider.Settings;
+import android.widget.Toast;
 
 public class NetworkHelper {
 	public static boolean IS_NETWORK_CONNECTED = false;
