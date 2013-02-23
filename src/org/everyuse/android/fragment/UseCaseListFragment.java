@@ -18,6 +18,7 @@ import org.everyuse.android.R;
 import org.everyuse.android.activity.UseCaseDetailActivity;
 import org.everyuse.android.adapter.UseCaseAdapter;
 import org.everyuse.android.model.UseCase;
+import org.everyuse.android.util.NetworkHelper;
 import org.everyuse.android.widget.DynamicListView;
 import org.everyuse.android.widget.DynamicListView.OnListLoadListener;
 import org.json.JSONArray;
@@ -58,6 +59,11 @@ public class UseCaseListFragment extends SherlockListFragment {
 	private HttpClient client;
 	private String data_url;
 	private String data_url_raw;
+
+	@Override
+	public void onResume() {
+		super.onResume();
+	}
 
 	public static UseCaseListFragment newInstance(String data_url) {
 		UseCaseListFragment f = new UseCaseListFragment();
@@ -109,18 +115,23 @@ public class UseCaseListFragment extends SherlockListFragment {
 	}
 
 	private void loadData() {
-		load_data_task = new LoadDataTask();
-		
-		data_url = buildDataURLWithQuery(data_url_raw);
+		if (NetworkHelper.IS_NETWORK_CONNECTED) {
+			load_data_task = new LoadDataTask();
 
-		if (data_url == null || data_url.equals("")) {
-			throw new IllegalStateException(
-					getString(R.string.msg_missing_data_url));
+			data_url = buildDataURLWithQuery(data_url_raw);
+
+			if (data_url == null || data_url.equals("")) {
+				throw new IllegalStateException(
+						getString(R.string.msg_missing_data_url));
+			}
+
+			Log.d(TAG, data_url);
+
+			load_data_task.execute(data_url);
+		} else {
+			Toast.makeText(getActivity(), "No data connection!",
+					Toast.LENGTH_SHORT).show();
 		}
-
-		Log.d(TAG, data_url);
-
-		load_data_task.execute(data_url);
 	}
 
 	/*
@@ -140,7 +151,8 @@ public class UseCaseListFragment extends SherlockListFragment {
 
 			@Override
 			public void onLoad() {
-				if (load_data_task == null) {
+				if (load_data_task == null
+						&& NetworkHelper.IS_NETWORK_CONNECTED) {
 
 					loadData();
 
@@ -172,6 +184,12 @@ public class UseCaseListFragment extends SherlockListFragment {
 		protected void onPreExecute() {
 			UseCaseListFragment.this.getSherlockActivity()
 					.setProgressBarIndeterminateVisibility(Boolean.TRUE);
+
+			if (!NetworkHelper.IS_NETWORK_CONNECTED) {
+				Toast.makeText(getActivity(), "No data connection!",
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
 		}
 
 		@Override

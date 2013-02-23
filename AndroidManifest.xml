@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -80,6 +82,15 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+
+        <receiver
+            android:name="org.everyuse.android.util.NetworkStateReceiver"
+            class="org.everyuse.android.util.NetworkStateReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
