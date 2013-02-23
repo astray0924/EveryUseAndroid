@@ -74,9 +74,9 @@ public class IndexActivity extends SherlockFragmentActivity {
 	protected void onResume() {
 		super.onResume();
 
-		NetworkHelper.checkAndEnableNetwork(this);
-
 		Log.i(TAG, "onResume");
+
+		NetworkHelper.checkAndEnableNetwork(this);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class IndexActivity extends SherlockFragmentActivity {
 		setContentView(R.layout.activity_index);
 
 		Log.i(TAG, "onCreate");
-
+		
 		initUI();
 
 		client = new DefaultHttpClient();
@@ -111,6 +111,10 @@ public class IndexActivity extends SherlockFragmentActivity {
 
 			finish();
 		} else {
+			if (!NetworkHelper.IS_NETWORK_CONNECTED) {
+				return;
+			}
+
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage(R.string.msg_register_prompt)
 					.setCancelable(false)

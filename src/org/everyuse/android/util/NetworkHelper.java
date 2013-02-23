@@ -9,12 +9,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.provider.Settings;
 
 public class NetworkHelper {
 	public static boolean IS_NETWORK_CONNECTED = false;
 
-	public static boolean checkNetworkConnection(Context context) {
+	public static boolean isConnection(Context context) {
 		final ConnectivityManager conMgr = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
@@ -25,11 +26,30 @@ public class NetworkHelper {
 		}
 	}
 
+	public static boolean isConnectedOrConnecting(Context context) {
+		final ConnectivityManager conMgr = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		// mobile
+		State mobile = conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+				.getState();
+
+		// wifi
+		State wifi = conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+				.getState();
+
+		if ((mobile == NetworkInfo.State.CONNECTED || mobile == NetworkInfo.State.CONNECTING)
+				|| (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public static void checkAndEnableNetwork(final Activity activity) {
-		if (!checkNetworkConnection(activity)) {
+		if (!isConnectedOrConnecting(activity)) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 			builder.setMessage(R.string.msg_turn_on_network)
-					.setCancelable(false)
 					.setPositiveButton("Yes",
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,

@@ -12,7 +12,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
 
-			if (NetworkHelper.checkNetworkConnection(context)) {
+			if (NetworkHelper.isConnection(context)) {
 				NetworkHelper.IS_NETWORK_CONNECTED = true;
 			} else {
 				NetworkHelper.IS_NETWORK_CONNECTED = false;
