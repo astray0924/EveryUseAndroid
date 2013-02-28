@@ -332,7 +332,7 @@ public class CreateActivity extends SherlockActivity {
 	}
 
 	private String getUploadImageFileName() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.KOREA);
 		sdf.setTimeZone(TimeZone.getTimeZone("Korea/Seoul"));
 		String timestamp = sdf.format(new Date());
 		String username = UserHelper.getCurrentUser(this).username;

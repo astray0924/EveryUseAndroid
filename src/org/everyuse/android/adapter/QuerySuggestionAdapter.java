@@ -12,7 +12,7 @@ import android.widget.Filterable;
 public class QuerySuggestionAdapter extends ArrayAdapter<String> implements Filterable {
 	private ArrayList<String> resultList;
 	private String target_attr = "";
-	
+
 	public static final String ATTR_ITEM = "item";
 	public static final String ATTR_PURPOSE = "purpose";
 
@@ -28,12 +28,20 @@ public class QuerySuggestionAdapter extends ArrayAdapter<String> implements Filt
 
 	@Override
 	public int getCount() {
-		return resultList.size();
+		if (resultList == null) {
+			return 0;
+		} else {
+			return resultList.size();
+		}
 	}
 
 	@Override
 	public String getItem(int index) {
-		return resultList.get(index);
+		if (resultList == null) {
+			return "";
+		} else {
+			return resultList.get(index);
+		}
 	}
 
 	@Override

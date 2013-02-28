@@ -33,14 +33,11 @@ public class UseCase implements Parcelable {
 	public int wows_count;
 	public int metoos_count;
 
-	private static Gson gson = new GsonBuilder().setDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss").create();
-	private static DateFormat year_month_day_format = DateFormat
-			.getDateInstance(DateFormat.MEDIUM);
+	private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+	private static DateFormat year_month_day_format = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
 	private static DateFormat today_format = new SimpleDateFormat("hh:mm aaa");
-	private static DateFormat other_day_format = new SimpleDateFormat(
-			"yyyy-MM-dd");
+	private static DateFormat other_day_format = new SimpleDateFormat("yyyy-MM-dd");
 
 	public String getPurposeString() {
 		if (purpose_type == null || purpose == null) {
@@ -61,7 +58,7 @@ public class UseCase implements Parcelable {
 	private boolean isKoreanLocale() {
 		return lang.toString().equals(Locale.KOREA) || lang.toString().equals(Locale.KOREAN);
 	}
-	
+
 	private boolean isEmptyLocale() {
 		return lang.toString().equals("");
 	}
@@ -112,11 +109,11 @@ public class UseCase implements Parcelable {
 	}
 
 	public String getPhotoThumbURL() {
-		return getPhotoBaseURL() + "/thumb/" + converted_file_name;
+		return getPhotoBaseURL() + "/" + converted_file_name;
 	}
 
 	public String getPhotoLargeURL() {
-		return getPhotoBaseURL() + "/large/" + converted_file_name;
+		return getPhotoBaseURL() + "/" + converted_file_name;
 	}
 
 	public String toString() {
@@ -133,8 +130,7 @@ public class UseCase implements Parcelable {
 		return gson.fromJson(json.toString(), UseCase.class);
 	}
 
-	public static ArrayList<UseCase> parseMultipleFromJSON(JSONArray json)
-			throws JSONException {
+	public static ArrayList<UseCase> parseMultipleFromJSON(JSONArray json) throws JSONException {
 		ArrayList<UseCase> use_case_list = new ArrayList<UseCase>();
 
 		for (int i = 0; i < json.length(); i++) {
