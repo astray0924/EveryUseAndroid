@@ -43,7 +43,7 @@ public class UseCaseDetailFragment extends SherlockFragment {
 	private ToggleButton tgl_scrap;
 
 	private OnFollowUpdateListener followCallback;
-	
+
 	private Activity activity = null;
 
 	public interface OnFollowUpdateListener {
@@ -58,15 +58,14 @@ public class UseCaseDetailFragment extends SherlockFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		
+
 		// 로컬 변수에 할당
 		this.activity = activity;
 
 		try {
 			followCallback = (OnFollowUpdateListener) activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnFollowUpdateListener");
+			throw new ClassCastException(activity.toString() + " must implement OnFollowUpdateListener");
 		}
 	}
 
@@ -101,15 +100,14 @@ public class UseCaseDetailFragment extends SherlockFragment {
 		// 코멘트 헬퍼 초기화
 		// use_case_id는 시작 아이템의 것으로 함
 		commentsHelper = new CommentsHelper(getActivity(), use_case_id);
-		commentsHelper
-				.setOnCommentsUpdateHandler(new OnCommentsUpdateHandler() {
+		commentsHelper.setOnCommentsUpdateHandler(new OnCommentsUpdateHandler() {
 
-					@Override
-					public void onUpdate(Comments comments) {
-						updateCommentButtonState(comments);
-					}
+			@Override
+			public void onUpdate(Comments comments) {
+				updateCommentButtonState(comments);
+			}
 
-				});
+		});
 
 		// 코멘트 가져오기
 		commentsHelper.updateCommentsInfo();
@@ -123,27 +121,22 @@ public class UseCaseDetailFragment extends SherlockFragment {
 	 * , android.view.ViewGroup, android.os.Bundle)
 	 */
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		final View page = inflater.inflate(R.layout.fragment_usecase_detail,
-				null);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		final View page = inflater.inflate(R.layout.fragment_usecase_detail, null);
 		return page;
 	}
 
 	private void display(View page, UseCase data) {
 		// 사용자 정보 보여주는 뷰 초기화
 		View profile_panel = page.findViewById(R.id.profile_panel);
-		ImageView iv_user_photo = (ImageView) profile_panel
-				.findViewById(R.id.iv_user_photo);
-		TextView tv_username = (TextView) profile_panel
-				.findViewById(R.id.tv_username);
+		ImageView iv_user_photo = (ImageView) profile_panel.findViewById(R.id.iv_user_photo);
+		TextView tv_username = (TextView) profile_panel.findViewById(R.id.tv_username);
 
 		// 사용자 정보 출력
 		tv_username.setText(data.writer_name);
 
 		// Content panel
-		ImageView usecase_photo = (ImageView) page
-				.findViewById(R.id.iv_usecase_photo);
+		ImageView usecase_photo = (ImageView) page.findViewById(R.id.iv_usecase_photo);
 		TextView usecase_text = (TextView) page.findViewById(R.id.tv_usecase_text);
 
 		image_downloader.download(data.getPhotoLargeURL(), usecase_photo);
@@ -201,19 +194,17 @@ public class UseCaseDetailFragment extends SherlockFragment {
 
 		// follow 버튼 초기화
 		tgl_follow = (ToggleButton) page.findViewById(R.id.tgl_follow);
-		relationshipHelper = new RelationshipHelper(getActivity(),
-				data.writer_id, tgl_follow);
-		relationshipHelper
-				.setOnRelationshipUpdateHandler(new OnRelationshipUpdateHandler() {
+		relationshipHelper = new RelationshipHelper(getActivity(), data.writer_id, tgl_follow);
+		relationshipHelper.setOnRelationshipUpdateHandler(new OnRelationshipUpdateHandler() {
 
-					@Override
-					public void onUpdate(Relationship relationship) {
-						// TODO 의미있는 숫자 리턴
-						followCallback.onFollowUpdate(0);
+			@Override
+			public void onUpdate(Relationship relationship) {
+				// TODO 의미있는 숫자 리턴
+				followCallback.onFollowUpdate(0);
 
-					}
+			}
 
-				});
+		});
 		relationshipHelper.updateRelationshipInfo();
 
 		// 코멘트 버튼 초기화
@@ -258,7 +249,7 @@ public class UseCaseDetailFragment extends SherlockFragment {
 			}
 
 		});
-		
+
 		// similar 버튼 초기화
 		final Activity activity = UseCaseDetailFragment.this.getActivity();
 		Button btn_similar_item = (Button) page.findViewById(R.id.btn_similar_item);
@@ -268,12 +259,14 @@ public class UseCaseDetailFragment extends SherlockFragment {
 			public void onClick(View v) {
 				Intent intent = new Intent(activity, CreateActivity.class);
 				intent.putExtra(CreateActivity.EXTRA_REF_ITEM_ID, use_case.id);
+				intent.putExtra(CreateActivity.EXTRA_ITEM, use_case.item);
+				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 				startActivity(intent);
-				
+
 			}
-			
+
 		});
-		
+
 		Button btn_similar_purpose = (Button) page.findViewById(R.id.btn_similar_purpose);
 		btn_similar_purpose.setOnClickListener(new OnClickListener() {
 
@@ -281,10 +274,12 @@ public class UseCaseDetailFragment extends SherlockFragment {
 			public void onClick(View v) {
 				Intent intent = new Intent(activity, CreateActivity.class);
 				intent.putExtra(CreateActivity.EXTRA_REF_PURPOSE_ID, use_case.id);
+				intent.putExtra(CreateActivity.EXTRA_PURPOSE, use_case.purpose);
+				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 				startActivity(intent);
-				
+
 			}
-			
+
 		});
 
 		// 만약 글쓴이가 현재 사용자와 같다면 코멘트 및 팔로우 기능 해제

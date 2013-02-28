@@ -34,8 +34,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-public class DetailActivity extends SherlockFragmentActivity implements
-		UseCaseDetailFragment.OnFollowUpdateListener {
+public class DetailActivity extends SherlockFragmentActivity implements UseCaseDetailFragment.OnFollowUpdateListener {
 	public static String EXTRA_DATA = "DATA";
 	public static String EXTRA_DATA_LIST = "DATA_LIST";
 	public static String EXTRA_STRAT_INDEX = "START_INDEX";
@@ -71,8 +70,7 @@ public class DetailActivity extends SherlockFragmentActivity implements
 			break;
 		case R.id.menu_edit:
 			intent = new Intent(this, CreateActivity.class);
-			intent.putExtra(CreateActivity.EXTRA_USE_CASE,
-					getCurrentUseCase());
+			intent.putExtra(CreateActivity.EXTRA_USE_CASE, getCurrentUseCase());
 			startActivity(intent);
 			break;
 		case R.id.menu_discard:
@@ -80,8 +78,8 @@ public class DetailActivity extends SherlockFragmentActivity implements
 			break;
 		case R.id.menu_new:
 			intent = new Intent(this, CreateActivity.class);
-			intent.putExtra(CreateActivity.EXTRA_REF_ALL_ID,
-					getCurrentUseCase().id);
+			intent.putExtra(CreateActivity.EXTRA_REF_ALL_ID, getCurrentUseCase().id);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(intent);
 			break;
 		}
@@ -100,34 +98,29 @@ public class DetailActivity extends SherlockFragmentActivity implements
 
 	private void showDiscardDialog(final UseCase use_case) {
 		AlertDialog.Builder discard_bld = new AlertDialog.Builder(this);
-		discard_bld
-				.setMessage(getString(R.string.msg_discard))
-				.setCancelable(true)
-				.setPositiveButton(getString(R.string.msg_yes),
-						new DialogInterface.OnClickListener() {
+		discard_bld.setMessage(getString(R.string.msg_discard)).setCancelable(true)
+				.setPositiveButton(getString(R.string.msg_yes), new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
-								try {
-									URL url = getDeleteURL(use_case);
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						try {
+							URL url = getDeleteURL(use_case);
 
-									// 아이템 삭제
-									delete_task = new DeleteTask();
-									delete_task.execute(url);
-								} catch (MalformedURLException e) {
-									Log.e(TAG, e.getMessage());
-								}
+							// 아이템 삭제
+							delete_task = new DeleteTask();
+							delete_task.execute(url);
+						} catch (MalformedURLException e) {
+							Log.e(TAG, e.getMessage());
+						}
 
-							}
-						})
-				.setNegativeButton(getString(R.string.msg_no),
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
-								// TODO Auto-generated method stub
+					}
+				}).setNegativeButton(getString(R.string.msg_no), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						// TODO Auto-generated method stub
 
-							}
-						});
+					}
+				});
 
 		AlertDialog alert = discard_bld.create();
 		alert.setTitle("Delete?");
@@ -184,9 +177,7 @@ public class DetailActivity extends SherlockFragmentActivity implements
 			dialog.dismiss();
 
 			if (result) {
-				Toast.makeText(activity,
-						activity.getString(R.string.msg_delete_success),
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(activity, activity.getString(R.string.msg_delete_success), Toast.LENGTH_LONG).show();
 
 				// MainActivity에 리스트 초기화 하도록 지시
 				Intent intent = new Intent(activity, MainActivity.class);
@@ -196,9 +187,7 @@ public class DetailActivity extends SherlockFragmentActivity implements
 
 				activity.finish();
 			} else {
-				Toast.makeText(activity,
-						activity.getString(R.string.msg_delete_fail),
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(activity, activity.getString(R.string.msg_delete_fail), Toast.LENGTH_LONG).show();
 			}
 
 		}
@@ -235,8 +224,7 @@ public class DetailActivity extends SherlockFragmentActivity implements
 		UseCase use_case = getCurrentUseCase();
 
 		if (use_case != null) {
-			return UserHelper.isCurrentUser(DetailActivity.this,
-					getCurrentUseCase().writer_id);
+			return UserHelper.isCurrentUser(DetailActivity.this, getCurrentUseCase().writer_id);
 		} else {
 			Log.d(TAG, "Current UseCase is null");
 
@@ -317,8 +305,7 @@ public class DetailActivity extends SherlockFragmentActivity implements
 		}
 
 		if (data_list == null) {
-			throw new IllegalStateException(
-					getString(R.string.msg_missing_data));
+			throw new IllegalStateException(getString(R.string.msg_missing_data));
 		}
 	}
 
@@ -331,8 +318,7 @@ public class DetailActivity extends SherlockFragmentActivity implements
 		@Override
 		public Fragment getItem(int position) {
 			UseCase data = data_list.get(position);
-			UseCaseDetailFragment fragment = UseCaseDetailFragment
-					.newInstance(data);
+			UseCaseDetailFragment fragment = UseCaseDetailFragment.newInstance(data);
 			return fragment;
 		}
 

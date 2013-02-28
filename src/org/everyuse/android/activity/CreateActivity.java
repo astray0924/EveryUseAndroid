@@ -97,6 +97,7 @@ public class CreateActivity extends SherlockActivity {
 	// EXTRAs
 	public static final String EXTRA_USE_CASE = "extra_use_case";
 	public static final String EXTRA_ITEM = "extra_item";
+	public static final String EXTRA_PURPOSE = "extra_purpose";
 	public static final String EXTRA_REF_ALL_ID = "extra_ref_all";
 	public static final String EXTRA_REF_ITEM_ID = "extra_ref_item";
 	public static final String EXTRA_REF_PURPOSE_ID = "extra_ref_purpose";
@@ -158,6 +159,11 @@ public class CreateActivity extends SherlockActivity {
 				ac_item.setText(item_text);
 			}
 
+			String purpose_text = intent.getStringExtra(EXTRA_PURPOSE);
+			if (purpose_text != null) {
+				ac_purpose.setText(purpose_text);
+			}
+
 			// EXTRA_REF
 			ref_all_id = intent.getLongExtra(EXTRA_REF_ALL_ID, 0);
 			ref_item_id = intent.getLongExtra(EXTRA_REF_ITEM_ID, 0);
@@ -194,7 +200,7 @@ public class CreateActivity extends SherlockActivity {
 		ac_item = (AutoCompleteTextView) findViewById(R.id.ac_item);
 		ac_item.setAdapter(new QuerySuggestionAdapter(this, R.layout.list_item_query_suggestion,
 				QuerySuggestionAdapter.ATTR_ITEM));
-		
+
 		ac_purpose = (AutoCompleteTextView) findViewById(R.id.ac_purpose);
 		ac_purpose.setAdapter(new QuerySuggestionAdapter(this, R.layout.list_item_query_suggestion,
 				QuerySuggestionAdapter.ATTR_PURPOSE));
@@ -576,14 +582,16 @@ public class CreateActivity extends SherlockActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Bitmap bitmap = null;
+
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case PICK_FROM_CAMERA: {
 				// Resize and rotate the original bitmap
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 3;
-				Bitmap bitmap = ImageHelper.rotateBitmap(
-						BitmapFactory.decodeFile(raw_photo_file.getAbsolutePath(), options), 90);
+				bitmap = ImageHelper.rotateBitmap(BitmapFactory.decodeFile(raw_photo_file.getAbsolutePath(), options),
+						90);
 
 				Log.d(TAG, "raw_photo_file (at onActivityResult) : " + raw_photo_file);
 
@@ -603,9 +611,9 @@ public class CreateActivity extends SherlockActivity {
 				// Resize and rotate the original bitmap
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 3;
-				Bitmap resized = BitmapFactory.decodeStream(is, null, options);
+				bitmap = ImageHelper.rotateBitmap(BitmapFactory.decodeStream(is, null, options), 90);
 
-				new SaveBitmapTask().execute(resized);
+				new SaveBitmapTask().execute(bitmap);
 				break;
 			}
 			}
