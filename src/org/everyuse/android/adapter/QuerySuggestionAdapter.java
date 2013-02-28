@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import org.everyuse.android.util.SearchSuggestionProvider;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 public class QuerySuggestionAdapter extends ArrayAdapter<String> implements Filterable {
+	private final String TAG = getClass().getSimpleName();
+
 	private ArrayList<String> resultList;
 	private String target_attr = "";
 
@@ -51,6 +54,8 @@ public class QuerySuggestionAdapter extends ArrayAdapter<String> implements Filt
 			protected FilterResults performFiltering(CharSequence constraint) {
 				FilterResults filterResults = new FilterResults();
 				if (constraint != null) {
+					Log.d(TAG, "Retrieving Query Suggestion for " + constraint.toString() + ", " + target_attr);
+
 					// Retrieve the autocomplete results.
 					resultList = SearchSuggestionProvider.autocomplete(constraint.toString(), target_attr);
 

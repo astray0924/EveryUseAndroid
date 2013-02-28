@@ -2,9 +2,11 @@ package org.everyuse.android.util;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -29,12 +31,12 @@ public class SearchSuggestionProvider extends SearchRecentSuggestionsProvider {
 		HttpURLConnection conn = null;
 		StringBuilder jsonResults = new StringBuilder();
 
-		StringBuilder sb = new StringBuilder(URLHelper.QUERY_SUGGESTION_URL + URLHelper.EXT_JSON);
-		sb.append("?q=" + q);
-		sb.append("&attr=" + attr);
-
-		URL url;
 		try {
+			StringBuilder sb = new StringBuilder(URLHelper.QUERY_SUGGESTION_URL + URLHelper.EXT_JSON);
+			sb.append("?q=" + URLEncoder.encode(q, "UTF-8"));
+			sb.append("&attr=" + URLEncoder.encode(attr, "UTF-8"));
+
+			URL url;
 			url = new URL(sb.toString());
 			conn = (HttpURLConnection) url.openConnection();
 			InputStreamReader in = new InputStreamReader(conn.getInputStream());
