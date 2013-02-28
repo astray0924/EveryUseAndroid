@@ -117,18 +117,18 @@ public class SearchActivity extends SherlockListActivity implements
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Intent intent = new Intent(this, UseCaseDetailActivity.class);
+		Intent intent = new Intent(this, DetailActivity.class);
 
 		SearchItem search_item = (SearchItem) mAdapter.getItem(position);
 		String search_category = search_item.search_category;
 
 		ArrayList<UseCase> data_list = mDataMap.get(search_category);
 		intent.putParcelableArrayListExtra(
-				UseCaseDetailActivity.EXTRA_DATA_LIST, data_list);
+				DetailActivity.EXTRA_DATA_LIST, data_list);
 
 		UseCase use_case = search_item.use_case;
 		int pos = data_list.indexOf(use_case);
-		intent.putExtra(UseCaseDetailActivity.EXTRA_STRAT_INDEX, pos);
+		intent.putExtra(DetailActivity.EXTRA_STRAT_INDEX, pos);
 		startActivity(intent);
 	}
 
@@ -356,8 +356,8 @@ public class SearchActivity extends SherlockListActivity implements
 
 	@Override
 	public void onClick(View v) {
-		Intent intent = new Intent(this, UseCaseCreateActivity.class);
-		intent.putExtra(UseCaseCreateActivity.EXTRA_ITEM, q);
+		Intent intent = new Intent(this, CreateActivity.class);
+		intent.putExtra(CreateActivity.EXTRA_ITEM, q);
 		startActivity(intent);
 
 	}

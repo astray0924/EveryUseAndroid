@@ -17,7 +17,7 @@
             android:text="@string/tv_item" />
 
         <AutoCompleteTextView
-            android:id="@+id/et_item"
+            android:id="@+id/ac_item"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
@@ -42,7 +42,7 @@
                 android:layout_weight="6" />
 
             <AutoCompleteTextView
-                android:id="@+id/et_purpose"
+                android:id="@+id/ac_purpose"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"

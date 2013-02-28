@@ -34,7 +34,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-public class UseCaseDetailActivity extends SherlockFragmentActivity implements
+public class DetailActivity extends SherlockFragmentActivity implements
 		UseCaseDetailFragment.OnFollowUpdateListener {
 	public static String EXTRA_DATA = "DATA";
 	public static String EXTRA_DATA_LIST = "DATA_LIST";
@@ -70,8 +70,8 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 			startActivity(intent);
 			break;
 		case R.id.menu_edit:
-			intent = new Intent(this, UseCaseCreateActivity.class);
-			intent.putExtra(UseCaseCreateActivity.EXTRA_USE_CASE,
+			intent = new Intent(this, CreateActivity.class);
+			intent.putExtra(CreateActivity.EXTRA_USE_CASE,
 					getCurrentUseCase());
 			startActivity(intent);
 			break;
@@ -79,8 +79,8 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 			showDiscardDialog(getCurrentUseCase());
 			break;
 		case R.id.menu_new:
-			intent = new Intent(this, UseCaseCreateActivity.class);
-			intent.putExtra(UseCaseCreateActivity.EXTRA_REF_ALL_ID,
+			intent = new Intent(this, CreateActivity.class);
+			intent.putExtra(CreateActivity.EXTRA_REF_ALL_ID,
 					getCurrentUseCase().id);
 			startActivity(intent);
 			break;
@@ -146,7 +146,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 
 		@Override
 		protected void onPreExecute() {
-			activity = UseCaseDetailActivity.this;
+			activity = DetailActivity.this;
 
 			dialog.show();
 		}
@@ -235,7 +235,7 @@ public class UseCaseDetailActivity extends SherlockFragmentActivity implements
 		UseCase use_case = getCurrentUseCase();
 
 		if (use_case != null) {
-			return UserHelper.isCurrentUser(UseCaseDetailActivity.this,
+			return UserHelper.isCurrentUser(DetailActivity.this,
 					getCurrentUseCase().writer_id);
 		} else {
 			Log.d(TAG, "Current UseCase is null");

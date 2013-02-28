@@ -174,7 +174,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		switch (id) {
 		case R.id.menu_new:
 			Intent create_intent = new Intent(MainActivity.this,
-					UseCaseCreateActivity.class);
+					CreateActivity.class);
 			startActivity(create_intent);
 			break;
 		/*

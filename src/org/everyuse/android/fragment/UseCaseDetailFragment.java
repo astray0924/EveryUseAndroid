@@ -1,7 +1,7 @@
 package org.everyuse.android.fragment;
 
 import org.everyuse.android.R;
-import org.everyuse.android.activity.UseCaseCreateActivity;
+import org.everyuse.android.activity.CreateActivity;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.util.CommentsHelper;
 import org.everyuse.android.util.CommentsHelper.Comments;
@@ -266,8 +266,8 @@ public class UseCaseDetailFragment extends SherlockFragment {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(activity, UseCaseCreateActivity.class);
-				intent.putExtra(UseCaseCreateActivity.EXTRA_REF_ITEM_ID, use_case.id);
+				Intent intent = new Intent(activity, CreateActivity.class);
+				intent.putExtra(CreateActivity.EXTRA_REF_ITEM_ID, use_case.id);
 				startActivity(intent);
 				
 			}
@@ -279,8 +279,8 @@ public class UseCaseDetailFragment extends SherlockFragment {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(activity, UseCaseCreateActivity.class);
-				intent.putExtra(UseCaseCreateActivity.EXTRA_REF_PURPOSE_ID, use_case.id);
+				Intent intent = new Intent(activity, CreateActivity.class);
+				intent.putExtra(CreateActivity.EXTRA_REF_PURPOSE_ID, use_case.id);
 				startActivity(intent);
 				
 			}
