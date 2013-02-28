@@ -54,7 +54,7 @@ public class SearchAdapter extends BaseAdapter {
 		if (item != null) {
 			if (item.is_section) {
 				convertView = inflater
-						.inflate(R.layout.list_section_item, null);
+						.inflate(R.layout.list_item_section, null);
 				final TextView tv = (TextView) convertView
 						.findViewById(R.id.section_separator);
 				tv.setText(item.title);

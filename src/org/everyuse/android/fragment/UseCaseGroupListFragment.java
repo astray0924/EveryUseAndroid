@@ -18,7 +18,7 @@ import org.everyuse.android.R;
 import org.everyuse.android.activity.DetailActivity;
 import org.everyuse.android.adapter.UseCaseGroupAdapter;
 import org.everyuse.android.model.UseCaseGroup;
-import org.everyuse.android.util.NetworkHelper;
+import org.everyuse.android.util.NetworkStateHelper;
 import org.everyuse.android.widget.DynamicExpandableListView;
 import org.everyuse.android.widget.DynamicExpandableListView.OnListLoadListener;
 import org.everyuse.android.widget.ExpandableListFragment;
@@ -115,7 +115,7 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 	}
 
 	private void fetchData() {
-		if (NetworkHelper.IS_NETWORK_CONNECTED) {
+		if (NetworkStateHelper.IS_NETWORK_CONNECTED) {
 			data_url = buildDataURLWithQuery(data_url_raw);
 
 			if (data_url == null || data_url.equals("")) {
@@ -166,7 +166,7 @@ public class UseCaseGroupListFragment extends ExpandableListFragment implements
 			@Override
 			public void onLoad() {
 				if (load_data_task == null
-						&& NetworkHelper.IS_NETWORK_CONNECTED) {
+						&& NetworkStateHelper.IS_NETWORK_CONNECTED) {
 					fetchData();
 				}
 

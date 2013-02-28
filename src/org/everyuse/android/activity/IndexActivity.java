@@ -17,7 +17,7 @@ import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.ErrorHelper;
-import org.everyuse.android.util.NetworkHelper;
+import org.everyuse.android.util.NetworkStateHelper;
 import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
 import org.json.JSONException;
@@ -76,7 +76,7 @@ public class IndexActivity extends SherlockFragmentActivity {
 
 		Log.i(TAG, "onResume");
 
-		NetworkHelper.checkAndEnableNetwork(this);
+		NetworkStateHelper.checkAndEnableNetwork(this);
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class IndexActivity extends SherlockFragmentActivity {
 
 			finish();
 		} else {
-			if (!NetworkHelper.IS_NETWORK_CONNECTED) {
+			if (!NetworkStateHelper.IS_NETWORK_CONNECTED) {
 				return;
 			}
 

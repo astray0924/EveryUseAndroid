@@ -18,7 +18,7 @@ import org.everyuse.android.R;
 import org.everyuse.android.activity.DetailActivity;
 import org.everyuse.android.adapter.UseCaseAdapter;
 import org.everyuse.android.model.UseCase;
-import org.everyuse.android.util.NetworkHelper;
+import org.everyuse.android.util.NetworkStateHelper;
 import org.everyuse.android.widget.DynamicListView;
 import org.everyuse.android.widget.DynamicListView.OnListLoadListener;
 import org.json.JSONArray;
@@ -115,7 +115,7 @@ public class UseCaseListFragment extends SherlockListFragment {
 	}
 
 	private void loadData() {
-		if (NetworkHelper.IS_NETWORK_CONNECTED) {
+		if (NetworkStateHelper.IS_NETWORK_CONNECTED) {
 			load_data_task = new LoadDataTask();
 
 			data_url = buildDataURLWithQuery(data_url_raw);
@@ -152,7 +152,7 @@ public class UseCaseListFragment extends SherlockListFragment {
 			@Override
 			public void onLoad() {
 				if (load_data_task == null
-						&& NetworkHelper.IS_NETWORK_CONNECTED) {
+						&& NetworkStateHelper.IS_NETWORK_CONNECTED) {
 
 					loadData();
 
@@ -185,7 +185,7 @@ public class UseCaseListFragment extends SherlockListFragment {
 			UseCaseListFragment.this.getSherlockActivity()
 					.setProgressBarIndeterminateVisibility(Boolean.TRUE);
 
-			if (!NetworkHelper.IS_NETWORK_CONNECTED) {
+			if (!NetworkStateHelper.IS_NETWORK_CONNECTED) {
 				Toast.makeText(getActivity(), "No data connection!",
 						Toast.LENGTH_SHORT).show();
 				return;

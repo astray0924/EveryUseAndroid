@@ -28,6 +28,7 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.everyuse.android.R;
+import org.everyuse.android.adapter.QuerySuggestionAdapter;
 import org.everyuse.android.model.UseCase;
 import org.everyuse.android.model.User;
 import org.everyuse.android.util.ErrorHelper;
@@ -191,7 +192,12 @@ public class CreateActivity extends SherlockActivity {
 
 	private void initUI() {
 		ac_item = (AutoCompleteTextView) findViewById(R.id.ac_item);
+		ac_item.setAdapter(new QuerySuggestionAdapter(this, R.layout.list_item_query_suggestion,
+				QuerySuggestionAdapter.ATTR_ITEM));
+		
 		ac_purpose = (AutoCompleteTextView) findViewById(R.id.ac_purpose);
+		ac_purpose.setAdapter(new QuerySuggestionAdapter(this, R.layout.list_item_query_suggestion,
+				QuerySuggestionAdapter.ATTR_PURPOSE));
 
 		// purpose type Spinner 초기화
 		sp_purpose_type = (Spinner) findViewById(R.id.sp_purpose_type);
@@ -398,8 +404,8 @@ public class CreateActivity extends SherlockActivity {
 					new_photo_selected = false;
 				} else {
 					upload_photo_file = null;
-					Toast.makeText(CreateActivity.this, "Unable to generate the photo to upload",
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(CreateActivity.this, "Unable to generate the photo to upload", Toast.LENGTH_LONG)
+							.show();
 					return;
 				}
 			}

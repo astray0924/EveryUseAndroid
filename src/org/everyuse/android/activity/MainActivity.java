@@ -8,7 +8,7 @@ import org.everyuse.android.fragment.UseCaseGroupListFragment;
 import org.everyuse.android.fragment.UseCaseListFragment;
 import org.everyuse.android.fragment.UseCaseListWithOptionFragment;
 import org.everyuse.android.fragment.UserMenuFragment;
-import org.everyuse.android.util.NetworkHelper;
+import org.everyuse.android.util.NetworkStateHelper;
 import org.everyuse.android.util.URLHelper;
 import org.everyuse.android.util.UserHelper;
 
@@ -89,7 +89,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		selected_tab = getSelectedTabPosition();
 		getSupportActionBar().setSelectedNavigationItem(selected_tab);
 
-		NetworkHelper.checkAndEnableNetwork(this);
+		NetworkStateHelper.checkAndEnableNetwork(this);
 	}
 
 	private void saveSelectedTabPosition(int selected_tab) {
