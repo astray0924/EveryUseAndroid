@@ -251,10 +251,10 @@ public class MainActivity extends SherlockFragmentActivity implements
 		private final int RECENT = 2;
 		private final int CATEOGORY = 3;
 		private final int MY = 4;
+		
+		private final int TAB_COUNT = MY + 1;
 
-		private final int TAB_COUNT = 5;
-
-		private List<Fragment> fragment_list = new ArrayList<Fragment>();
+		private ArrayList<Fragment> fragment_list = new ArrayList<Fragment>();
 
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -287,26 +287,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 		@Override
 		public Fragment getItem(int i) {
-			if (fragment_list.get(i) == null) {
-				fragment_list.add(i, getFragment(i));
+			Fragment frag = fragment_list.get(i);
+
+			if (frag == null) {
+				throw new IllegalStateException(
+						"Fragment not initialized properly.");
 			}
 
-			return fragment_list.get(i);
-		}
-
-		private Fragment getFragment(int index) {
-			if (index >= getCount()) {
-				throw new IllegalArgumentException("Tab index out of bound");
-			}
-
-			Fragment fragment = null;
-			try {
-				fragment = fragment_list.get(index);
-			} catch (IndexOutOfBoundsException e) {
-				Log.d("MainActivity", "Tab index out of bound");
-			}
-
-			return fragment;
+			return frag;
 		}
 
 		@Override
